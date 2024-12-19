@@ -8,6 +8,10 @@ public partial class AlarmeAddView : ContentPage
 {
     private readonly IAlarmeService _alarmeService;
 
+    public AlarmeAddView()
+    {
+    }
+
     public AlarmeAddView(IAlarmeService alarmeService)
     {
         InitializeComponent();

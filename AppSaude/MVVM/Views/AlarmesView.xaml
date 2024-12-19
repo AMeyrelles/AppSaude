@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
+             x:DataType="local:AlarmeViewModel"
+             x:Class="AppSaude.MVVM.Views.AlarmesView"
+             Title="AlarmesView">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="FontSize" Value="Large"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="BackgroundColor" Value="Gray"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="BackgroundColor" Value="Gray"/>
+        </Style>
+    </ContentPage.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
+
+        <CollectionView ItemsSource="{Binding Alarmes}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                    <Border Margin="5" >
+                        <VerticalStackLayout >                              
+                            <Border>
+                                <Label FontSize="40" Text="{Binding MedicationName}"/>
+                            </Border>
+                            <Border>
+                                <Label  Text="{Binding PatientName}"/>
+                            </Border>
+                            <Border>
+                                <Label Text="{Binding Description}"/>
+                            </Border>
+                        <Button      
+                            Command="{Binding DeleteCommand}"
+                            Margin="10"
+                            x:Name="btnDeleteAlarme"                           
+                            BackgroundColor="Blue"                           
+                            Text="DELETAR"                 
+                            HeightRequest="50"
+                            WidthRequest="100" />                        
+                    </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
+            <Button      
+                Command="{Binding DisplayCommand}"
+                Margin="10"                  
+                x:Name="btnCarregarAlarme"                           
+                BackgroundColor="Blue"                           
+                Text="CARREGAR"                 
+                HeightRequest="50"
+                WidthRequest="100"  
+             />
+
+            <Button
+                Margin="10"
+                Grid.Row="1"            
+                HeightRequest="50"
+                WidthRequest="50"
+                CornerRadius="10"
+                BackgroundColor="LightSteelBlue"
+                ImageSource="plus.png"
+                x:Name="btnAdd"
+                Clicked="btnAdd_Clicked">
+            </Button>
+        </HorizontalStackLayout>
+    </Grid>
+
+
+</ContentPage>

@@ -19,7 +19,7 @@ namespace AppSaude
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            builder.Services.AddScoped<IAlarmeService, AlarmeService>();
+            builder.Services.AddSingleton<IAlarmeService, AlarmeService>(); ;
             return builder.Build();
         }
     }

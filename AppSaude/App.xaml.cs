@@ -10,7 +10,7 @@ namespace AppSaude
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new AlarmeAddView(alarmeService));
+            MainPage = new NavigationPage(new AlarmesView(alarmeService));
         }
     }
 }

@@ -112,6 +112,7 @@ namespace AppSaude.MVVM.ViewModels
                     await alarmeRepository.AddAlarme(AlarmeAtual);
                     await Refresh(alarmeRepository);
                     await App.Current.MainPage.DisplayAlert("Alerta", "Salvo com sucesso!", "OK");
+                    await App.Current.MainPage.Navigation.PopAsync();
                 }
                 catch (Exception ex)
                 {

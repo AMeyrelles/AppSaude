@@ -10,7 +10,9 @@ namespace AppSaude.Services
 {
     public class AlarmeService : IAlarmeService
     {
+
         private SQLiteAsyncConnection _dbConnection;
+     
         public async Task InitializeAsync()
         {
             await SetUpDb();
