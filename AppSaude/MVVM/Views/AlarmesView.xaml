@@ -30,27 +30,40 @@
 
         <CollectionView ItemsSource="{Binding Alarmes}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                <DataTemplate>
+
                     <Border Margin="5" >
-                        <VerticalStackLayout >                              
-                            <Border>
-                                <Label FontSize="40" Text="{Binding MedicationName}"/>
-                            </Border>
-                            <Border>
-                                <Label  Text="{Binding PatientName}"/>
-                            </Border>
-                            <Border>
-                                <Label Text="{Binding Description}"/>
-                            </Border>
-                        <Button      
-                            Command="{Binding DeleteCommand}"
-                            Margin="10"
-                            x:Name="btnDeleteAlarme"                           
-                            BackgroundColor="Blue"                           
-                            Text="DELETAR"                 
-                            HeightRequest="50"
-                            WidthRequest="100" />                        
-                    </VerticalStackLayout>
+                        <VerticalStackLayout >
+                            <!--  Implementado para deletar deslizando -->    
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem 
+                                            BackgroundColor="Blue"                                          
+                                            Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AlarmeViewModel}}, Path = DeleteCommand}"
+                                            Text="Excluir"              
+                                            />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+
+                                <Grid RowDefinitions="Auto, Auto, Auto"
+                                      Padding="10">                                    
+                                    <Label 
+                                     FontSize="40"                                       
+                                     Text="{Binding MedicationName}"
+                                     Grid.Row="0"/>                        
+                          
+                                <Label                                     
+                                    Text="{Binding PatientName}"
+                                    Grid.Row="1"/>                         
+                           
+                                <Label                                     
+                                    Text="{Binding Description}"
+                                    Grid.Row="2"/>
+                                </Grid>                                
+                            </SwipeView>
+                            <!-- Fim -->
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
                 </CollectionView.ItemTemplate>

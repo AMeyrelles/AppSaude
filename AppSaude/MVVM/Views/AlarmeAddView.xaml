@@ -40,7 +40,10 @@
         </VerticalStackLayout>
           
 
-            <CollectionView Grid.Row="2" ItemsSource="{Binding Alarmes}">
+            <CollectionView Grid.Row="2" 
+                            ItemsSource="{Binding Alarmes}"
+                            SelectedItem="{Binding AlarmeAtual}">  
+                
                 <CollectionView.ItemTemplate>
                     <DataTemplate>                
                          <VerticalStackLayout>
@@ -62,8 +65,7 @@
            <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">
                        
                             <Button      
-                             Command="{Binding SaveCommand}"
-                             
+                             Command="{Binding SaveCommand}"                             
                              x:Name="btnAddAlarme"                           
                              BackgroundColor="Blue"                           
                              Text="SALVAR"                 
