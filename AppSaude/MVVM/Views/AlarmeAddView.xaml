@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
+             x:DataType="local:AlarmeViewModel"
+             x:Class="AppSaude.MVVM.Views.AlarmeAddView"
+             Title="AlarmeAddView">
+
+
+    <ContentPage.Resources>
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="10*"/>           
+        </Grid.RowDefinitions>     
+           
+            <VerticalStackLayout 
+                Grid.Row="0"
+                Padding="10" >
+                <Border BackgroundColor="AliceBlue" Padding="10,10,0,10" Margin="0,5,0,5">
+                    <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
+                </Border>
+
+                <Border BackgroundColor="AliceBlue" Padding="10,10,0,10" Margin="0,5,0,5">
+                <Entry Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
+                </Border>
+
+                <Border BackgroundColor="AliceBlue" Margin="0,5,0,5" Padding="10,10,0,10">
+                <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
+                </Border>
+            </VerticalStackLayout>
+          
+
+            <CollectionView Grid.Row="2" ItemsSource="{Binding Alarmes}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>                
+                         <VerticalStackLayout>
+                            <Border>
+                                <Label Text="{Binding MedicationName}"/>
+                            </Border>
+                            <Border>
+                                <Label Text="{Binding PatientName}"/>
+                            </Border>
+                            <Border>
+                                <Label Text="{Binding Description}"/>
+                            </Border>                            
+                        </VerticalStackLayout>
+                
+                      </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+       
+           <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">
+                       
+                            <Button      
+                             Command="{Binding SaveCommand}"
+                             
+                             x:Name="btnAddAlarme"                           
+                             BackgroundColor="Blue"                           
+                             Text="SALVAR"                 
+                             HeightRequest="100"
+                             WidthRequest="100"  
+                             />
+                                            
+           </HorizontalStackLayout>
+        
+    </Grid>
+</ContentPage>
