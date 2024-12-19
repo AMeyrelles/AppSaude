@@ -103,10 +103,16 @@ namespace AppSaude.MVVM.ViewModels
 
         public AlarmeViewModel(IAlarmeService _alarmeService)
         {
-           var alarmeRepository = _alarmeService ?? throw new ArgumentNullException(nameof(_alarmeService), "O serviço de alarme não foi fornecido.");
+            var alarmeRepository = _alarmeService ?? throw new ArgumentNullException(nameof(_alarmeService), "O serviço de alarme não foi fornecido.");
 
             AlarmeAtual = new Alarme(); // Inicialize o objeto
             Alarmes = new ObservableCollection<Alarme>(); // Inicialize a coleção
+
+            if (_alarmeService == null)
+            {
+                throw new ArgumentNullException(nameof(_alarmeService));
+            }
+                 
 
             SaveCommand = new Command(async () =>
             {
@@ -173,6 +179,17 @@ namespace AppSaude.MVVM.ViewModels
 
         public async Task Refresh(IAlarmeService _alarmeService)
         {
+            Alarmes = new ObservableCollection<Alarme>();
+
+            if (_alarmeService == null)
+            {
+                throw new InvalidOperationException("O serviço de alarme não foi inicializado.");
+            }
+
+                   
+
+            var alarmesList = await _alarmeService.GetAlarmes();           
+
             var alarmesAtualizados = await _alarmeService.GetAlarmes();
             Alarmes.Clear();
             foreach (var alarme in alarmesAtualizados)
