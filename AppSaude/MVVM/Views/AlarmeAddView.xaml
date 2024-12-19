@@ -62,8 +62,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
        
-           <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">
-                       
+           <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">                       
                             <Button      
                              Command="{Binding SaveCommand}"                             
                              x:Name="btnAddAlarme"                           

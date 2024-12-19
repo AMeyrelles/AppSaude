@@ -1,3 +1,4 @@
+
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 
@@ -15,6 +16,25 @@ public partial class AlarmesView : ContentPage
         BindingContext = viewModel;
     }
 
+    // Chama DisplayCommand automaticamente quando a página aparecer
+
+    public AlarmeViewModel DisparoAutoViewModel { get; }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        try
+        {
+            // Dispara o DisplayCommand para carregar os dados automaticamente
+            DisparoAutoViewModel.DisplayCommand.Execute(null);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Erro", ex.Message, "OK");
+        }
+    }
+
+    // Botão para navergar AlarmeAddView
     private async void btnAdd_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new AlarmeAddView(_service));
