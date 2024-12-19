@@ -41,9 +41,7 @@
           
 
             <CollectionView Grid.Row="2" 
-                            ItemsSource="{Binding Alarmes}"
-                            SelectedItem="{Binding AlarmeAtual}">  
-                
+                            ItemsSource="{Binding Alarmes}">                  
                 <CollectionView.ItemTemplate>
                     <DataTemplate>                
                          <VerticalStackLayout>

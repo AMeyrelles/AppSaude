@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AppSaude.MVVM.Views.HomePageView"
+             Title="HomePageView">
+
+    <!-- Styles da Página HOME  -->
+    <ContentPage.Resources>
+        <!-- Style dos Buttons -->
+        <Style TargetType="Button">
+            <Setter Property="HeightRequest" Value="100"/>
+            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+            <Setter Property="Padding" Value="60,70"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <!-- Style das Label -->
+        <Style TargetType="Label">
+            <Setter Property="Padding" Value="10,0,0,0"/>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+
+        <!-- Style do Frame -->
+        <Style TargetType="Frame">
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="WidthRequest" Value="200"/>
+            <Setter Property="HeightRequest" Value="70"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+        </Style>
+
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>    
+
+        <VerticalStackLayout
+            Grid.Row="0"
+            Margin="0,50,0,0"
+            HorizontalOptions ="Center" >
+            <!-- Primeira linha de botões -->
+            <HorizontalStackLayout VerticalOptions ="Start">
+                <Button                     
+                 x:Name="btnAlarme"                   
+                 Clicked="btnAlarme_Clicked"
+                 ImageSource="alarm_clock.png"/>
+
+                <Button 
+                 x:Name="btnNoticacao"
+                 
+                 ImageSource="bell.png"/>
+                
+            </HorizontalStackLayout>
+
+            <!-- Segunda linha de botões -->
+            <HorizontalStackLayout VerticalOptions ="Start">
+                <Button 
+                 x:Name="btnAgendamentos"
+                 ImageSource="calendar.png"/>
+
+                <Button 
+                 x:Name="btnMaps"
+                 
+                 ImageSource="maps_and_location.png"/>
+            </HorizontalStackLayout>
+
+            <Frame>
+                <HorizontalStackLayout Grid.Row="1">
+                    <!-- <Image Source="calendar"></Image>  -->
+                    <Label x:Name="lblAEspecialistaHome" Text="lblEspecialista"/>
+                    <Label x:Name="lblADateHome" Text="lblDate"/>
+                    <Label x:Name="lblAHourHome" Text="lblHora"/>
+                </HorizontalStackLayout>
+            </Frame>
+
+            <Frame>
+                <HorizontalStackLayout Grid.Row="2" >
+                    <!-- <Image Source="alarm_clock"></Image>  -->
+                    <Label x:Name="lblRelogioMedicamentoHome" Text="lblMedicamento"/>
+                    <Label x:Name="lblHoraMedicamentoHome" Text="lblHoraMedicamento"/>
+                </HorizontalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

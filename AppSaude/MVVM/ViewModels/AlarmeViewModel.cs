@@ -81,6 +81,8 @@ namespace AppSaude.MVVM.ViewModels
         }
 
         private string _description;
+        private object alarme;
+
         public string Description
         {
             get => _description;
@@ -99,8 +101,10 @@ namespace AppSaude.MVVM.ViewModels
         public ICommand DeleteCommand { get; }
         public ICommand DisplayCommand { get; }
 
-        public AlarmeViewModel(IAlarmeService alarmeRepository)
+        public AlarmeViewModel(IAlarmeService _alarmeService)
         {
+           var alarmeRepository = _alarmeService ?? throw new ArgumentNullException(nameof(_alarmeService), "O serviço de alarme não foi fornecido.");
+
             AlarmeAtual = new Alarme(); // Inicialize o objeto
             Alarmes = new ObservableCollection<Alarme>(); // Inicialize a coleção
 
@@ -108,9 +112,9 @@ namespace AppSaude.MVVM.ViewModels
             {
                 try
                 {
-                    await alarmeRepository.InitializeAsync();
-                    await alarmeRepository.AddAlarme(AlarmeAtual);
-                    await Refresh(alarmeRepository);
+                    await _alarmeService.InitializeAsync();
+                    await _alarmeService.AddAlarme(AlarmeAtual);
+                    await Refresh(_alarmeService);
                     await App.Current.MainPage.DisplayAlert("Alerta", "Salvo com sucesso!", "OK");
                     await App.Current.MainPage.Navigation.PopAsync();
                 }
@@ -124,9 +128,9 @@ namespace AppSaude.MVVM.ViewModels
             {
                 try
                 {
-                    await alarmeRepository.InitializeAsync();
-                    await alarmeRepository.UpdateAlarme(AlarmeAtual);
-                    await Refresh(alarmeRepository);
+                    await _alarmeService.InitializeAsync();
+                    await _alarmeService.UpdateAlarme(AlarmeAtual);
+                    await Refresh(_alarmeService);
                     await App.Current.MainPage.DisplayAlert("Alerta", "Atualizado com sucesso!", "OK");
                 }
                 catch (Exception ex)
@@ -139,12 +143,12 @@ namespace AppSaude.MVVM.ViewModels
             {
                 try
                 {
-                    await alarmeRepository.InitializeAsync();
+                    await _alarmeService.InitializeAsync();
                     var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Deseja deletar o alarme?", "SIM", "NÃO");
                     if (resposta)
                     {
-                        await alarmeRepository.DeleteAlarme(AlarmeAtual);
-                        await Refresh(alarmeRepository);
+                        await _alarmeService.DeleteAlarme(AlarmeAtual);
+                        await Refresh(_alarmeService);
                     }
                 }
                 catch (Exception ex)
@@ -167,14 +171,15 @@ namespace AppSaude.MVVM.ViewModels
             });
         }
 
-        public async Task Refresh(IAlarmeService alarmeRepository)
+        public async Task Refresh(IAlarmeService _alarmeService)
         {
-            var alarmesAtualizados = await alarmeRepository.GetAlarmes();
+            var alarmesAtualizados = await _alarmeService.GetAlarmes();
             Alarmes.Clear();
             foreach (var alarme in alarmesAtualizados)
             {
                 Alarmes.Add(alarme);
             }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

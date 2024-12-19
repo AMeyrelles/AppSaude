@@ -28,7 +28,9 @@
             <RowDefinition  Height="60"/>
         </Grid.RowDefinitions>
 
-        <CollectionView ItemsSource="{Binding Alarmes}">
+        <CollectionView ItemsSource="{Binding Alarmes}"
+                        SelectedItem="{Binding AlarmeAtual}">
+            
                 <CollectionView.ItemTemplate>
                 <DataTemplate>
 

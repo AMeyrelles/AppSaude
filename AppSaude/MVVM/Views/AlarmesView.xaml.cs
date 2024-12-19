@@ -11,8 +11,11 @@ public partial class AlarmesView : ContentPage
 	{
         InitializeComponent();
 
+        _service = alarmeService;
+
         // Criação da ViewModel com a injeção do serviço
         var viewModel = new AlarmeViewModel(alarmeService);
+
         BindingContext = viewModel;
     }
 
