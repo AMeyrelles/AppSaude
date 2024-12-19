@@ -13,7 +13,14 @@ public partial class AlarmeAddView : ContentPage
         InitializeComponent();
         _alarmeService = alarmeService;
 
+        _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService), "O serviço de alarme não foi fornecido.");
+
         // Defina o BindingContext, caso necessário para usar com MVVM.
         BindingContext = new AlarmeViewModel(_alarmeService);
+    }
+
+    private async void btnCancelarAlarme_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
     }
 }

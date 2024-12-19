@@ -60,15 +60,29 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
        
-           <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">                       
-                            <Button      
+           <HorizontalStackLayout  
+               
+               Grid.Row="2" HorizontalOptions="Center">
+               
+            <Button      
+                             Clicked="btnCancelarAlarme_Clicked"                             
+                             x:Name="btnCancelarAlarme"                           
+                             BackgroundColor="Blue"                           
+                             Text="CANCELAR"                 
+                             HeightRequest="50"
+                             WidthRequest="100"  
+                             Margin="20"                             
+                             />
+
+            <Button      
                              Command="{Binding SaveCommand}"                             
                              x:Name="btnAddAlarme"                           
                              BackgroundColor="Blue"                           
                              Text="SALVAR"                 
-                             HeightRequest="100"
-                             WidthRequest="100"  
-                             />
+                             HeightRequest="50"
+                             WidthRequest="100" 
+                             Margin="20"
+                                 />
 
         </HorizontalStackLayout>
         
