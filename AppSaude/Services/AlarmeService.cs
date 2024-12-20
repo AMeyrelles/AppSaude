@@ -12,28 +12,48 @@ namespace AppSaude.Services
     {
 
         private SQLiteAsyncConnection _dbConnection;
-     
+        private readonly SemaphoreSlim _initializationLock = new(1, 1);
+
         public async Task InitializeAsync()
         {
-            await SetUpDb();
+            await _initializationLock.WaitAsync();
+            try
+            {
+                await SetUpDb();
+            }
+            finally
+            {
+                _initializationLock.Release();
+            }
         }
 
         private async Task SetUpDb()
         {
             if (_dbConnection == null)
             {
-                string dbPath = Path.Combine(Environment.GetFolderPath
-                    (Environment.SpecialFolder.LocalApplicationData),
+                string dbPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "DBAppSaude.db3");
 
-                _dbConnection = new SQLiteAsyncConnection(dbPath);
+                if (string.IsNullOrWhiteSpace(dbPath) || !Directory.Exists(Path.GetDirectoryName(dbPath)))
+                {
+                    throw new InvalidOperationException("Caminho do banco de dados é inválido ou inacessível.");
+                }
 
-                // Criar tabela para o modelo Alarme
+                _dbConnection = new SQLiteAsyncConnection(dbPath);
                 await _dbConnection.CreateTableAsync<Alarme>();
             }
         }
 
-        public async Task<int> AddAlarme(Alarme alarme) => await _dbConnection.InsertAsync(alarme);
+
+        //Metodos de CRUD
+        public async Task<int> AddAlarme(Alarme alarme)
+        {
+            if (_dbConnection == null)
+                throw new InvalidOperationException("A conexão com o banco de dados não foi inicializada.");
+            return await _dbConnection.InsertAsync(alarme);
+        }
+        //public async Task<int> AddAlarme(Alarme alarme) => await _dbConnection.InsertAsync(alarme);
 
         public async Task<int> Deletelarme(Alarme alarme) => await _dbConnection.DeleteAsync(alarme);
 
