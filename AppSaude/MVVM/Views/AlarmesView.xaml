@@ -21,7 +21,7 @@
             <Setter Property="BackgroundColor" Value="Gray"/>
         </Style>
     </ContentPage.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -29,9 +29,10 @@
         </Grid.RowDefinitions>
 
         <CollectionView ItemsSource="{Binding Alarmes}"
-                        SelectedItem="{Binding AlarmeAtual}">
-            
+                        SelectedItem="{Binding AlarmeAtual}"
+                        SelectionMode="Single">            
                 <CollectionView.ItemTemplate>
+                    
                 <DataTemplate>
 
                     <Border Margin="5" >
@@ -40,11 +41,9 @@
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
-                                        <SwipeItem 
-                                            BackgroundColor="Blue"                                          
-                                            Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AlarmeViewModel}}, Path = DeleteCommand}"
-                                            Text="Excluir"              
-                                            />
+                                        <SwipeItem BackgroundColor="Blue"
+                                            Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AlarmeViewModel}}, Path = DeleteCommand}"                                            
+                                            Text="Excluir" />
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
 
@@ -65,6 +64,7 @@
                                 </Grid>                                
                             </SwipeView>
                             <!-- Fim -->
+                        
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>

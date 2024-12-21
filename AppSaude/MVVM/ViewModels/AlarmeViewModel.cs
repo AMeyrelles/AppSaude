@@ -6,9 +6,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
+
 namespace AppSaude.MVVM.ViewModels
 {
-    public partial class AlarmeViewModel : INotifyPropertyChanged
+    public partial class AlarmeViewModel : ObservableObject
     {
         private Alarme _alarmeAtual;
         public Alarme AlarmeAtual
@@ -94,24 +95,25 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        public ICommand SaveCommand { get; }
-        public ICommand UpdateCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand DisplayCommand { get; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand UpdateCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+        public ICommand DisplayCommand { get; set; }
 
         public AlarmeViewModel(IAlarmeService alarmeRepository)
         {
-            if (alarmeRepository == null)
-            {
-                throw new ArgumentNullException(nameof(alarmeRepository), "O serviço de alarme não foi fornecido.");
-            }
-
-            AlarmeAtual = new Alarme(); // Inicializa o objeto
-            Alarmes = new ObservableCollection<Alarme>(); // Inicializa a coleção
 
             // Inicializa o serviço de alarme
             _ = alarmeRepository.InitializeAsync();
 
+            if (alarmeRepository == null)
+            {
+                throw new ArgumentNullException(nameof(alarmeRepository), "O serviço de alarme não foi fornecido.");
+            }        
+            
+            AlarmeAtual = new Alarme(); // Inicializa o objeto
+
+   
             SaveCommand = new Command(async () =>
             {
                 try
@@ -141,15 +143,22 @@ namespace AppSaude.MVVM.ViewModels
                 }
             });
 
+
             DeleteCommand = new Command(async () =>
             {
+                if (AlarmeAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhum alarme selecionado.", "OK");
+                    return;
+                }
+
                 try
                 {
-                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Deseja deletar o alarme?", "SIM", "NÃO");
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Excluir alarme???", "SIM", "NÃO");
                     if (resposta)
                     {
                         await alarmeRepository.DeleteAlarme(AlarmeAtual);
-                        await Refresh(alarmeRepository);  // Atualiza a lista após deletar
+                        await Refresh(alarmeRepository);
                     }
                 }
                 catch (Exception ex)
@@ -159,7 +168,8 @@ namespace AppSaude.MVVM.ViewModels
             });
 
             DisplayCommand = new Command(async () =>
-            {
+            {                
+
                 try
                 {
                     await alarmeRepository.InitializeAsync();
@@ -176,9 +186,13 @@ namespace AppSaude.MVVM.ViewModels
         {
             try
             {
+                //Inicia a coleção sempre que chamado
+                Alarmes = new ObservableCollection<Alarme>();
+
                 // Recupera os alarmes do serviço e atualiza a coleção ObservableCollection
                 var alarmesList = await alarmeService.GetAlarmes();
-                Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
+
+                //Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
                 foreach (var alarme in alarmesList)
                 {
                     Alarmes.Add(alarme);  // Adiciona os alarmes retornados à coleção
@@ -190,11 +204,11 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
     }
 }
