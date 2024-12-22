@@ -8,8 +8,8 @@
     <ContentPage.Resources>
         <!-- Style dos Buttons -->
         <Style TargetType="Button">
-            <Setter Property="HeightRequest" Value="130"/>
-            <Setter Property="WidthRequest" Value="130"/>
+            <Setter Property="HeightRequest" Value="140"/>
+            <Setter Property="WidthRequest" Value="140"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="CornerRadius" Value="8"/>
@@ -20,6 +20,7 @@
             <Setter Property="Padding" Value="5,0,0,0"/>
             <Setter Property="FontSize" Value="Small"/>
             <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Medium"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
         </Style>
@@ -31,7 +32,7 @@
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
             <Setter Property="HeightRequest" Value="50"/>
-            <Setter Property="WidthRequest" Value="270"/>   
+            <Setter Property="WidthRequest" Value="290"/>   
         </Style>
 
     </ContentPage.Resources>
@@ -107,7 +108,7 @@
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
                 <HorizontalStackLayout >
-                    <Image Margin="5" Source="calendar"></Image>                    
+                    <Image Margin="6" Source="calendar"></Image>                    
                     <Label x:Name="lblAEspecialistaHome" Text="lblEspecialista"/>                    
                     <Label x:Name="lblADateHome" Text="lblDate"/>
                     <Label x:Name="lblAHourHome" Text="lblHora"/>
