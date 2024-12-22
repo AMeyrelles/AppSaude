@@ -27,7 +27,7 @@ public partial class AlarmesView : ContentPage
 
         try
         {
-            // Verifique se o BindingContext é da ViewModel que contém o DisplayCommand
+            // O BindingContext é da ViewModel que contém o DisplayCommand
             var viewModel = BindingContext as AlarmeViewModel;
             if (viewModel != null)
             {

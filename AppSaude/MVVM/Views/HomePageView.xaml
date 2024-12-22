@@ -8,87 +8,115 @@
     <ContentPage.Resources>
         <!-- Style dos Buttons -->
         <Style TargetType="Button">
-            <Setter Property="HeightRequest" Value="100"/>
-            <Setter Property="WidthRequest" Value="100"/>
+            <Setter Property="HeightRequest" Value="130"/>
+            <Setter Property="WidthRequest" Value="130"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
-            <Setter Property="Padding" Value="60,70"/>
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="CornerRadius" Value="8"/>
         </Style>
-
+        
         <!-- Style das Label -->
         <Style TargetType="Label">
-            <Setter Property="Padding" Value="10,0,0,0"/>
-            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
+            <Setter Property="FontSize" Value="Small"/>
             <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
         </Style>
 
-        <!-- Style do Frame -->
-        <Style TargetType="Frame">
-            <Setter Property="Margin" Value="0,20,0,0"/>
-            <Setter Property="WidthRequest" Value="200"/>
-            <Setter Property="HeightRequest" Value="70"/>
-            <Setter Property="CornerRadius" Value="5"/>
+        <!-- Style do Border -->
+        <Style TargetType="Border">
+            <Setter Property="Margin" Value="0,8,0,0"/>         
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
-            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="WidthRequest" Value="270"/>   
         </Style>
 
     </ContentPage.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>    
+    <ScrollView>
+        <Grid  HorizontalOptions="Center">
+        
+              <Grid.RowDefinitions>
+                <RowDefinition Height="60*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition  Height="20*" />
+              </Grid.RowDefinitions>
 
-        <VerticalStackLayout
+
+            <VerticalStackLayout             
             Grid.Row="0"
-            Margin="0,50,0,0"
-            HorizontalOptions ="Center" >
+            VerticalOptions="Center">      
+            
+        
             <!-- Primeira linha de botões -->
-            <HorizontalStackLayout VerticalOptions ="Start">
-                <Button                     
-                 x:Name="btnAlarme"                   
-                 Clicked="btnAlarme_Clicked"
-                 ImageSource="alarm_clock.png"/>
+            <HorizontalStackLayout HorizontalOptions="Center">                
+                <Button  
+                    x:Name="btnAlarme" 
+                    ImageSource="alarm_clock.png"
+                    Clicked="btnAlarme_Clicked"               
+                />
 
                 <Button 
-                 x:Name="btnNoticacao"
-                 
-                 ImageSource="bell.png"/>
-                
+                 Text="Notificação"
+                 x:Name="btnNoticacao"                    
+                 ImageSource="bell.png"/>                
             </HorizontalStackLayout>
+            <!-- FIM -->
 
             <!-- Segunda linha de botões -->
-            <HorizontalStackLayout VerticalOptions ="Start">
+            <HorizontalStackLayout              
+                HorizontalOptions="Center">
+
                 <Button 
                  x:Name="btnAgendamentos"
                  ImageSource="calendar.png"/>
 
                 <Button 
-                 x:Name="btnMaps"
-                 
-                 ImageSource="maps_and_location.png"/>
+                 x:Name="btnMaps"                 
+                 ImageSource="maps_and_location.png"/>                
             </HorizontalStackLayout>
+            <!-- FIM -->
+           
+            <CollectionView ItemsSource="{Binding AlarmeAtual}">                
+                    <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        
+                            <!--   lbl's dos alarmes -->
+                        <Border Grid.Row="2">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="6" />
+                            </Border.StrokeShape>
+                            <HorizontalStackLayout >
+                                <Image Margin="5" Source="alarm_clock"/>
+                                <Label x:Name="lblNameMedicamento" Text="{Binding MedicationName}"/>
+                                <Label x:Name="lblHoraMedicamentoHome" Text="lblHoraMedicamento"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                        <!-- FIM -->
+                        
+                    </DataTemplate>                    
+                </CollectionView.ItemTemplate>                    
+            </CollectionView>  
 
-            <Frame>
-                <HorizontalStackLayout Grid.Row="1">
-                    <!-- <Image Source="calendar"></Image>  -->
-                    <Label x:Name="lblAEspecialistaHome" Text="lblEspecialista"/>
+
+            <!--   lbl's dos agendamentos -->
+            <Border Grid.Row="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                <HorizontalStackLayout >
+                    <Image Margin="5" Source="calendar"></Image>                    
+                    <Label x:Name="lblAEspecialistaHome" Text="lblEspecialista"/>                    
                     <Label x:Name="lblADateHome" Text="lblDate"/>
                     <Label x:Name="lblAHourHome" Text="lblHora"/>
                 </HorizontalStackLayout>
-            </Frame>
-
-            <Frame>
-                <HorizontalStackLayout Grid.Row="2" >
-                    <!-- <Image Source="alarm_clock"></Image>  -->
-                    <Label x:Name="lblRelogioMedicamentoHome" Text="lblMedicamento"/>
-                    <Label x:Name="lblHoraMedicamentoHome" Text="lblHoraMedicamento"/>
-                </HorizontalStackLayout>
-            </Frame>
-
+            </Border>
+            <!-- FIM -->
+            
         </VerticalStackLayout>
+       
     </Grid>
-
+    </ScrollView>
 </ContentPage>
