@@ -79,7 +79,7 @@
             </HorizontalStackLayout>
             <!-- FIM -->
            
-            <CollectionView ItemsSource="{Binding AlarmeAtual}">                
+            <CollectionView ItemsSource="{Binding Alarmes}">                
                     <CollectionView.ItemTemplate>
                     <DataTemplate>
                         
