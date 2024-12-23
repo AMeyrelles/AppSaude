@@ -96,11 +96,31 @@ namespace AppSaude.MVVM.ViewModels
         }
 
 
+        private TimeSpan _reminderTime;
+
+        public TimeSpan ReminderTime
+        {
+            get => _reminderTime;
+            set
+            {
+                if (_reminderTime != value)
+                {
+                    _reminderTime = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand SaveCommand { get; set; }
         public ICommand UpdateCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand DisplayCommand { get; set; }
 
+
+        public AlarmeViewModel()
+        {
+            ReminderTime = new TimeSpan(8, 0, 0); // 08:00
+        }
         public AlarmeViewModel(IAlarmeService alarmeRepository)
         {
 

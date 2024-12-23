@@ -92,8 +92,10 @@
                             <HorizontalStackLayout >
                                 <Image Margin="5" Source="alarm_clock"/>
                                 <Label x:Name="lblNameMedicamento" Text="{Binding MedicationName}"/>
-                                <Label x:Name="lblHoraMedicamentoHome" Text="lblHoraMedicamento"/>
-                            </HorizontalStackLayout>
+                                <Label x:Name="lblTraco" Text="ás"/>
+                                <Label x:Name="lblHorario"                                          
+                                     Text="{Binding ReminderTime, StringFormat='{}{0:hh\\:mm}h'}"/>
+                                </HorizontalStackLayout>
                         </Border>
                         <!-- FIM -->
                         

@@ -8,6 +8,7 @@
 
 
     <ContentPage.Resources>
+        
         <Style TargetType="Entry">
             <Setter Property="TextColor" Value="Black"/>
             <Setter Property="FontSize" Value="Medium"/>
@@ -20,18 +21,13 @@
             <Setter Property="Padding" Value="10,5,0,0"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
         </Style>
-
-        <Style TargetType="Frame">
-            <Setter Property="Margin" Value="5,0,5,0"/>
-            <Setter Property="Padding" Value="0,0,0,0"/>
-            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
-        </Style>
+        
     </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45*"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="30*"/>
             <RowDefinition Height="15*"/>           
         </Grid.RowDefinitions>           
            
@@ -66,7 +62,7 @@
         <Border             
             Grid.Row="1"                     
             WidthRequest="300"
-            HeightRequest="100"
+            HeightRequest="120"
             HorizontalOptions="Center"
             Stroke="AliceBlue"
             >
@@ -77,19 +73,21 @@
 
             <VerticalStackLayout HorizontalOptions="Center">
               <Label 
-                  Padding="20,0,0,0"
+                  Padding="0,0,0,0"
+                  FontSize="Medium"
                   Text="Insira o horario do alarme"/>
     
-              <TimePicker 
+              <TimePicker     
+                Time="{Binding AlarmeAtual.ReminderTime}"
                 FontSize="50"
                 HorizontalOptions="Center"
-                x:Name="TimePickerControl" Time="00:00:00" />
+                x:Name="TimePickerControl" 
+                />
         
             </VerticalStackLayout>
         </Border>
 
-        <HorizontalStackLayout  
-               
+        <HorizontalStackLayout                 
                Grid.Row="2" HorizontalOptions="Center">
                
             <Button      
