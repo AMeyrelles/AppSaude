@@ -16,8 +16,8 @@
             
         </Style>
         <Style TargetType="Border">
-            <Setter Property="Margin" Value="0,0,0,3"/>
-            <Setter Property="Padding" Value="5,0,0,0"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="10,5,0,0"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
         </Style>
 
@@ -62,90 +62,31 @@
 
         </VerticalStackLayout>
 
-        
-        <!-- Grid para organizar botões e entry das horas e minutos -->
-        <Grid Grid.Row="1"
-              HorizontalOptions="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>         
-                        
-
-             <!-- Aumentar as horas e minutos - UP -->
-                
-            <!-- Botões de aumentar e diminuir as horas -->
-                <HorizontalStackLayout 
-                    HorizontalOptions="Center"
-                    Grid.Row="0"
-                    Margin="0,10,0,0">                   
-                
-                    <Button 
-                        HeightRequest="40"
-                        ImageSource="seta_up.png"
-                        BackgroundColor="Transparent"                                               
-                        x:Name="btnUpHour"/>
-
-                    <Button 
-                        HeightRequest="40"
-                        ImageSource="seta_up.png"
-                        BackgroundColor="Transparent"                     
-                        x:Name="btnUpMinute"/>                    
-                </HorizontalStackLayout>
-
-            <!-- Entrys para inserir as horas e minutos -->
-            <Border Grid.Row="1"                    
-                    WidthRequest="130"
-                    Stroke="AliceBlue"
-                    HorizontalOptions="Center">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="6" />
-                </Border.StrokeShape>
-
-                
-                <HorizontalStackLayout 
-                    Margin="1"
-                    HorizontalOptions="Center"
-                                       >
-                        <Entry 
-                            x:Name="HoursEntry" Placeholder="Horas (0-23)" Keyboard="Numeric"
-                            WidthRequest="50"
-                            FontSize="30"/>
-                    
-                        <Label 
-                            FontSize="30"
-                            VerticalOptions="Center" 
-                               Text=":"/>
-                    
-                        <Entry 
-                            x:Name="MinutesEntry" Placeholder="Minutos (0-59)" Keyboard="Numeric"
-                            WidthRequest="50"
-                            FontSize="30"/>
-                 </HorizontalStackLayout>
-            </Border>
+        <!-- TimerPicker -->
+        <Border             
+            Grid.Row="1"                     
+            WidthRequest="300"
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            Stroke="AliceBlue"
+            >
             
-            <!-- Botões de diminuir diminuir horas e minutos -->
-            <HorizontalStackLayout 
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="6" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout HorizontalOptions="Center">
+              <Label 
+                  Padding="20,0,0,0"
+                  Text="Insira o horario do alarme"/>
+    
+              <TimePicker 
+                FontSize="50"
                 HorizontalOptions="Center"
-                Grid.Row="2"
-                Margin="0,0,0,10">
-
-                <Button 
-                        HeightRequest="40"
-                        ImageSource="seta_down.png"
-                        BackgroundColor="Transparent"                          
-                         x:Name="btnDownHour"/>
-
-                <Button 
-                        HeightRequest="40"
-                        ImageSource="seta_down.png"
-                        BackgroundColor="Transparent"                          
-                        x:Name="btnDownMinute"/>
-                
-            </HorizontalStackLayout>        
-  
-        </Grid>
+                x:Name="TimePickerControl" Time="00:00:00" />
+        
+            </VerticalStackLayout>
+        </Border>
 
         <HorizontalStackLayout  
                
@@ -162,7 +103,8 @@
                              />
 
             <Button      
-                             Command="{Binding SaveCommand}"                             
+                             Command="{Binding SaveCommand}"
+                             Clicked="btnAddAlarme_Clicked"
                              x:Name="btnAddAlarme"                           
                              BackgroundColor="Blue"                           
                              Text="SALVAR"                 

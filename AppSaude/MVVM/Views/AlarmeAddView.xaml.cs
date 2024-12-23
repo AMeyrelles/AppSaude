@@ -23,4 +23,18 @@ public partial class AlarmeAddView : ContentPage
     {
         await Navigation.PopAsync();
     }
+ 
+
+    private async void btnAddAlarme_Clicked(object sender, EventArgs e)
+    {
+         // Obtém o valor do TimePicker
+             TimeSpan selectedTime = TimePickerControl.Time;
+
+        // Extrai as horas e minutos
+        int hours = selectedTime.Hours;
+        int minutes = selectedTime.Minutes;
+
+        // Exibe o horário selecionado        
+        await DisplayAlert("Alerta", $"Horário selecionado: {hours:D2}:{minutes:D2}", "OK");
+    }
 }

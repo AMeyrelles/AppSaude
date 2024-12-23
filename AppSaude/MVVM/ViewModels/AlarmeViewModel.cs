@@ -95,6 +95,7 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+
         public ICommand SaveCommand { get; set; }
         public ICommand UpdateCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
