@@ -16,67 +16,138 @@
             
         </Style>
         <Style TargetType="Border">
-            <Setter Property="Margin" Value="0,5,0,5"/>
-            <Setter Property="Padding" Value="5,5,0,10"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="Padding" Value="5,0,0,0"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+        </Style>
+
+        <Style TargetType="Frame">
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="Padding" Value="0,0,0,0"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
         </Style>
     </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="45*"/>
             <RowDefinition Height="40*"/>
-            <RowDefinition Height="10*"/>           
-        </Grid.RowDefinitions>   
-        
+            <RowDefinition Height="15*"/>           
+        </Grid.RowDefinitions>           
            
+        <!-- Entrys para inserir os dados -->
             <VerticalStackLayout 
                 Grid.Row="0"
                 Padding="10" >
-                <Border>
+                <Border Stroke="AliceBlue">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
                 <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
                 </Border>
 
-                 <Border>
+            <Border Stroke="AliceBlue">
                      <Border.StrokeShape>
                          <RoundRectangle CornerRadius="6" />
                      </Border.StrokeShape>
                      <Entry Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
                  </Border>
 
-               <Border>
+            <Border Stroke="AliceBlue">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
                 <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
-               </Border>
-        </VerticalStackLayout>
-          
+               </Border>               
 
-            <CollectionView Grid.Row="2" 
-                            ItemsSource="{Binding Alarmes}">                  
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>                
-                         <VerticalStackLayout>
-                            <Border>
-                                <Label Text="{Binding MedicationName}"/>
-                            </Border>
-                            <Border>
-                                <Label Text="{Binding PatientName}"/>
-                            </Border>
-                            <Border>
-                                <Label Text="{Binding Description}"/>
-                            </Border>                            
-                        </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        
+        <!-- Grid para organizar botões e entry das horas e minutos -->
+        <Grid Grid.Row="1"
+              HorizontalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>         
+                        
+
+             <!-- Aumentar as horas e minutos - UP -->
                 
-                      </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-       
-           <HorizontalStackLayout  
+            <!-- Botões de aumentar e diminuir as horas -->
+                <HorizontalStackLayout 
+                    HorizontalOptions="Center"
+                    Grid.Row="0"
+                    Margin="0,10,0,0">                   
+                
+                    <Button 
+                        HeightRequest="40"
+                        ImageSource="seta_up.png"
+                        BackgroundColor="Transparent"                                               
+                        x:Name="btnUpHour"/>
+
+                    <Button 
+                        HeightRequest="40"
+                        ImageSource="seta_up.png"
+                        BackgroundColor="Transparent"                     
+                        x:Name="btnUpMinute"/>                    
+                </HorizontalStackLayout>
+
+            <!-- Entrys para inserir as horas e minutos -->
+            <Border Grid.Row="1"                    
+                    WidthRequest="130"
+                    Stroke="AliceBlue"
+                    HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+
+                
+                <HorizontalStackLayout 
+                    Margin="1"
+                    HorizontalOptions="Center"
+                                       >
+                        <Entry 
+                            x:Name="HoursEntry" Placeholder="Horas (0-23)" Keyboard="Numeric"
+                            WidthRequest="50"
+                            FontSize="30"/>
+                    
+                        <Label 
+                            FontSize="30"
+                            VerticalOptions="Center" 
+                               Text=":"/>
+                    
+                        <Entry 
+                            x:Name="MinutesEntry" Placeholder="Minutos (0-59)" Keyboard="Numeric"
+                            WidthRequest="50"
+                            FontSize="30"/>
+                 </HorizontalStackLayout>
+            </Border>
+            
+            <!-- Botões de diminuir diminuir horas e minutos -->
+            <HorizontalStackLayout 
+                HorizontalOptions="Center"
+                Grid.Row="2"
+                Margin="0,0,0,10">
+
+                <Button 
+                        HeightRequest="40"
+                        ImageSource="seta_down.png"
+                        BackgroundColor="Transparent"                          
+                         x:Name="btnDownHour"/>
+
+                <Button 
+                        HeightRequest="40"
+                        ImageSource="seta_down.png"
+                        BackgroundColor="Transparent"                          
+                        x:Name="btnDownMinute"/>
+                
+            </HorizontalStackLayout>        
+  
+        </Grid>
+
+        <HorizontalStackLayout  
                
                Grid.Row="2" HorizontalOptions="Center">
                

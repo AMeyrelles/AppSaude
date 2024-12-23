@@ -38,7 +38,7 @@ public partial class HomePageView : ContentPage
         }
     }
 
-    //Button to navigate to AlarmesView
+    //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new AlarmesView(_service));
