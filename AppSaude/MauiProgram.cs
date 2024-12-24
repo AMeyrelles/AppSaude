@@ -1,5 +1,6 @@
 ﻿using AppSaude.Services;
 using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
 
 namespace AppSaude
 {
@@ -10,14 +11,15 @@ namespace AppSaude
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                });                                
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton<IAlarmeService, AlarmeService>(); ;
             return builder.Build();

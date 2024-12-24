@@ -1,5 +1,8 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using System.Threading.Channels;
+using Plugin.LocalNotification;
 
 namespace AppSaude.MVVM.Views;
 
@@ -9,6 +12,7 @@ public partial class HomePageView : ContentPage
 	public HomePageView(IAlarmeService alarmeService)
 	{
 		InitializeComponent();
+               
         _service = alarmeService;
 
 		_service = new AlarmeService();
@@ -38,6 +42,7 @@ public partial class HomePageView : ContentPage
         }
     }
 
+  
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
