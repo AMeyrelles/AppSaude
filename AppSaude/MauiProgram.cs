@@ -1,6 +1,8 @@
-﻿using AppSaude.Services;
+﻿using AppSaude.MVVM.Views;
+using AppSaude.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.LocalNotification;
+using Plugin.Maui.Audio;
 
 namespace AppSaude
 {
@@ -21,7 +23,10 @@ namespace AppSaude
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton<IAlarmeService, AlarmeService>(); ;
+            builder.Services.AddSingleton(AudioManager.Current);
+            builder.Services.AddSingleton<IAlarmeService, AlarmeService>();
+            builder.Services.AddTransient<HomePageView>();  
+
             return builder.Build();
         }
     }

@@ -1,128 +1,152 @@
-using AppSaude.MVVM.Models;
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
+using Plugin.Maui.Audio;
+using System.Timers;
 
-namespace AppSaude.MVVM.Views;
-
-public partial class AlarmeAddView : ContentPage
+namespace AppSaude.MVVM.Views
 {
-    private readonly IAlarmeService _alarmeService;
-
-    //List de alarmes
-    private List<DateTime> alarmList = new List<DateTime>();
-
-    public AlarmeAddView(IAlarmeService alarmeService)
+    public partial class AlarmeAddView : ContentPage
     {
-        InitializeComponent();
-        _alarmeService = alarmeService;
+        private readonly IAlarmeService _alarmeService;
+        private readonly IAudioManager _audioManager;
+        private readonly List<DateTime> _alarmList = new List<DateTime>();
+      
 
-        _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService), "O serviço de alarme não foi fornecido.");
-
-        // Defina o BindingContext, caso necessário para usar com MVVM.
-        BindingContext = new AlarmeViewModel(_alarmeService);
-    }
-
-    private async void btnCancelarAlarme_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
- 
-
-    private async void btnAddAlarme_Clicked(object sender, EventArgs e)
-    {
-         // Obtém o valor do TimePicker
-             TimeSpan selectedTime = TimePickerControl.Time;
-
-        // Extrai as horas e minutos
-        int hours = selectedTime.Hours;
-        int minutes = selectedTime.Minutes;
-
-        var now = DateTime.Now;
-        var alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
-
-        // Ajusta para o próximo dia, se o horário já passou
-        if (alarmDateTime <= now)
+        public AlarmeAddView(IAlarmeService alarmeService, IAudioManager audioManager)
         {
-            alarmDateTime = alarmDateTime.AddDays(1);
+            InitializeComponent();
+            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager), "O serviço de áudio não foi fornecido.");
+            _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService), "O serviço de alarme não foi fornecido.");
+            BindingContext = new AlarmeViewModel(_alarmeService);                     
         }
 
-        // Adiciona o alarme à lista
-        alarmList.Add(alarmDateTime);
-
-   
-
-        //await DisplayAlert("Alarme", $"Alarme configurado para {alarmDateTime:HH:mm}", "OK");
-
-        // Exibe o horário selecionado        
-        //await DisplayAlert("Alerta", $"Horário selecionado: {hours:D2}:{minutes:D2}", "OK");
-
-        await VerifyPermissionsAsync();
-
-        ScheduleAlarm(alarmDateTime);
-    }
-
-    private void ScheduleAlarm(DateTime alarmDateTime)
-    {
-        try
+        //Botão de voltar
+        private async void btnCancelarAlarme_Clicked(object sender, EventArgs e)
         {
-            var notification = new NotificationRequest
+            await Navigation.PopAsync();
+        }
+
+        //Botão para salvar o alarme
+        private async void btnAddAlarme_Clicked(object sender, EventArgs e)
+        {
+            TimeSpan selectedTime = TimePickerControl.Time;
+            DateTime now = DateTime.Now;
+            DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
+
+            if (alarmDateTime <= now)
             {
-                NotificationId = 100,
-                Title = "Lembrete de Remédio",
-                Description = "É hora de tomar seu remédio!",
-                Schedule = new NotificationRequestSchedule
+                alarmDateTime = alarmDateTime.AddDays(1);
+            }
+
+            _alarmList.Add(alarmDateTime);
+
+            await VerifyPermissionsAsync();
+            await ScheduleAlarmAsync(alarmDateTime);
+        }
+
+        //Verifica permissão para exibir notificacao
+        private async Task VerifyPermissionsAsync()
+        {
+            try
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                if (status != PermissionStatus.Granted)
                 {
-                    NotifyTime = alarmDateTime
-                },
-                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-                {
-                    AutoCancel = true,
-                    IconSmallName = {ResourceName = "alarme_clock_dois.png"}
+                    await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
+                    status = await Permissions.RequestAsync<Permissions.PostNotifications>();
                 }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    Console.WriteLine("Permissão para notificações concedida.");
+                }
+                else
+                {
+                    Console.WriteLine("Permissão para notificações negada.");
+                    await DisplayAlert("Alerta", "Permissão para notificações NEGADA!", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
+            }
+        }
+
+        //Dispara a notificacao
+        private async Task ScheduleAlarmAsync(DateTime alarmDateTime)
+        {
+            try
+            {
+                var notification = new NotificationRequest
+                {
+                    NotificationId = 100,
+                    Title = "Lembrete de Remédio",
+                    Description = "É hora de tomar seu remédio!",
+                    Schedule = new NotificationRequestSchedule
+                    {
+                        NotifyTime = alarmDateTime
+                    },
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        AutoCancel = true,
+                        IconSmallName = { ResourceName = "bell.png" }
+                    }
+                };
+
+                await LocalNotificationCenter.Current.Show(notification);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+            }
+        }
+
+
+        //Checa se o alarme atual é igual o horario atual
+        private async void CheckAlarms(object sender, ElapsedEventArgs e)
+        {
+            TimeSpan selectedTime = TimePickerControl.Time;
+            DateTime now = DateTime.Now;
+            DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
+
+            foreach (var alarm in _alarmList)
+            {
+
+                if (alarmDateTime <= now)
+                {
+                    alarmDateTime = alarmDateTime.AddDays(1);
+                }
+                else
+                {
+                    if (now.Hour == alarm.Hour && now.Minute == alarm.Minute)
+                    {
+                        await OnAudioTriggered();
+                        await OpenAlarmeViewAsync();
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        //Disparo para o som de notificação
+        private async Task OnAudioTriggered()
+        {
+            var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("careless_whisper.mp3"));
+            player.Play();
+            player.PlaybackEnded += (sender, e) =>
+            {
+                player.Dispose();
             };
-
-            // Mostra a notificação
-            LocalNotificationCenter.Current.Show(notification);
         }
-        catch (Exception ex)
+
+        //Navega para a tela quando o alarme disparar
+        private async Task OpenAlarmeViewAsync()
         {
-            Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+            await Navigation.PushAsync(new AlarmesView(_alarmeService, _audioManager));
         }
-    }
-
-
-    //Metodo para verificar se o usuario concebeu a permissão
-    private async Task VerifyPermissionsAsync()
-    {
-        try
-        {
-            // Solicita permissão para notificações
-            var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-
-            if (status != PermissionStatus.Granted)
-            {
-                await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
-                status = await Permissions.RequestAsync<Permissions.PostNotifications>();
-
-            }
-
-            if (status == PermissionStatus.Granted)
-            {
-                // Permissão concedida
-                Console.WriteLine("Permissão para notificações concedida.");
-                //await DisplayAlert("Alerta", "Permissão para notificações concedida.", "OK");
-            }
-            else
-            {
-                // Permissão negada
-                Console.WriteLine("Permissão para notificações negada.");
-                await DisplayAlert("Alerta", "Permissão para notificações NEGADA!.", "OK");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
-        }
+      
     }
 }

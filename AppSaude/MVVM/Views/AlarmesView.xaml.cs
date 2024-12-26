@@ -1,5 +1,6 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
+using Plugin.Maui.Audio;
 
 namespace AppSaude.MVVM.Views;
 
@@ -7,9 +8,13 @@ public partial class AlarmesView : ContentPage
 {
     private readonly IAlarmeService _service;
 
-    public AlarmesView(IAlarmeService alarmeService)
+    private readonly IAudioManager _audioManager;
+
+    public AlarmesView(IAlarmeService alarmeService, IAudioManager audioManager)
     {
         InitializeComponent();
+
+        _audioManager = audioManager;
 
         _service = alarmeService;
 
@@ -44,6 +49,6 @@ public partial class AlarmesView : ContentPage
     // Botão para navegar para AlarmeAddView
     private async void btnAdd_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AlarmeAddView(_service));
+        await Navigation.PushAsync(new AlarmeAddView(_service, _audioManager));
     }
 }
