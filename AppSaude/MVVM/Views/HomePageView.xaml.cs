@@ -9,16 +9,16 @@ namespace AppSaude.MVVM.Views;
 
 public partial class HomePageView : ContentPage
 {
-	private readonly IAlarmeService _service;
+	private readonly IService _service;
 
     private readonly IAudioManager _audioManager;
-    public HomePageView(IAlarmeService alarmeService, IAudioManager audioManager)
+    public HomePageView(IService alarmeService, IAudioManager audioManager)
     {
         InitializeComponent();
 
         _service = alarmeService;
 
-        _service = new AlarmeService();
+        _service = new Service();
 
         var viewModel = new AlarmeViewModel(alarmeService);
 
@@ -51,5 +51,10 @@ public partial class HomePageView : ContentPage
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new AlarmesView(_service, _audioManager));
+    }
+
+    private async void btnAgendamentos_Clicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new AgendamentosView(_service));
     }
 }

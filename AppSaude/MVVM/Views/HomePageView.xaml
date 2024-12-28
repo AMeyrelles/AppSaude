@@ -72,7 +72,9 @@
 
                 <Button 
                  x:Name="btnAgendamentos"
-                 ImageSource="calendar.png"/>
+                 ImageSource="calendar.png"
+                 Clicked="btnAgendamentos_Clicked"   
+                    />
 
                 <Button 
                  x:Name="btnMaps"                 

@@ -107,8 +107,8 @@
              CornerRadius="10"
              BackgroundColor="LightSteelBlue"
              ImageSource="plus.png"
-             x:Name="btnAdd"
-             Clicked="btnAdd_Clicked">
+             x:Name="btnAdd">
+
             </Button>
         </HorizontalStackLayout>
     </Grid>

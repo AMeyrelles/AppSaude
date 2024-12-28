@@ -24,7 +24,7 @@ namespace AppSaude
             builder.Logging.AddDebug();
 #endif
             builder.Services.AddSingleton(AudioManager.Current);
-            builder.Services.AddSingleton<IAlarmeService, AlarmeService>();
+            builder.Services.AddSingleton<IService, Service>();
             builder.Services.AddTransient<HomePageView>();  
 
             return builder.Build();

@@ -8,12 +8,12 @@ namespace AppSaude.MVVM.Views
 {
     public partial class AlarmeAddView : ContentPage
     {
-        private readonly IAlarmeService _alarmeService;
+        private readonly IService _alarmeService;
         private readonly IAudioManager _audioManager;
         private readonly List<DateTime> _alarmList = new List<DateTime>();
       
 
-        public AlarmeAddView(IAlarmeService alarmeService, IAudioManager audioManager)
+        public AlarmeAddView(IService alarmeService, IAudioManager audioManager)
         {
             InitializeComponent();
             _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager), "O serviço de áudio não foi fornecido.");

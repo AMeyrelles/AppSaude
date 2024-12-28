@@ -1,11 +1,7 @@
 ﻿using AppSaude.MVVM.Models;
+using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AppSaude.MVVM.ViewModels
@@ -13,7 +9,6 @@ namespace AppSaude.MVVM.ViewModels
     public partial class AgendamentoViewModel : ObservableObject
     {
         private Agendamento _agendamentoAtual;
-
         public Agendamento AgendamentoAtual
         {
             get => _agendamentoAtual;
@@ -150,12 +145,91 @@ namespace AppSaude.MVVM.ViewModels
             AppointmentDateTime = new TimeSpan(8, 0, 0); // 08:00
         }
 
+        public AgendamentoViewModel(IService agendamentoRepository)
+        {
+
+            // Inicializa o serviço de alarme
+            _ = agendamentoRepository.InitializeAsync();
+
+            if (agendamentoRepository == null)
+            {
+                throw new ArgumentNullException(nameof(agendamentoRepository), "O serviço de agendamento não foi fornecido.");
+            }
+
+            AgendamentoAtual = new Agendamento();
+
+
+            SaveCommand = new Command(async () =>
+            {
+                try
+                {
+                    await agendamentoRepository.AddAgendamento(AgendamentoAtual);
+                    await Refresh(agendamentoRepository);  // Atualiza a lista após salvar
+                    await App.Current.MainPage.DisplayAlert("Alerta", "Salvo com sucesso!", "OK");
+                    await App.Current.MainPage.Navigation.PopAsync();
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
+            UpdateCommand = new Command(async () =>
+            {
+                try
+                {
+                    await agendamentoRepository.UpdateAgendamento(AgendamentoAtual);
+                    await Refresh(agendamentoRepository);  // Atualiza a lista após atualizar
+                    await App.Current.MainPage.DisplayAlert("Alerta", "Atualizado com sucesso!", "OK");
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
+
+            DeleteCommand = new Command(async () =>
+            {
+                if (AgendamentoAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhum agendamento selecionado.", "OK");
+                    return;
+                }
+
+                try
+                {
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Excluir o agendamento???", "SIM", "NÃO");
+                    if (resposta)
+                    {
+                        await agendamentoRepository.DeleteAgendamento(AgendamentoAtual);
+                        await Refresh(agendamentoRepository);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
+            DisplayCommand = new Command(async () =>
+            {
+
+                try
+                {
+                    await agendamentoRepository.InitializeAsync();
+                    await Refresh(agendamentoRepository);  // Atualiza a lista quando a página é carregada
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+        }
 
 
 
-
-
-        public async Task Refresh()
+        public async Task Refresh(IService _servicos)
         {
             try
             {
@@ -163,7 +237,7 @@ namespace AppSaude.MVVM.ViewModels
                 Agendamentos = new ObservableCollection<Agendamento>();
 
                 // Recupera os alarmes do serviço e atualiza a coleção ObservableCollection
-                var agendamentoList = await _servicos.GetAlarmes();
+                var agendamentoList = await _servicos.GetAgendamentos();
 
                 //Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
                 foreach (var agendamento in agendamentoList)

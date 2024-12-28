@@ -8,10 +8,10 @@ namespace AppSaude
 {
     public partial class App : Application
     {
-        private readonly IAlarmeService _alarmeService;
+        private readonly IService _alarmeService;
         private readonly IAudioManager _audioManager;
 
-        public App(IAlarmeService alarmeService, IAudioManager audioManager)
+        public App(IService alarmeService, IAudioManager audioManager)
         {
             InitializeComponent();               
 

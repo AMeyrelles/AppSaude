@@ -10,7 +10,7 @@ namespace AppSaude.MVVM.Models
 
         // Nome do especialista
         [NotNull, MaxLength(100)]
-        public required string SpecialistName { get; set; }
+        public string SpecialistName { get; set; }
 
         // Nome da especialidade
         [NotNull, MaxLength(50)]

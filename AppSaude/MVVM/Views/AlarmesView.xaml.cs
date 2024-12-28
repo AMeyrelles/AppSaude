@@ -6,11 +6,11 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AlarmesView : ContentPage
 {
-    private readonly IAlarmeService _service;
+    private readonly IService _service;
 
     private readonly IAudioManager _audioManager;
 
-    public AlarmesView(IAlarmeService alarmeService, IAudioManager audioManager)
+    public AlarmesView(IService alarmeService, IAudioManager audioManager)
     {
         InitializeComponent();
 
