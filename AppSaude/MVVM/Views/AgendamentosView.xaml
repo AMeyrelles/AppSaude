@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
+             x:DataType="local:AgendamentoViewModel"
+             x:Class="AppSaude.MVVM.Views.AgendamentosView"
+             Title="AgendamentosView">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Large"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+            <Setter Property="Padding" Value="0,0,0,5"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+        </Style>
+
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
+
+        <CollectionView ItemsSource="{Binding Agendamentos}"
+                     SelectedItem="{Binding AgendamentoAtual}"
+                     SelectionMode="Single">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout >
+                            <!--  Implementado para deletar deslizando -->
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem BackgroundColor="Blue"
+                                         Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AgendamentoViewModel}}, Path = DeleteCommand}"                                            
+                                         Text="Excluir" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+
+                                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                                    <Label 
+                                  FontSize="40"                                       
+                                  Text="{Binding SpecialistName}"
+                                  Grid.Row="0"/>
+
+                                    <Label   
+                                     Text="{Binding AppointmentDateTime, StringFormat='{}{0:hh\\:mm}h'}"
+                                       Grid.Row="1"/>
+
+                                    <Label                                     
+                                 Text="{Binding Specialty}"
+                                 Grid.Row="2"/>
+
+                                    <Label                                     
+                                 Text="{Binding PostalCode}"
+                                 Grid.Row="3"/>
+
+                                    <Label                                     
+                                 Text="{Binding Street}"
+                                 Grid.Row="4"/>
+
+                                    <Label                                     
+                                 Text="{Binding Neighborhood}"
+                                 Grid.Row="5"/>
+
+                                </Grid>
+                            </SwipeView>
+                            <!-- Fim -->
+
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
+            <Button      
+             Command="{Binding DisplayCommand}"
+             Margin="10"                  
+             x:Name="btnCarregarAlarme"                           
+             BackgroundColor="Blue"                           
+             Text="CARREGAR"                 
+             HeightRequest="50"
+             WidthRequest="100"  
+          />
+
+            <Button
+             Margin="10"
+             Grid.Row="1"            
+             HeightRequest="50"
+             WidthRequest="50"
+             CornerRadius="10"
+             BackgroundColor="LightSteelBlue"
+             ImageSource="plus.png"
+             x:Name="btnAdd"
+             Clicked="btnAdd_Clicked">
+            </Button>
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>
