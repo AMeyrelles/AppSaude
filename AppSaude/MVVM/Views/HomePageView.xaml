@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"            
              x:Class="AppSaude.MVVM.Views.HomePageView"
              Title="HomePageView">
 
@@ -45,7 +46,6 @@
                 <RowDefinition  Height="20*" />
               </Grid.RowDefinitions>
 
-
             <VerticalStackLayout             
             Grid.Row="0"
             VerticalOptions="Center">      
@@ -81,43 +81,59 @@
                  ImageSource="maps_and_location.png"/>                
             </HorizontalStackLayout>
             <!-- FIM -->
+
+                <VerticalStackLayout Padding="10">
+
+                    <!-- Lista de Alarmes -->
+                    <Label Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+                    <CollectionView ItemsSource="{Binding Alarmes}" Margin="0,0,0,10">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="6" />
+                                    </Border.StrokeShape>
+                                    
+                                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                        <Image Source="alarm_clock" WidthRequest="30" HeightRequest="30" />
+                                        <Label Text="{Binding MedicationName}" FontSize="16" />
+                                        <Label Text="às" FontSize="16" />
+                                        <Label Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="16" />
+                                    </HorizontalStackLayout>
+                                    
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Lista de Agendamentos -->
+                    <Label Text="Agendamentos" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+                    <CollectionView ItemsSource="{Binding Agendamentos}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="6" />
+                                    </Border.StrokeShape>
+                                    
+                                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                        <Image Source="calendar" WidthRequest="30" HeightRequest="30" />
+                                        <Label Text="{Binding SpecialistName}" FontSize="16" />
+                                        <Label Text="em" FontSize="16" />
+                                        
+                                        <!-- 
+                                        <Label Text="{Binding DataAgendamento, StringFormat='{0:dd/MM/yyyy}'}" FontSize="16" />
+                                        <Label Text="às" FontSize="16" />
+                                        <Label Text="{Binding HoraAgendamento, StringFormat='{0:HH:mm}h'}" FontSize="16" />
+                                        -->
+                                    </HorizontalStackLayout>
+                                    
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>                
            
-            <CollectionView ItemsSource="{Binding Alarmes}">                
-                    <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        
-                            <!--   lbl's dos alarmes -->
-                        <Border Grid.Row="2">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="6" />
-                            </Border.StrokeShape>
-                            <HorizontalStackLayout >
-                                <Image Margin="5" Source="alarm_clock"/>
-                                <Label x:Name="lblNameMedicamento" Text="{Binding MedicationName}"/>
-                                <Label x:Name="lblTraco" Text="ás"/>
-                                <Label x:Name="lblHorario"                                          
-                                     Text="{Binding ReminderTime, StringFormat='{}{0:hh\\:mm}h'}"/>
-                                </HorizontalStackLayout>
-                        </Border>
-                        <!-- FIM -->
-                        
-                    </DataTemplate>                    
-                </CollectionView.ItemTemplate>                    
-            </CollectionView>  
-
-
-            <!--   lbl's dos agendamentos -->
-            <Border Grid.Row="1">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="6" />
-                </Border.StrokeShape>
-                <HorizontalStackLayout >
-                    <Image Margin="6" Source="calendar"></Image>                    
-                    <Label x:Name="lblAEspecialistaHome" Text="lblEspecialista"/>                    
-                    <Label x:Name="lblADateHome" Text="lblDate"/>
-                    <Label x:Name="lblAHourHome" Text="lblHora"/>
-                </HorizontalStackLayout>
-            </Border>
             <!-- FIM -->
             
         </VerticalStackLayout>

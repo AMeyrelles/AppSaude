@@ -6,7 +6,7 @@ namespace AppSaude.MVVM.Models
     public class Agendamento
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        public int AppointmentsId { get; set; }
 
         // Nome do especialista
         [NotNull, MaxLength(100)]
@@ -17,7 +17,7 @@ namespace AppSaude.MVVM.Models
         public string Specialty { get; set; }
 
         // Codigo postal
-        [NotNull, MaxLength(30)]
+        [MaxLength(30)]
         public string PostalCode { get; set; }
 
         // Rua
@@ -35,5 +35,8 @@ namespace AppSaude.MVVM.Models
         // Horário do agendamento
         [NotNull]
         public TimeSpan AppointmentDateTime { get; set; }
+
+        [MaxLength(100)]
+        public string DescriptionAppointments { get; set; }
     }
 }

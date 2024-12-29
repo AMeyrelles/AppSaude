@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
-             x:DataType="local:AlarmeViewModel"
+             x:DataType="local:MainViewModel"
              x:Class="AppSaude.MVVM.Views.AlarmesView"
-             Title="AlarmesView">
+             Title="Alarmes">
 
     <ContentPage.Resources>
         <Style TargetType="Label">

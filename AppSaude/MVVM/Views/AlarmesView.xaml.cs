@@ -10,18 +10,16 @@ public partial class AlarmesView : ContentPage
 
     private readonly IAudioManager _audioManager;
 
-    public AlarmesView(IService alarmeService, IAudioManager audioManager)
+    public AlarmesView(IService servico, IAudioManager audioManager)
     {
         InitializeComponent();
 
         _audioManager = audioManager;
 
-        _service = alarmeService;
+        _service = servico;
 
-        // Criação da ViewModel com a injeção do serviço
-        var viewModel = new AlarmeViewModel(alarmeService);
+        var viewModel = new AlarmeViewModel(servico);
 
-        // Definindo o BindingContext da página para a ViewModel
         BindingContext = viewModel;
     }
 

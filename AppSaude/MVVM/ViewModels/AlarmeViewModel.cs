@@ -2,8 +2,6 @@
 using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 
@@ -189,7 +187,7 @@ namespace AppSaude.MVVM.ViewModels
             });
 
             DisplayCommand = new Command(async () =>
-            {                
+            {
 
                 try
                 {

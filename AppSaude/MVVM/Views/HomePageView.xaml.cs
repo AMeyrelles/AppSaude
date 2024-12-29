@@ -9,21 +9,21 @@ namespace AppSaude.MVVM.Views;
 
 public partial class HomePageView : ContentPage
 {
-	private readonly IService _service;
+	private readonly IService _services;  
 
     private readonly IAudioManager _audioManager;
-    public HomePageView(IService alarmeService, IAudioManager audioManager)
+   
+    public HomePageView(IService services, IAudioManager audioManager)
     {
         InitializeComponent();
 
-        _service = alarmeService;
+        _services = services;
+        _audioManager = audioManager;
 
-        _service = new Service();
-
-        var viewModel = new AlarmeViewModel(alarmeService);
+        var viewModel = new MainViewModel(services);
 
         BindingContext = viewModel;
-        _audioManager = audioManager;
+
     }
 
     protected override async void OnAppearing()
@@ -33,7 +33,8 @@ public partial class HomePageView : ContentPage
         try
         {
             // O BindingContext é da ViewModel que contém o DisplayCommand
-            var viewModel = BindingContext as AlarmeViewModel;
+            var viewModel = BindingContext as MainViewModel;
+
             if (viewModel != null)
             {
                 // Dispara o DisplayCommand para carregar os dados automaticamente
@@ -50,11 +51,11 @@ public partial class HomePageView : ContentPage
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AlarmesView(_service, _audioManager));
+        await Navigation.PushAsync(new AlarmesView(_services, _audioManager));
     }
 
     private async void btnAgendamentos_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AgendamentosView(_service));
+        await Navigation.PushAsync(new AgendamentosView(_services, _audioManager));
     }
 }

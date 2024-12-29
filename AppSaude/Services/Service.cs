@@ -85,7 +85,7 @@ namespace AppSaude.Services
 
         public async Task<Agendamento> GetAgendamento(int id)
         {
-            var agendamento = await _dbConnection.Table<Agendamento>().FirstOrDefaultAsync(x => x.Id == id);
+            var agendamento = await _dbConnection.Table<Agendamento>().FirstOrDefaultAsync(x => x.AppointmentsId == id);
             if (agendamento == null)
             {
                 Console.WriteLine($"Nenhum agendamento encontrado para o ID: {id}");

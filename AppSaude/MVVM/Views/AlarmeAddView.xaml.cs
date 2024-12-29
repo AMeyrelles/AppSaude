@@ -13,12 +13,16 @@ namespace AppSaude.MVVM.Views
         private readonly List<DateTime> _alarmList = new List<DateTime>();
       
 
-        public AlarmeAddView(IService alarmeService, IAudioManager audioManager)
+        public AlarmeAddView(IService servicos, IAudioManager audioManager)
         {
             InitializeComponent();
             _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager), "O serviço de áudio não foi fornecido.");
-            _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService), "O serviço de alarme não foi fornecido.");
-            BindingContext = new AlarmeViewModel(_alarmeService);                     
+          
+            _alarmeService = servicos ?? throw new ArgumentNullException(nameof(servicos), "O serviço de alarme não foi fornecido.");
+            
+            var viewModel = new AlarmeViewModel(_alarmeService);
+
+            BindingContext = viewModel;                     
         }
 
         //Botão de voltar

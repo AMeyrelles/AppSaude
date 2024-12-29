@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
+             x:DataType="local:AgendamentoViewModel"
+             x:Class="AppSaude.MVVM.Views.AgendamentoAddView"
+             Title="AgendamentoAddView">
+
+
+
+    <ContentPage.Resources>
+
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="10,5,0,0"/>
+            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+        </Style>
+
+    </ContentPage.Resources>
+
+    
+        
+    
+    <Grid>
+        <Grid.RowDefinitions>
+                <RowDefinition Height="85*"/>
+            <RowDefinition  Height="15*"/>
+
+            </Grid.RowDefinitions>
+
+        <ScrollView>
+        <!-- Entrys para inserir os dados -->
+        <VerticalStackLayout
+             Grid.Row="0">
+            <!-- Primeira Entry - SpecialistName -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                <Entry Text="{Binding AgendamentoAtual.SpecialistName, Mode=TwoWay}"  x:Name="txtSpecialistName" Placeholder="Nome do Especialista"/>
+            </Border>
+
+            <!-- Segunda Entry - SpecialistName -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.Specialty, Mode=TwoWay}"  x:Name="txtSpecialty" Placeholder="Qual a especialidade?"/>
+            </Border>
+
+            <!-- Terceira Entry - PostalCode -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.PostalCode, Mode=TwoWay}"  x:Name="txtPostalCode" Placeholder="CEP"/>
+            </Border>
+
+            <!-- Quarta Entry - City -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.City, Mode=TwoWay}"  x:Name="txtCity" Placeholder="Cidade"/>
+            </Border>
+
+            <!-- Quinta Entry - Street -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.Street, Mode=TwoWay}"  x:Name="txtStreet" Placeholder="Rua"/>
+            </Border>
+
+            <!-- Sexta Entry - Neighborhood -->
+            <Border  Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.Neighborhood, Mode=TwoWay}"  x:Name="txtNeighborhood" Placeholder="Bairro"/>
+            </Border>
+
+                <!-- Sexta Entry - Description -->
+                <Border  Stroke="AliceBlue">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="6" />
+                    </Border.StrokeShape>
+                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescription" Placeholder="Insira uma descrição"/>
+                </Border>
+
+            </VerticalStackLayout>           
+            
+        </ScrollView>
+        
+        <!-- Botões de Add agendamentos e cancelar -->
+        <HorizontalStackLayout                 
+             Grid.Row="1" HorizontalOptions="Center">
+
+                    <Button      
+                      Clicked="btnCancelarAgendamento_Clicked"     
+                      x:Name="btnCancelarAgendamento"                           
+                      BackgroundColor="Blue"                           
+                      Text="CANCELAR"                 
+                      HeightRequest="50"
+                      WidthRequest="100"  
+                      Margin="20"                             
+                      />
+
+                    <Button      
+                      Command="{Binding SaveCommand}"                      
+                      x:Name="btnAddAgendamento"                           
+                      BackgroundColor="Blue"                           
+                      Text="SALVAR"                 
+                      HeightRequest="50"
+                      WidthRequest="100" 
+                      Margin="20"
+                          />
+                </HorizontalStackLayout>
+            
+    </Grid>
+   
+    
+    
+</ContentPage>

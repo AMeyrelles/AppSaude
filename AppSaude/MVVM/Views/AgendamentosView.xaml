@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
-             x:DataType="local:AgendamentoViewModel"
+             x:DataType="local:MainViewModel"
              x:Class="AppSaude.MVVM.Views.AgendamentosView"
-             Title="AgendamentosView">
+             Title="Agendamentos">
 
     <ContentPage.Resources>
         <Style TargetType="Label">
@@ -91,12 +91,12 @@
         <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
             <Button      
              Command="{Binding DisplayCommand}"
-             Margin="10"                  
-             x:Name="btnCarregarAlarme"                           
+             Margin="10"                                          
              BackgroundColor="Blue"                           
              Text="CARREGAR"                 
              HeightRequest="50"
-             WidthRequest="100"  
+             WidthRequest="100"
+             x:Name="btnCarregarAgendamentos" 
           />
 
             <Button
@@ -107,7 +107,8 @@
              CornerRadius="10"
              BackgroundColor="LightSteelBlue"
              ImageSource="plus.png"
-             x:Name="btnAdd">
+             x:Name="btnAdd"
+             Clicked="btnAdd_Clicked">
 
             </Button>
         </HorizontalStackLayout>

@@ -36,15 +36,15 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        private int _id;
-        public int Id
+        private int _appointmentsId;
+        public int AppointmentsId
         {
-            get => _id;
+            get => _appointmentsId;
             set
             {
-                if (_id != value)
+                if (_appointmentsId != value)
                 {
-                    _id = value;
+                    _appointmentsId = value;
                     OnPropertyChanged();
                 }
             }
@@ -92,6 +92,20 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+        private string _city;
+        public string City
+        {
+            get => _city;
+            set
+            {
+                if (_city != value)
+                {
+                    _city = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _street;
         public string Street
         {
@@ -131,6 +145,21 @@ namespace AppSaude.MVVM.ViewModels
                     _appointmentDateTime = value;
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        private string _descriptionAppointments;     
+        public string DescriptionAppointments
+        {
+            get => _descriptionAppointments;
+            set
+            {
+                if(_descriptionAppointments != value)
+                {
+
+                    _descriptionAppointments = value;
+                    OnPropertyChanged();
+                        }
             }
         }
 
@@ -179,7 +208,7 @@ namespace AppSaude.MVVM.ViewModels
                 try
                 {
                     await agendamentoRepository.UpdateAgendamento(AgendamentoAtual);
-                    await Refresh(agendamentoRepository);  // Atualiza a lista após atualizar
+                    await Refresh(agendamentoRepository);  // Atualiza a lista
                     await App.Current.MainPage.DisplayAlert("Alerta", "Atualizado com sucesso!", "OK");
                 }
                 catch (Exception ex)
@@ -225,10 +254,10 @@ namespace AppSaude.MVVM.ViewModels
                     await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
                 }
             });
+
         }
 
-
-
+        //Instância a lista e a atualiza
         public async Task Refresh(IService _servicos)
         {
             try
