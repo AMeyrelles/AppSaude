@@ -1,6 +1,5 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
-using System.Globalization;
 
 namespace AppSaude.MVVM.Views;
 
@@ -51,11 +50,5 @@ public partial class AgendamentoAddView : ContentPage
     {
         await Navigation.PopAsync();
     }
-
-    private void datePickerControl_DateSelected(object sender, DateChangedEventArgs e)
-    {
-        var data = DateTime.Now;
-        string dataFormatada = data.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
-        Console.WriteLine($"Data formatada: {dataFormatada}");
-    }
+      
 }

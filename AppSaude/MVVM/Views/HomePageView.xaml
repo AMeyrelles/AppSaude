@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"            
              x:Class="AppSaude.MVVM.Views.HomePageView"
-             Title="HomePageView">
+             Title="Página Inicial"
+             >
 
     <!-- Styles da Página HOME  -->
     <ContentPage.Resources>
         <!-- Style dos Buttons -->
-        <Style TargetType="Button">
+        <Style TargetType="Button">          
+            <Setter Property="Padding" Value="10,10,10,10"/>
             <Setter Property="HeightRequest" Value="140"/>
             <Setter Property="WidthRequest" Value="140"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
@@ -17,127 +19,183 @@
         </Style>
         
         <!-- Style das Label -->
-        <Style TargetType="Label">
-            <Setter Property="Padding" Value="5,0,0,0"/>
-            <Setter Property="FontSize" Value="Small"/>
-            <Setter Property="TextColor" Value="Black"/>
+        <Style TargetType="Label">           
             <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Small"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
         </Style>
 
         <!-- Style do Border -->
-        <Style TargetType="Border">
-            <Setter Property="Margin" Value="0,8,0,0"/>         
+        <Style TargetType="Border">                  
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="HeightRequest" Value="50"/>
-            <Setter Property="WidthRequest" Value="290"/>   
+            <Setter Property="WidthRequest" Value="280"/>
         </Style>
 
     </ContentPage.Resources>
+    
     <ScrollView>
-        <Grid  HorizontalOptions="Center">
-        
-              <Grid.RowDefinitions>
-                <RowDefinition Height="60*"/>
-                <RowDefinition Height="20*"/>
-                <RowDefinition  Height="20*" />
-              </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80*"/>
+                <RowDefinition Height="15*"/>
+            </Grid.RowDefinitions>
 
-            <VerticalStackLayout             
-            Grid.Row="0"
-            VerticalOptions="Center">      
-            
-        
-            <!-- Primeira linha de botões -->
-            <HorizontalStackLayout HorizontalOptions="Center">                
-                <Button  
+            <VerticalStackLayout  
+                Padding="0,50,0,0"
+                    Grid.Row="0"
+                    VerticalOptions="Center">
+
+                <!-- Primeira linha de botões -->
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Button  
                     x:Name="btnAlarme" 
                     ImageSource="alarm_clock.png"
                     Clicked="btnAlarme_Clicked"               
                 />
+                        <Button 
+                         Text="Notificação"
+                         x:Name="btnNoticacao"                    
+                         ImageSource="bell.png"/>
+                    </HorizontalStackLayout>
+                    <!-- FIM -->
 
-                <Button 
-                 Text="Notificação"
-                 x:Name="btnNoticacao"                    
-                 ImageSource="bell.png"/>                
-            </HorizontalStackLayout>
-            <!-- FIM -->
+                    <!-- Segunda linha de botões -->
+                    <HorizontalStackLayout              
+                         HorizontalOptions="Center">
 
-            <!-- Segunda linha de botões -->
-            <HorizontalStackLayout              
-                HorizontalOptions="Center">
-
-                <Button 
-                 x:Name="btnAgendamentos"
-                 ImageSource="calendar.png"
-                 Clicked="btnAgendamentos_Clicked"   
+                        <Button 
+                          x:Name="btnAgendamentos"
+                          ImageSource="calendar.png"
+                          Clicked="btnAgendamentos_Clicked"   
                     />
 
-                <Button 
-                 x:Name="btnMaps"                 
-                 ImageSource="maps_and_location.png"/>                
-            </HorizontalStackLayout>
-            <!-- FIM -->
+                        <Button 
+                          x:Name="btnMaps"                 
+                          ImageSource="maps_and_location.png"/>
+                     </HorizontalStackLayout>
+                     <!-- FIM -->
+            </VerticalStackLayout>
 
-                <VerticalStackLayout Padding="10">
 
-                    <!-- Lista de Alarmes -->
-                    <Label Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
-                    <CollectionView ItemsSource="{Binding Alarmes}" Margin="0,0,0,10">
+            <VerticalStackLayout                    
+                    Grid.Row="1">
+
+                <!-- Lista de Alarmes -->
+                    <Label
+                        CharacterSpacing="5"
+                        Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,20,0,0" />
+                    <CollectionView 
+                        
+                        ItemsSource="{Binding Alarmes}" Margin="0,0,0,20">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
+
+                             <Grid>
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                    
+                                    <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="6" />
                                     </Border.StrokeShape>
-                                    
-                                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                                        <Image Source="alarm_clock" WidthRequest="30" HeightRequest="30" />
-                                        <Label Text="{Binding MedicationName}" FontSize="16" />
-                                        <Label Text="às" FontSize="16" />
-                                        <Label Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="16" />
-                                    </HorizontalStackLayout>
-                                    
+                                        
+                                        <VerticalStackLayout>
+                                            <HorizontalStackLayout 
+                                                Grid.Row="0"
+                                                Spacing="10" VerticalOptions="Center">
+                                                <Image Source="alarm_clock" WidthRequest="30" HeightRequest="30" />
+                                            </HorizontalStackLayout>
+                                                <Label 
+                                                    Grid.Row="1"
+                                                    Text="{Binding MedicationName}" FontSize="30" />
+                                                <Label 
+                                                    Grid.Row="2"
+                                                    Text="às"/>
+                                                <Label 
+                                                    Grid.Row="3"
+                                                    Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="20" />
+                                            
+                                        </VerticalStackLayout>                                        
                                 </Border>
+                             </Grid>
+
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
                     <!-- Lista de Agendamentos -->
-                    <Label Text="Agendamentos" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
-                    <CollectionView ItemsSource="{Binding Agendamentos}">
+                    <Label 
+                        CharacterSpacing="5"
+                        Text="Agendamentos" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+                    <CollectionView                        
+                        ItemsSource="{Binding Agendamentos}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="6" />
-                                    </Border.StrokeShape>
-                                    
-                                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-                                        <Image Source="calendar" WidthRequest="30" HeightRequest="30" />
-                                        <Label Text="{Binding SpecialistName}" FontSize="16" />
-                                        <Label Text="em" FontSize="16" />
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                  </Grid.RowDefinitions>
+
+
+                                      <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
+
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="6" />
+                                        </Border.StrokeShape>
                                         
-                                        <!-- 
-                                        <Label Text="{Binding DataAgendamento, StringFormat='{0:dd/MM/yyyy}'}" FontSize="16" />
-                                        <Label Text="às" FontSize="16" />
-                                        <Label Text="{Binding HoraAgendamento, StringFormat='{0:HH:mm}h'}" FontSize="16" />
-                                        -->
-                                    </HorizontalStackLayout>
-                                    
-                                </Border>
+                                        <VerticalStackLayout>                                 
+                                   
+                                         <HorizontalStackLayout
+                                                 Grid.Row="0"
+                                                Spacing="1" VerticalOptions="Center">
+                                                <Image Source="calendar" WidthRequest="30" HeightRequest="30" />                                                
+                                            </HorizontalStackLayout>
+
+                                            <Label Text="{Binding Specialty}" FontSize="30" />
+                                            <Label 
+                                                Grid.Row="1"
+                                                Text=" em " />
+
+                                            <Label 
+                                                Grid.Row="2"
+                                                Text="{Binding SelectedDate, StringFormat='{0:dd/MM/yyyy}'}" FontSize="20" />
+
+                                            <Label 
+                                                Grid.Row="3"
+                                                Text=" às " />
+
+                                            <Label 
+                                                Grid.Row="4"
+                                                Text="{Binding AppointmentDateTime, StringFormat='{0:hh\\:mm}h'}" FontSize="20" />
+                                                                           
+                                        </VerticalStackLayout>
+                                          
+                                      </Border>
+                                        
+                                </Grid>
+
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                </VerticalStackLayout>                
-           
-            <!-- FIM -->
-            
-        </VerticalStackLayout>
-       
-    </Grid>
+            </VerticalStackLayout>                        
+
+        </Grid>
     </ScrollView>
+
+    <!-- FIM -->
+    
 </ContentPage>

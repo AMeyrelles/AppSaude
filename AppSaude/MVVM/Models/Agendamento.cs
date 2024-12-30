@@ -35,8 +35,7 @@ namespace AppSaude.MVVM.Models
         // Horário do agendamento
         [NotNull]
         public TimeSpan AppointmentDateTime { get; set; }
-
-        
+                
         public DateTime SelectedDate { get; set; }
 
         [MaxLength(100)]

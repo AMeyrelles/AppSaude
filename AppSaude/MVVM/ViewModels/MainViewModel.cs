@@ -98,7 +98,7 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-
+        //Hora
         private TimeSpan _reminderTime;
         public TimeSpan ReminderTime
         {
@@ -113,6 +113,20 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+        //Data
+        private DateTime _selectedDate;
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if (_selectedDate != value)
+                {
+                    _selectedDate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         private ObservableCollection<Agendamento> _agendamentos;

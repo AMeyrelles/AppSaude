@@ -89,7 +89,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="6" />
                     </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescriptionAppointments" Placeholder="Bairro"/>
+                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescriptionAppointments" Placeholder="Descrição"/>
             </Border>
 
                 <!-- Sétima Entry - Date e Time PickerControl -->
@@ -99,8 +99,7 @@
                         </Border.StrokeShape>
                        <VerticalStackLayout>
                         <Label Text="Data" />
-                        <DatePicker  
-                            DateSelected="datePickerControl_DateSelected"
+                        <DatePicker                             
                             MinimumDate="2025-01-01"
                             Date="{Binding AgendamentoAtual.SelectedDate}"
                             x:Name="datePickerControl" 
