@@ -18,16 +18,13 @@
 
         </Style>
         <Style TargetType="Border">
-            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Margin" Value="5,0,5,10"/>
             <Setter Property="Padding" Value="10,5,0,0"/>
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
         </Style>
 
     </ContentPage.Resources>
 
-    
-        
-    
     <Grid>
         <Grid.RowDefinitions>
                 <RowDefinition Height="85*"/>
@@ -87,13 +84,43 @@
                     <Entry Text="{Binding AgendamentoAtual.Neighborhood, Mode=TwoWay}"  x:Name="txtNeighborhood" Placeholder="Bairro"/>
             </Border>
 
-                <!-- Sexta Entry - Description -->
-                <Border  Stroke="AliceBlue">
+             <!-- Sexta Entry - Description -->
+            <Border  Stroke="AliceBlue">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="6" />
                     </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescription" Placeholder="Insira uma descrição"/>
+                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescriptionAppointments" Placeholder="Bairro"/>
+            </Border>
+
+                <!-- Sétima Entry - Date e Time PickerControl -->
+                <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6" />
+                        </Border.StrokeShape>
+                       <VerticalStackLayout>
+                        <Label Text="Data" />
+                        <DatePicker  
+                            DateSelected="datePickerControl_DateSelected"
+                            MinimumDate="2025-01-01"
+                            Date="{Binding AgendamentoAtual.SelectedDate}"
+                            x:Name="datePickerControl" 
+                         />
+                    </VerticalStackLayout>
                 </Border>
+                
+                   
+                <Border>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6" />
+                        </Border.StrokeShape>
+                   <VerticalStackLayout>
+                       
+                     <Label FontSize="18" Text="Horario"/>
+                     <TimePicker 
+                         Time="{Binding AgendamentoAtual.AppointmentDateTime}"
+                         x:Name="timePickerControl" />
+                   </VerticalStackLayout>
+                </Border>                       
 
             </VerticalStackLayout>           
             
@@ -125,7 +152,6 @@
                 </HorizontalStackLayout>
             
     </Grid>
-   
-    
+       
     
 </ContentPage>

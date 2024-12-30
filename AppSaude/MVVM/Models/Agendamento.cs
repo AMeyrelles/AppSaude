@@ -36,6 +36,9 @@ namespace AppSaude.MVVM.Models
         [NotNull]
         public TimeSpan AppointmentDateTime { get; set; }
 
+        
+        public DateTime SelectedDate { get; set; }
+
         [MaxLength(100)]
         public string DescriptionAppointments { get; set; }
     }

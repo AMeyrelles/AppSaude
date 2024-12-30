@@ -3,6 +3,7 @@ using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Globalization;
 
 namespace AppSaude.MVVM.ViewModels
 {
@@ -134,6 +135,37 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+        private string _descriptionAppointments;
+        public string DescriptionAppointments
+        {
+            get => _descriptionAppointments;
+            set
+            {
+                if (_descriptionAppointments != value)
+                {
+
+                    _descriptionAppointments = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        //Data
+        private DateTime _selectedDate;
+        public DateTime SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if (_selectedDate != value)
+                {
+                    _selectedDate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // Hora
         private TimeSpan _appointmentDateTime;
         public TimeSpan AppointmentDateTime
         {
@@ -148,21 +180,7 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        private string _descriptionAppointments;     
-        public string DescriptionAppointments
-        {
-            get => _descriptionAppointments;
-            set
-            {
-                if(_descriptionAppointments != value)
-                {
-
-                    _descriptionAppointments = value;
-                    OnPropertyChanged();
-                        }
-            }
-        }
-
+        //Commandos CRUD
         public ICommand SaveCommand { get; set; }
         public ICommand UpdateCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
