@@ -35,7 +35,9 @@ namespace AppSaude.MVVM.Views
         private async void btnAddAlarme_Clicked(object sender, EventArgs e)
         {
             TimeSpan selectedTime = TimePickerControl.Time;
+
             DateTime now = DateTime.Now;
+
             DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
 
             if (alarmDateTime <= now)

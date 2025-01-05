@@ -140,14 +140,16 @@
                       />
 
                     <Button      
-                      Command="{Binding SaveCommand}"                      
-                      x:Name="btnAddAgendamento"                           
+                      x:Name="btnAddAgendamento"
+                      Clicked="btnAddAgendamento_Clicked"
+                      Command="{Binding SaveCommand}"                                               
                       BackgroundColor="Blue"                           
                       Text="SALVAR"                 
                       HeightRequest="50"
                       WidthRequest="100" 
                       Margin="20"
                           />
+            
                 </HorizontalStackLayout>
             
     </Grid>

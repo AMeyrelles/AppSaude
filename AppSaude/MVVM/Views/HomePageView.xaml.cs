@@ -58,4 +58,18 @@ public partial class HomePageView : ContentPage
     {
         await Navigation.PushAsync(new AgendamentosView(_services, _audioManager));
     }
+
+    //Falta implementar as funcionalidades
+
+    //Btn Maps
+    private async void btnMaps_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+    }
+
+    //Btn Notification
+    private async void btnNoticacao_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+    }
 }

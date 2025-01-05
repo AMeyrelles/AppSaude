@@ -1,5 +1,6 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
+using Plugin.LocalNotification;
 
 namespace AppSaude.MVVM.Views;
 
@@ -15,7 +16,7 @@ public partial class AgendamentoAddView : ContentPage
         BindingContext = viewModel;
     }
 
-
+    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
 
 
     //Verificar a permissão do usuario
@@ -46,9 +47,116 @@ public partial class AgendamentoAddView : ContentPage
             Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
         }
     }
+
+    //Botão para salvar o agendamento
+    private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
+    {
+        // Obtém a data e a hora selecionadas
+        DateTime selectedDate = datePickerControl.Date;
+        TimeSpan selectedTime = timePickerControl.Time;
+
+        // Combina a data e a hora
+        DateTime agendamentoDateTime = selectedDate.Date.Add(selectedTime);
+
+        // Verifica se a data selecionada é no passado
+        if (selectedDate < DateTime.Now.Date)
+        {
+            await DisplayAlert("Erro", "A data selecionada não pode ser no passado.", "OK");
+            return;
+        }
+
+       
+
+        if (selectedDate.Date == agendamentoDateTime.Date && agendamentoDateTime == selectedDate.Date.Add(selectedTime))
+        {
+            var notification = new NotificationRequest
+            {
+                NotificationId = 102,
+                Title = "ALERTA!",
+                Description = "Você tem um agendamento marcado HOJE!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = agendamentoDateTime
+                },
+                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                {
+                    AutoCancel = true,
+                    IconSmallName = { ResourceName = "bell.png" }
+                }
+            };
+
+           await LocalNotificationCenter.Current.Show(notification);
+        }
+
+        // Adiciona o agendamento à lista (opcional)
+        _agendamentoList.Add(selectedDate);
+
+        // Configura a notificação
+        await VerifyPermissionsAsync();
+        ScheduleNotificationDay(selectedDate);
+    }
+
+    private void ScheduleNotificationDay(DateTime agendamentoDateTime)
+    {
+        try
+        {
+            var notification = new NotificationRequest
+            {
+                NotificationId = 101,
+                Title = "ALERTA!",
+                Description = "Não esqueça do seu agendamento HOJE!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = agendamentoDateTime
+                },
+                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                {
+                    AutoCancel = true,
+                    IconSmallName = { ResourceName = "bell.png" }
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(notification);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+        }
+    }
+
+
+    private void ScheduleNotificationHour(DateTime agendamentoDateTime)
+    {
+        try
+        {
+            var notification = new NotificationRequest
+            {
+                NotificationId = 102,
+                Title = "ALERTA!",
+                Description = "Você tem um agendamento marcado HOJE!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = agendamentoDateTime
+                },
+                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                {
+                    AutoCancel = true,
+                    IconSmallName = { ResourceName = "bell.png" }
+                }
+            };
+
+            LocalNotificationCenter.Current.Show(notification);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+        }
+    }
+
     private async void btnCancelarAgendamento_Clicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
     }
-      
+
+
 }

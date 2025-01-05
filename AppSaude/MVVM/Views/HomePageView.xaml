@@ -53,14 +53,16 @@
                 <!-- Primeira linha de botões -->
                     <HorizontalStackLayout HorizontalOptions="Center">
                         <Button  
-                    x:Name="btnAlarme" 
-                    ImageSource="alarm_clock.png"
-                    Clicked="btnAlarme_Clicked"               
-                />
-                        <Button 
-                         Text="Notificação"
-                         x:Name="btnNoticacao"                    
-                         ImageSource="bell.png"/>
+                            x:Name="btnAlarme" 
+                            ImageSource="alarm_clock.png"
+                            Clicked="btnAlarme_Clicked"               
+                        />
+                        
+                        <Button                          
+                            x:Name="btnNoticacao" 
+                            Clicked="btnNoticacao_Clicked"
+                            ImageSource="bell.png"/>
+                        
                     </HorizontalStackLayout>
                     <!-- FIM -->
 
@@ -69,14 +71,15 @@
                          HorizontalOptions="Center">
 
                         <Button 
-                          x:Name="btnAgendamentos"
-                          ImageSource="calendar.png"
-                          Clicked="btnAgendamentos_Clicked"   
+                           x:Name="btnAgendamentos"
+                           ImageSource="calendar.png"
+                           Clicked="btnAgendamentos_Clicked"   
                     />
 
                         <Button 
-                          x:Name="btnMaps"                 
-                          ImageSource="maps_and_location.png"/>
+                            x:Name="btnMaps"      
+                            Clicked="btnMaps_Clicked"
+                            ImageSource="maps_and_location.png"/>
                      </HorizontalStackLayout>
                      <!-- FIM -->
             </VerticalStackLayout>
