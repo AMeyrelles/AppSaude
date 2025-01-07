@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
-             x:DataType="local:MainViewModel"
+             xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"             
              x:Class="AppSaude.MVVM.Views.AlarmesView"
+             BackgroundColor="White"
              Title="Alarmes">
 
     <ContentPage.Resources>
@@ -24,7 +24,7 @@
 
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition  Height="60"/>
@@ -47,7 +47,7 @@
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="Blue"
-                                            Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AlarmeViewModel}}, Path = DeleteCommand}"                                            
+                                            Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAlarmeCommand}"                                            
                                             Text="Excluir" />
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
@@ -81,16 +81,7 @@
             </CollectionView>
 
         <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
-            <Button      
-                Command="{Binding DisplayCommand}"
-                Margin="10"                  
-                x:Name="btnCarregarAlarme"                           
-                BackgroundColor="Blue"                           
-                Text="CARREGAR"                 
-                HeightRequest="50"
-                WidthRequest="100"  
-             />
-
+            
             <Button
                 Margin="10"
                 Grid.Row="1"            

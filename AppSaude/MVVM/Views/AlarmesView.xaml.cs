@@ -18,7 +18,7 @@ public partial class AlarmesView : ContentPage
 
         _service = servico;
 
-        var viewModel = new AlarmeViewModel(servico);
+        var viewModel = new MainViewModel(servico);
 
         BindingContext = viewModel;
     }
@@ -31,7 +31,7 @@ public partial class AlarmesView : ContentPage
         try
         {
             // O BindingContext é da ViewModel que contém o DisplayCommand
-            var viewModel = BindingContext as AlarmeViewModel;
+            var viewModel = BindingContext as MainViewModel;
             if (viewModel != null)
             {
                 // Dispara o DisplayCommand para carregar os dados automaticamente

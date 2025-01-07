@@ -43,6 +43,7 @@ namespace AppSaude.Services
             }
         }
 
+        //Alarmes
         public async Task<int> DeleteAlarme(Alarme alarme)
         {
             return await _dbConnection.DeleteAsync(alarme);
@@ -64,7 +65,6 @@ namespace AppSaude.Services
 
 
         //Agendamentos
-
         public async Task<int> AddAgendamento(Agendamento agendamento)
         {
             return await _dbConnection.InsertAsync(agendamento);

@@ -269,8 +269,10 @@ namespace AppSaude.MVVM.ViewModels
                 }
             }
         }
-              
-        public ICommand DisplayCommand { get; }
+
+        public ICommand DeleteAlarmeCommand { get; set; }
+        public ICommand DeleteAgendaCommand { get; set; }
+        public ICommand DisplayCommand { get; set; }
 
         public MainViewModel(IService servicesRepository)
 
@@ -286,6 +288,51 @@ namespace AppSaude.MVVM.ViewModels
             AlarmeAtual = new Alarme(); // Inicializa o objeto
             AgendamentoAtual = new Agendamento(); // Inicializa o objeto
 
+            DeleteAlarmeCommand = new Command(async () =>
+            {
+                if (AlarmeAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhum alarme selecionado.", "OK");
+                    return;
+                }
+
+                try
+                {
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Excluir alarme???", "SIM", "NÃO");
+                    if (resposta)
+                    {
+                        await servicesRepository.DeleteAlarme(AlarmeAtual);
+                        await Refresh(servicesRepository);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
+            DeleteAgendaCommand = new Command(async () =>
+            {
+                if (AgendamentoAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhum agendamento selecionado.", "OK");
+                    return;
+                }
+
+                try
+                {
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Excluir o agendamento???", "SIM", "NÃO");
+                    if (resposta)
+                    {
+                        await servicesRepository.DeleteAgendamento(AgendamentoAtual);
+                        await Refresh(servicesRepository);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
 
             DisplayCommand = new Command(async () =>
             {

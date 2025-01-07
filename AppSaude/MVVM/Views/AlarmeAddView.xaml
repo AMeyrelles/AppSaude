@@ -4,7 +4,7 @@
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
              x:DataType="local:AlarmeViewModel"
              x:Class="AppSaude.MVVM.Views.AlarmeAddView"
-             Title="AlarmeAddView">
+             Title="Novo alarme">
 
 
     <ContentPage.Resources>
@@ -24,10 +24,10 @@
         
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="AliceBlue">
         <Grid.RowDefinitions>
-            <RowDefinition Height="45*"/>
-            <RowDefinition Height="30*"/>
+            <RowDefinition Height="90*"/>
+
             <RowDefinition Height="15*"/>           
         </Grid.RowDefinitions>           
            
@@ -54,38 +54,37 @@
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
                 <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
-               </Border>               
+               </Border>
+
+                <!-- TimerPicker -->
+                 <Border                                          
+                       WidthRequest="390"
+                       HeightRequest="130"
+                       HorizontalOptions="Center"
+                      Stroke="AliceBlue"
+            >
+
+                   <Border.StrokeShape>
+                     <RoundRectangle CornerRadius="6" />
+                   </Border.StrokeShape>
+
+                   <VerticalStackLayout HorizontalOptions="Center">
+                        <Label 
+                       Padding="0,0,0,0"
+                       FontSize="Medium"
+                       Text="Insira o horario do alarme"/>
+
+                      <TimePicker     
+                         Time="{Binding AlarmeAtual.ReminderTime}"
+                         FontSize="50"
+                         HorizontalOptions="Center"
+                         x:Name="TimePickerControl" 
+                      />
+
+                   </VerticalStackLayout>
+                 </Border>
 
         </VerticalStackLayout>
-
-        <!-- TimerPicker -->
-        <Border             
-            Grid.Row="1"                     
-            WidthRequest="300"
-            HeightRequest="120"
-            HorizontalOptions="Center"
-            Stroke="AliceBlue"
-            >
-            
-            <Border.StrokeShape>
-                <RoundRectangle CornerRadius="6" />
-            </Border.StrokeShape>
-
-            <VerticalStackLayout HorizontalOptions="Center">
-              <Label 
-                  Padding="0,0,0,0"
-                  FontSize="Medium"
-                  Text="Insira o horario do alarme"/>
-    
-              <TimePicker     
-                Time="{Binding AlarmeAtual.ReminderTime}"
-                FontSize="50"
-                HorizontalOptions="Center"
-                x:Name="TimePickerControl" 
-                />
-        
-            </VerticalStackLayout>
-        </Border>
 
         <HorizontalStackLayout                 
                Grid.Row="2" HorizontalOptions="Center">
@@ -110,7 +109,7 @@
                              WidthRequest="100" 
                              Margin="20"
                                  />
-
+            
         </HorizontalStackLayout>
         
     </Grid>

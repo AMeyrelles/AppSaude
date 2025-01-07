@@ -32,7 +32,7 @@ public partial class HomePageView : ContentPage
 
         try
         {
-            // O BindingContext é da ViewModel que contém o DisplayCommand
+            // O BindingContext é da MainViewModel que contém o DisplayCommand
             var viewModel = BindingContext as MainViewModel;
 
             if (viewModel != null)
@@ -47,7 +47,7 @@ public partial class HomePageView : ContentPage
         }
     }
 
-  
+
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {

@@ -4,7 +4,7 @@
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
              x:DataType="local:AgendamentoViewModel"
              x:Class="AppSaude.MVVM.Views.AgendamentoAddView"
-             Title="AgendamentoAddView">
+             Title="Novo agendamento">
 
 
 
@@ -25,7 +25,7 @@
 
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="AliceBlue">
         <Grid.RowDefinitions>
                 <RowDefinition Height="85*"/>
             <RowDefinition  Height="15*"/>

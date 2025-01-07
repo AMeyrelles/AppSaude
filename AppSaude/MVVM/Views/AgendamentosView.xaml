@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"
              x:DataType="local:MainViewModel"
              x:Class="AppSaude.MVVM.Views.AgendamentosView"
+             BackgroundColor="White"             
              Title="Agendamentos">
 
     <ContentPage.Resources>
@@ -24,7 +25,7 @@
 
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition  Height="60"/>
@@ -47,7 +48,7 @@
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="Blue"
-                                         Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:AgendamentoViewModel}}, Path = DeleteCommand}"                                            
+                                         Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAgendaCommand}"                                            
                                          Text="Excluir" />
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
@@ -100,15 +101,6 @@
         </CollectionView>
 
         <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
-            <Button      
-             Command="{Binding DisplayCommand}"
-             Margin="10"                                          
-             BackgroundColor="Blue"                           
-             Text="CARREGAR"                 
-             HeightRequest="50"
-             WidthRequest="100"
-             x:Name="btnCarregarAgendamentos" 
-          />
 
             <Button
              Margin="10"

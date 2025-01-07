@@ -49,7 +49,7 @@ namespace AppSaude
                     else
                     {
                         // Se sua MainPage não for um NavigationPage, substitua pela sua navegação personalizada
-                        await Application.Current.MainPage.Navigation.PushAsync(new AlarmesView(_alarmeService, _audioManager));
+                        await Application.Current.MainPage.Navigation.PushAsync(new HomePageView(_alarmeService, _audioManager));
                     }
                 });
             }

@@ -18,7 +18,7 @@ public partial class AgendamentosView : ContentPage
 
         _services = services;
 
-        var viewModel = new AgendamentoViewModel(services);
+        var viewModel = new MainViewModel(services);
 
         BindingContext = viewModel;
     }
@@ -29,7 +29,7 @@ public partial class AgendamentosView : ContentPage
         try
         {
             // O BindingContext é da ViewModel que contém o DisplayCommand
-            var viewModel = BindingContext as AgendamentoViewModel;
+            var viewModel = BindingContext as MainViewModel;
             if (viewModel != null)
             {
                 // Dispara o DisplayCommand para carregar os dados automaticamente
