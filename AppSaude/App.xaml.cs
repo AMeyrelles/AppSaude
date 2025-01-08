@@ -44,7 +44,7 @@ namespace AppSaude
                     var navigationPage = (Application.Current.MainPage as NavigationPage);
                     if (navigationPage != null)
                     {
-                        await navigationPage.PushAsync(new AlarmesView(_alarmeService, _audioManager));
+                        await navigationPage.PushAsync(new HomePageView(_alarmeService, _audioManager));
                     }
                     else
                     {
