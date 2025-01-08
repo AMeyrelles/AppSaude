@@ -4,6 +4,7 @@
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
              x:DataType="local:AlarmeViewModel"
              x:Class="AppSaude.MVVM.Views.AlarmeAddView"
+             BackgroundColor="White"
              Title="Novo alarme">
 
 
@@ -39,21 +40,21 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
+                <Entry TextColor="Black" Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
                 </Border>
 
             <Border Stroke="AliceBlue">
                      <Border.StrokeShape>
                          <RoundRectangle CornerRadius="6" />
                      </Border.StrokeShape>
-                     <Entry Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
+                <Entry TextColor="Black" Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
                  </Border>
 
             <Border Stroke="AliceBlue">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
+                <Entry TextColor="Black" Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
                </Border>
 
                 <!-- TimerPicker -->
@@ -89,26 +90,28 @@
         <HorizontalStackLayout                 
                Grid.Row="2" HorizontalOptions="Center">
                
-            <Button      
+              <Button      
                              Clicked="btnCancelarAlarme_Clicked"                             
                              x:Name="btnCancelarAlarme"                           
-                             BackgroundColor="Blue"                           
+                             BackgroundColor="LightSteelBlue"  
+                             TextColor="Black"
                              Text="CANCELAR"                 
                              HeightRequest="50"
                              WidthRequest="100"  
                              Margin="20"                             
-                             />
+              />
 
-            <Button      
+              <Button      
                              Command="{Binding SaveCommand}"
                              Clicked="btnAddAlarme_Clicked"
                              x:Name="btnAddAlarme"                           
-                             BackgroundColor="Blue"                           
+                             BackgroundColor="LightSteelBlue"    
+                             TextColor="Black"
                              Text="SALVAR"                 
                              HeightRequest="50"
                              WidthRequest="100" 
                              Margin="20"
-                                 />
+              />
             
         </HorizontalStackLayout>
         

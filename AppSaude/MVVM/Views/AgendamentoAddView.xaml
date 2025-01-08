@@ -4,6 +4,7 @@
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"
              x:DataType="local:AgendamentoViewModel"
              x:Class="AppSaude.MVVM.Views.AgendamentoAddView"
+             BackgroundColor="White"
              Title="Novo agendamento">
 
 
@@ -41,7 +42,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding AgendamentoAtual.SpecialistName, Mode=TwoWay}"  x:Name="txtSpecialistName" Placeholder="Nome do Especialista"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.SpecialistName, Mode=TwoWay}"  x:Name="txtSpecialistName" Placeholder="Nome do Especialista"/>
             </Border>
 
             <!-- Segunda Entry - SpecialistName -->
@@ -49,7 +50,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.Specialty, Mode=TwoWay}"  x:Name="txtSpecialty" Placeholder="Qual a especialidade?"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.Specialty, Mode=TwoWay}"  x:Name="txtSpecialty" Placeholder="Qual a especialidade?"/>
             </Border>
 
             <!-- Terceira Entry - PostalCode -->
@@ -57,7 +58,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.PostalCode, Mode=TwoWay}"  x:Name="txtPostalCode" Placeholder="CEP"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.PostalCode, Mode=TwoWay}"  x:Name="txtPostalCode" Placeholder="CEP"/>
             </Border>
 
             <!-- Quarta Entry - City -->
@@ -65,7 +66,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.City, Mode=TwoWay}"  x:Name="txtCity" Placeholder="Cidade"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.City, Mode=TwoWay}"  x:Name="txtCity" Placeholder="Cidade"/>
             </Border>
 
             <!-- Quinta Entry - Street -->
@@ -73,7 +74,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.Street, Mode=TwoWay}"  x:Name="txtStreet" Placeholder="Rua"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.Street, Mode=TwoWay}"  x:Name="txtStreet" Placeholder="Rua"/>
             </Border>
 
             <!-- Sexta Entry - Neighborhood -->
@@ -81,7 +82,7 @@
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.Neighborhood, Mode=TwoWay}"  x:Name="txtNeighborhood" Placeholder="Bairro"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.Neighborhood, Mode=TwoWay}"  x:Name="txtNeighborhood" Placeholder="Bairro"/>
             </Border>
 
              <!-- Sexta Entry - Description -->
@@ -89,7 +90,7 @@
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="6" />
                     </Border.StrokeShape>
-                    <Entry Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescriptionAppointments" Placeholder="Descrição"/>
+                    <Entry TextColor="Black" Text="{Binding AgendamentoAtual.DescriptionAppointments, Mode=TwoWay}"  x:Name="txtDescriptionAppointments" Placeholder="Descrição"/>
             </Border>
 
                 <!-- Sétima Entry - Date e Time PickerControl -->
@@ -98,8 +99,9 @@
                             <RoundRectangle CornerRadius="6" />
                         </Border.StrokeShape>
                        <VerticalStackLayout>
-                        <Label Text="Data" />
-                        <DatePicker                             
+                        <Label TextColor="Black" Text="Data" />
+                        <DatePicker 
+                            TextColor="Black"
                             MinimumDate="2025-01-01"
                             Date="{Binding AgendamentoAtual.SelectedDate}"
                             x:Name="datePickerControl" 
@@ -116,6 +118,7 @@
                        
                      <Label FontSize="18" Text="Horario"/>
                      <TimePicker 
+                         TextColor="Black"
                          Time="{Binding AgendamentoAtual.AppointmentDateTime}"
                          x:Name="timePickerControl" />
                    </VerticalStackLayout>
@@ -132,7 +135,8 @@
                     <Button      
                       Clicked="btnCancelarAgendamento_Clicked"     
                       x:Name="btnCancelarAgendamento"                           
-                      BackgroundColor="Blue"                           
+                      BackgroundColor="LightSteelBlue" 
+                      TextColor="Black"
                       Text="CANCELAR"                 
                       HeightRequest="50"
                       WidthRequest="100"  
@@ -143,7 +147,8 @@
                       x:Name="btnAddAgendamento"
                       Clicked="btnAddAgendamento_Clicked"
                       Command="{Binding SaveCommand}"                                               
-                      BackgroundColor="Blue"                           
+                      BackgroundColor="LightSteelBlue" 
+                      TextColor="Black"
                       Text="SALVAR"                 
                       HeightRequest="50"
                       WidthRequest="100" 

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"            
              x:Class="AppSaude.MVVM.Views.HomePageView"
-             x:DataType="local:MainViewModel"
              BackgroundColor="White"
              Title="Página Inicial"
              >
@@ -35,7 +34,7 @@
             <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="WidthRequest" Value="280"/>
+            <Setter Property="WidthRequest" Value="290"/>
         </Style>
 
     </ContentPage.Resources>
@@ -54,16 +53,25 @@
 
                 <!-- Primeira linha de botões -->
                     <HorizontalStackLayout HorizontalOptions="Center">
+                    <VerticalStackLayout Margin="5">
                         <Button  
                             x:Name="btnAlarme" 
-                            ImageSource="alarm_clock.png"
+                            ImageSource="alarm_clock.png"                   
                             Clicked="btnAlarme_Clicked"               
                         />
-                        
+                        <Label Text="Alarme"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Margin="5">
                         <Button                          
                             x:Name="btnNoticacao" 
-                            Clicked="btnNoticacao_Clicked"
-                            ImageSource="bell.png"/>
+                           Clicked="btnNoticacao_Clicked"
+                             ImageSource="bell.png"/>
+
+                        <Label Text="Notificação"/>
+
+                    </VerticalStackLayout>
+                       
                         
                     </HorizontalStackLayout>
                     <!-- FIM -->
@@ -72,16 +80,24 @@
                     <HorizontalStackLayout              
                          HorizontalOptions="Center">
 
+                    <VerticalStackLayout Margin="5">
                         <Button 
                            x:Name="btnAgendamentos"
                            ImageSource="calendar.png"
                            Clicked="btnAgendamentos_Clicked"   
                     />
+                        <Label Text="Agendamento"/>
+                    </VerticalStackLayout>
 
+
+                    <VerticalStackLayout Margin="5">
                         <Button 
                             x:Name="btnMaps"      
                             Clicked="btnMaps_Clicked"
                             ImageSource="maps_and_location.png"/>
+                        <Label Text="Mapa"/>
+                    </VerticalStackLayout>
+
                      </HorizontalStackLayout>
                      <!-- FIM -->
             </VerticalStackLayout>
@@ -90,57 +106,66 @@
             <VerticalStackLayout                    
                     Grid.Row="1">
 
-                <!-- Lista de Alarmes -->
+                <!-- Lista de Alarmes 
                     <Label
                         CharacterSpacing="5"
-                        Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,20,0,0" />
+                        Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,20,0,10" />
+                    -->
                     <CollectionView 
                         
-                        ItemsSource="{Binding Alarmes}" Margin="0,0,0,20">
+                        ItemsSource="{Binding Alarmes}" Margin="0,20,0,20">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
 
-                             <Grid>
-                                <Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                                    </Grid.RowDefinitions>
                                     
-                                    <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="6" />
-                                    </Border.StrokeShape>
-                                        
+                                    <!-- Lista de Alarmes -->
+
+                                    <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,10">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="6" />
+                                        </Border.StrokeShape>
+
                                         <VerticalStackLayout>
-                                            <HorizontalStackLayout 
+
+                                             <HorizontalStackLayout                                            
                                                 Grid.Row="0"
-                                                Spacing="10" VerticalOptions="Center">
+                                                Spacing="0" HorizontalOptions="Center">
+                                            
                                                 <Image Source="alarm_clock" WidthRequest="30" HeightRequest="30" />
-                                            </HorizontalStackLayout>
-                                                <Label 
+                                            
+                                                <Label                                                   
+                                                  CharacterSpacing="6"
+                                                  Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"
+                                                />
+
+                                             </HorizontalStackLayout>
+
+                                        <Label 
                                                     Grid.Row="1"
                                                     Text="{Binding MedicationName}" FontSize="30" />
-                                                <Label 
+                                            <Label 
                                                     Grid.Row="2"
                                                     Text="às"/>
-                                                <Label 
+                                            <Label 
                                                     Grid.Row="3"
                                                     Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="20" />
-                                            
-                                        </VerticalStackLayout>                                        
-                                </Border>
-                             </Grid>
+
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
 
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
 
-                    <!-- Lista de Agendamentos -->
-                    <Label 
-                        CharacterSpacing="5"
-                        Text="Agendamentos" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+                <!-- Lista de Agendamentos  -->
                     <CollectionView                        
                         ItemsSource="{Binding Agendamentos}">
                         <CollectionView.ItemTemplate>
@@ -156,21 +181,27 @@
                                   </Grid.RowDefinitions>
 
 
-                                      <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,5">
+                                      <Border StrokeThickness="1" Stroke="Gray" Padding="5,0,0,5" Margin="0,0,0,10">
 
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="6" />
                                         </Border.StrokeShape>
                                         
-                                        <VerticalStackLayout>                                 
-                                   
-                                         <HorizontalStackLayout
-                                                 Grid.Row="0"
-                                                Spacing="1" VerticalOptions="Center">
-                                                <Image Source="calendar" WidthRequest="30" HeightRequest="30" />                                                
-                                            </HorizontalStackLayout>
+                                        <VerticalStackLayout HorizontalOptions="Center">
+                                            
+                                          <HorizontalStackLayout                                            
+                                                Grid.Row="0"
+                                                Spacing="1" HorizontalOptions="Center">
 
-                                            <Label Text="{Binding Specialty}" FontSize="30" />
+                                            <Image HorizontalOptions="Start" Source="calendar" WidthRequest="30" HeightRequest="30" />
+
+                                                <Label                                                   
+                                                  CharacterSpacing="5"
+                                                  Text="Agendamento" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"/>
+                                            
+                                          </HorizontalStackLayout>                                             
+
+                                        <Label Text="{Binding Specialty}" FontSize="30" />
                                             <Label 
                                                 Grid.Row="1"
                                                 Text=" em " />
