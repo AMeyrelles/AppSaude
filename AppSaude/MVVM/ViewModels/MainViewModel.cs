@@ -41,7 +41,6 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-
         private int _id;
         public int Id
         {
@@ -269,6 +268,19 @@ namespace AppSaude.MVVM.ViewModels
                 }
             }
         }
+
+        //Muda a cor do Border quando a condição for atendida
+        private Color _borderColor = Colors.LightSteelBlue;
+        public Color BorderColor
+        {
+            get => _borderColor;
+            set
+            {
+                _borderColor = value;
+                OnPropertyChanged(nameof(BorderColor));
+            }
+        }
+
 
         public ICommand DeleteAlarmeCommand { get; set; }
         public ICommand DeleteAgendaCommand { get; set; }

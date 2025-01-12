@@ -11,6 +11,11 @@ namespace AppSaude
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+#if ANDROID
+            builder.Services.AddTransient<IServiceAndroid, ServiceAndroid>();   
+           
+#endif
             builder
                 .UseMauiApp<App>()
                 .UseLocalNotification()

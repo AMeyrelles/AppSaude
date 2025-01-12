@@ -8,47 +8,26 @@ namespace AppSaude.MVVM.Views
 {
     public partial class AlarmeAddView : ContentPage
     {
-        private readonly IService _alarmeService;
-        private readonly IAudioManager _audioManager;
-        private readonly List<DateTime> _alarmList = new List<DateTime>();
-      
+        private readonly IService _service;    
 
-        public AlarmeAddView(IService servicos, IAudioManager audioManager)
+        IServiceAndroid _servicesAndroid;
+        public string MessageToast { get; set; }
+
+        private readonly List<DateTime> _alarmList = new();
+
+        public AlarmeAddView(IService servicos, IServiceAndroid serviceAndroid)
         {
             InitializeComponent();
-            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager), "O serviço de áudio não foi fornecido.");
-          
-            _alarmeService = servicos ?? throw new ArgumentNullException(nameof(servicos), "O serviço de alarme não foi fornecido.");
-            
-            var viewModel = new AlarmeViewModel(_alarmeService);
+           
+            _service = servicos ?? throw new ArgumentNullException(nameof(servicos), "O serviço de alarme não foi fornecido.");
 
-            BindingContext = viewModel;                     
-        }
+            _servicesAndroid = serviceAndroid ?? throw new ArgumentNullException(nameof(servicos), "O serviço não foi fornecido.");
 
-        //Botão de voltar
-        private async void btnCancelarAlarme_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PopAsync();
-        }
+            _servicesAndroid = serviceAndroid;
 
-        //Botão para salvar o alarme
-        private async void btnAddAlarme_Clicked(object sender, EventArgs e)
-        {
-            TimeSpan selectedTime = TimePickerControl.Time;
+            var viewModel = new AlarmeViewModel(_service);
 
-            DateTime now = DateTime.Now;
-
-            DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
-
-            if (alarmDateTime <= now)
-            {
-                alarmDateTime = alarmDateTime.AddDays(1);
-            }
-
-            _alarmList.Add(alarmDateTime);
-
-            await VerifyPermissionsAsync();
-            await ScheduleAlarmAsync(alarmDateTime);
+            BindingContext = viewModel;            
         }
 
         //Verifica permissão para exibir notificacao
@@ -80,78 +59,31 @@ namespace AppSaude.MVVM.Views
             }
         }
 
-        //Dispara a notificacao
-        private async Task ScheduleAlarmAsync(DateTime alarmDateTime)
-        {
-            try
-            {
-                var notification = new NotificationRequest
-                {
-                    NotificationId = 100,
-                    Title = "Lembrete de Remédio",
-                    Description = "É hora de tomar seu remédio!",
-                    Schedule = new NotificationRequestSchedule
-                    {
-                        NotifyTime = alarmDateTime
-                    },
-                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-                    {
-                        AutoCancel = true,
-                        IconSmallName = { ResourceName = "bell.png" }
-                    }
-                };
-
-                await LocalNotificationCenter.Current.Show(notification);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
-            }
-        }
-
-
-        //Checa se o alarme atual é igual o horario atual
-        private async void CheckAlarms(object sender, ElapsedEventArgs e)
+        //Botão para salvar o alarme
+        private async void btnAddAlarme_Clicked(object sender, EventArgs e)
         {
             TimeSpan selectedTime = TimePickerControl.Time;
+
             DateTime now = DateTime.Now;
+
             DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
 
-            foreach (var alarm in _alarmList)
+            if (alarmDateTime <= now)
             {
-
-                if (alarmDateTime <= now)
-                {
-                    alarmDateTime = alarmDateTime.AddDays(1);
-                }
-                else
-                {
-                    if (now.Hour == alarm.Hour && now.Minute == alarm.Minute)
-                    {
-                        await OnAudioTriggered();
-                        await OpenAlarmeViewAsync();
-                        break;
-                    }
-                }
-
+                alarmDateTime = alarmDateTime.AddDays(1);
             }
+
+            _alarmList.Add(alarmDateTime);
+
+            _servicesAndroid.Start();
+
+            await VerifyPermissionsAsync();            
         }
 
-        //Disparo para o som de notificação
-        private async Task OnAudioTriggered()
+        //Botão de voltar
+        private async void btnCancelarAlarme_Clicked(object sender, EventArgs e)
         {
-            var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("careless_whisper.mp3"));
-            player.Play();
-            player.PlaybackEnded += (sender, e) =>
-            {
-                player.Dispose();
-            };
-        }
-
-        //Navega para a tela quando o alarme disparar
-        private async Task OpenAlarmeViewAsync()
-        {
-            await Navigation.PushAsync(new AlarmesView(_alarmeService, _audioManager));
+            await Navigation.PopAsync();
         }
       
     }

@@ -2,30 +2,34 @@
 using AppSaude.Services;
 using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
-using System.Globalization;
 
 namespace AppSaude
 {
     public partial class App : Application
     {
         private readonly IService _alarmeService;
+
         private readonly IAudioManager _audioManager;
 
-        public App(IService alarmeService, IAudioManager audioManager)
+        IServiceAndroid _servicesAndroid;
+
+        public App(IService alarmeService, IServiceAndroid servicesAndroid, IAudioManager audioManager)
         {
-            InitializeComponent();               
+            InitializeComponent();
 
             // Adicionar o manipulador de eventos para a notificação
             LocalNotificationCenter.Current.NotificationActionTapped += Current_NotificationActionTapped;
-
-            _audioManager = audioManager;
 
             // Atribuir dependências injetadas
             _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService));
             _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));
 
+            _audioManager = audioManager;
+
+            _servicesAndroid = servicesAndroid;
+
             // Configurar a página inicial
-            MainPage = new NavigationPage(new HomePageView(_alarmeService, _audioManager));
+            MainPage = new NavigationPage(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
         }
 
         // Método de manipulação para NotificationActionTapped
@@ -44,12 +48,12 @@ namespace AppSaude
                     var navigationPage = (Application.Current.MainPage as NavigationPage);
                     if (navigationPage != null)
                     {
-                        await navigationPage.PushAsync(new HomePageView(_alarmeService, _audioManager));
+                        await navigationPage.PushAsync(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
                     }
                     else
                     {
                         // Se sua MainPage não for um NavigationPage, substitua pela sua navegação personalizada
-                        await Application.Current.MainPage.Navigation.PushAsync(new HomePageView(_alarmeService, _audioManager));
+                        await Application.Current.MainPage.Navigation.PushAsync(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
                     }
                 });
             }

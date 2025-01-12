@@ -18,7 +18,7 @@ namespace AppSaude.Services
         Task<int> AddAgendamento(Agendamento agendamento);
         Task<int> DeleteAgendamento(Agendamento agendamento);
         Task<int> UpdateAgendamento(Agendamento agendamento);
-
         Task SetUpDb();
+
     }
 }

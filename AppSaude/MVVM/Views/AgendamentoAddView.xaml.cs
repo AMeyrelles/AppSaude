@@ -7,6 +7,8 @@ namespace AppSaude.MVVM.Views;
 public partial class AgendamentoAddView : ContentPage
 {
 	private readonly IService _services;
+
+    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
     public AgendamentoAddView(IService services)
 	{
         InitializeComponent();
@@ -14,39 +16,7 @@ public partial class AgendamentoAddView : ContentPage
 
         var viewModel = new AgendamentoViewModel(services);
         BindingContext = viewModel;
-    }
-
-    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
-
-
-    //Verificar a permissão do usuario
-    private async Task VerifyPermissionsAsync()
-    {
-        try
-        {
-            var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-
-            if (status != PermissionStatus.Granted)
-            {
-                await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
-                status = await Permissions.RequestAsync<Permissions.PostNotifications>();
-            }
-
-            if (status == PermissionStatus.Granted)
-            {
-                Console.WriteLine("Permissão para notificações concedida.");
-            }
-            else
-            {
-                await App.Current.MainPage.DisplayAlert("Alerta!", "Permissão para notificações negada." , "OK");
-                await DisplayAlert("Alerta", "Permissão para notificações NEGADA!", "OK");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
-        }
-    }
+    }   
 
     //Botão para salvar o agendamento
     private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
@@ -65,9 +35,8 @@ public partial class AgendamentoAddView : ContentPage
             return;
         }
 
-       
-
-        if (selectedDate.Date == agendamentoDateTime.Date && agendamentoDateTime == selectedDate.Date.Add(selectedTime))
+        //Dispara notificação
+        if (selectedDate.Date == agendamentoDateTime.Date)
         {
             var notification = new NotificationRequest
             {
@@ -96,6 +65,7 @@ public partial class AgendamentoAddView : ContentPage
         ScheduleNotificationDay(selectedDate);
     }
 
+    //Dispara notificação
     private void ScheduleNotificationDay(DateTime agendamentoDateTime)
     {
         try
@@ -112,7 +82,7 @@ public partial class AgendamentoAddView : ContentPage
                 Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                 {
                     AutoCancel = true,
-                    IconSmallName = { ResourceName = "bell.png" }
+                    IconSmallName = { ResourceName = "appicon.svg" }
                 }
             };
 
@@ -124,35 +94,36 @@ public partial class AgendamentoAddView : ContentPage
         }
     }
 
-
-    private void ScheduleNotificationHour(DateTime agendamentoDateTime)
+    //Verificar a permissão do usuario
+    private async Task VerifyPermissionsAsync()
     {
         try
         {
-            var notification = new NotificationRequest
-            {
-                NotificationId = 102,
-                Title = "ALERTA!",
-                Description = "Você tem um agendamento marcado HOJE!",
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = agendamentoDateTime
-                },
-                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-                {
-                    AutoCancel = true,
-                    IconSmallName = { ResourceName = "bell.png" }
-                }
-            };
+            var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
 
-            LocalNotificationCenter.Current.Show(notification);
+            if (status != PermissionStatus.Granted)
+            {
+                await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
+                status = await Permissions.RequestAsync<Permissions.PostNotifications>();
+            }
+
+            if (status == PermissionStatus.Granted)
+            {
+                Console.WriteLine("Permissão para notificações concedida.");
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Alerta!", "Permissão para notificações negada.", "OK");
+                await DisplayAlert("Alerta", "Permissão para notificações NEGADA!", "OK");
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+            Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
         }
     }
 
+    //Botão de Cancelar/Retornar
     private async void btnCancelarAgendamento_Clicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();

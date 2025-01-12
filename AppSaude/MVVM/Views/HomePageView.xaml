@@ -127,12 +127,12 @@
                                     
                                     <!-- Lista de Alarmes -->
 
-                                    <Border StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,10">
+                                     <Border x:Name="alarmBorder" StrokeThickness="1" Stroke="Gray" Padding="10" Margin="0,5,0,10">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="6" />
                                         </Border.StrokeShape>
 
-                                        <VerticalStackLayout>
+                                       <VerticalStackLayout x:Name="alarmVSL">
 
                                              <HorizontalStackLayout                                            
                                                 Grid.Row="0"
@@ -140,14 +140,14 @@
                                             
                                                 <Image Source="alarm_clock" WidthRequest="30" HeightRequest="30" />
                                             
-                                                <Label                                                   
+                                                <Label                                              
                                                   CharacterSpacing="6"
                                                   Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"
                                                 />
 
                                              </HorizontalStackLayout>
 
-                                        <Label 
+                                        <Label      x:Name="lblMName"  
                                                     Grid.Row="1"
                                                     Text="{Binding MedicationName}" FontSize="30" />
                                             <Label 
