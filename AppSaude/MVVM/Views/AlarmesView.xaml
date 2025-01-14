@@ -19,7 +19,10 @@
 
     </ContentPage.Resources>
 
-    <Grid Margin="5,10,5,0" BackgroundColor="White">
+    <Grid         
+        BackgroundColor="White"
+        Margin="5,10,5,0">
+        
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition  Height="60"/>
@@ -33,7 +36,7 @@
             <CollectionView.ItemTemplate>                    
                 <DataTemplate>
                     <Border 
-                        Margin="5,10,5,10">
+                        Margin="5,10,5,10">                        
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="6" />
                         </Border.StrokeShape>
@@ -43,7 +46,7 @@
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
-                                        <SwipeItem BackgroundColor="#195986"
+                                        <SwipeItem BackgroundColor="#05395e"
                                             Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAlarmeCommand}"                                            
                                             Text="Excluir" />
                                     </SwipeItems>
@@ -52,9 +55,8 @@
                                 <Grid RowDefinitions="Auto, Auto, Auto, Auto">
                                     <Border>
                                         <VerticalStackLayout >
-
                                             <Border 
-                                                BackgroundColor="#05395e" 
+                                                BackgroundColor="#195986" 
                                                 Margin="0,0,0,10">
 
                                                 <VerticalStackLayout>
@@ -66,16 +68,12 @@
 
                                                     <Label  
                                                         TextColor="White"
-                                                        FontSize="20"
+                                                        FontSize="30"
                                                         Text="{Binding ReminderTime, StringFormat='{}{0:hh\\:mm}h'}"
                                                         Grid.Row="1"/>
         
-                                                </VerticalStackLayout>
-   
-
+                                                </VerticalStackLayout>   
                                             </Border>
-
-
 
                                             <Label 
                                                  Margin="0,0,0,20"
@@ -89,7 +87,6 @@
                                                  Grid.Row="3"/>
 
                                         </VerticalStackLayout>
-
                                     </Border>
                                     
                                 </Grid>                                

@@ -2,6 +2,8 @@
 using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace AppSaude.MVVM.ViewModels
@@ -270,16 +272,18 @@ namespace AppSaude.MVVM.ViewModels
         }
 
         //Muda a cor do Border quando a condição for atendida
-        private Color _borderColor = Colors.LightSteelBlue;
-        public Color BorderColor
+        private bool _isHighlighted;
+        public bool IsHighlighted
         {
-            get => _borderColor;
+            get => _isHighlighted;
             set
             {
-                _borderColor = value;
-                OnPropertyChanged(nameof(BorderColor));
+                _isHighlighted = value;
+                OnPropertyChanged();
             }
         }
+
+        public Command ToggleHighlightCommand => new Command(() => IsHighlighted = !IsHighlighted);
 
 
         public ICommand DeleteAlarmeCommand { get; set; }

@@ -10,17 +10,22 @@
     <ContentPage.Resources>
         
         <Style TargetType="Entry">
-            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="FontSize" Value="Large"/>
             <Setter Property="CharacterSpacing" Value="2"/>
             <Setter Property="Margin" Value="0,10,0,0"/>
-            
+            <Setter Property="TextColor" Value="White"/>
         </Style>
+        
         <Style TargetType="Border">
             <Setter Property="Margin" Value="0,0,0,10"/>
             <Setter Property="Padding" Value="10,5,0,0"/>
-            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+            <Setter Property="BackgroundColor" Value="#195986"/>
         </Style>
-        
+
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="White"/>
+        </Style>
+
     </ContentPage.Resources>
 
     <Grid BackgroundColor="White">
@@ -31,36 +36,36 @@
         </Grid.RowDefinitions>           
            
         <!-- Entrys para inserir os dados -->
-            <VerticalStackLayout 
+        <VerticalStackLayout 
                 Grid.Row="0"
                 Padding="10" >
                 <Border Stroke="AliceBlue">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="6" />
-                </Border.StrokeShape>
-                <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
+                  <Border.StrokeShape>
+                     <RoundRectangle CornerRadius="6" />
+                  </Border.StrokeShape>
+                       <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
                 </Border>
 
-            <Border Stroke="AliceBlue">
+              <Border Stroke="AliceBlue">
                      <Border.StrokeShape>
                          <RoundRectangle CornerRadius="6" />
                      </Border.StrokeShape>
-                <Entry Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
-                 </Border>
+                <Entry TextColor="White" Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
+              </Border>
 
-            <Border Stroke="AliceBlue">
+              <Border Stroke="AliceBlue">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
                 <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
-               </Border>
+              </Border>
 
                 <!-- TimerPicker -->
-                <Border                                          
+               <Border                                          
                      WidthRequest="390"
                      HeightRequest="130"
                      HorizontalOptions="Center"
-                     Stroke="AliceBlue"
+                     Stroke="AliceBlue"                    
                      >
                    <Border.StrokeShape>
                      <RoundRectangle CornerRadius="6" />
@@ -70,7 +75,8 @@
                       <Label 
                         Padding="0,0,0,0"
                         FontSize="Medium"
-                        Text="Insira o horario do alarme"
+                        TextColor="White"
+                        Text="Insira o horario do alarme"                        
                       />
 
                       <TimePicker  
@@ -81,7 +87,7 @@
                       />
 
                    </VerticalStackLayout>
-                </Border>
+               </Border>
 
         </VerticalStackLayout>
 
@@ -91,7 +97,7 @@
               <Button      
                              Clicked="btnCancelarAlarme_Clicked"                             
                              x:Name="btnCancelarAlarme"                          
-                             TextColor="Black"
+                             TextColor="White"
                              Text="CANCELAR"                 
                              HeightRequest="50"
                              WidthRequest="100"  
@@ -102,7 +108,7 @@
                              Command="{Binding SaveCommand}"
                              Clicked="btnAddAlarme_Clicked"
                              x:Name="btnAddAlarme"                           
-                             TextColor="Black"
+                             TextColor="White"
                              Text="SALVAR"                 
                              HeightRequest="50"
                              WidthRequest="100" 

@@ -2,7 +2,6 @@ using AppSaude.MVVM.Models;
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
-using Plugin.LocalNotification.AndroidOption;
 using Plugin.Maui.Audio;
 
 namespace AppSaude.MVVM.Views;
@@ -11,10 +10,7 @@ public partial class AlarmesView : ContentPage
 {
     private readonly IService _service;
     private readonly IAudioManager _audioManager;
-
-    IServiceAndroid _servicesAndroid;
-
-    
+    IServiceAndroid _servicesAndroid;    
 
     private List<Alarme> _alarmeList = new List<Alarme>();
    
@@ -88,6 +84,16 @@ public partial class AlarmesView : ContentPage
         // Configura o timer para chamar o método de verificação a cada 1 minuto
         _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
     }
+
+    //Limpa o timer ao sair da tela
+    //protected override void OnDisappearing()
+    //{
+    //    base.OnDisappearing();
+
+    //    // Para o timer ao sair da tela
+    //    _timer?.Dispose();
+    //    _timer = null;
+    //}
 
     private async void CheckAlarms(object state)
     {

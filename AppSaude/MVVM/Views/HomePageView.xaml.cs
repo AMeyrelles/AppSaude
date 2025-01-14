@@ -55,8 +55,7 @@ public partial class HomePageView : ContentPage
         }
     }
 
-
-
+    //Carregar os dados ao carregar a tela
     private Timer _timer;
     protected override async void OnAppearing()
     {
@@ -66,7 +65,7 @@ public partial class HomePageView : ContentPage
         _alarmeList = await LoadAlarmsFromDatabaseAsync();
 
         // Exibe a quantidade de alarmes carregados
-        Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");    
+        Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");
 
         try
         {
@@ -87,6 +86,17 @@ public partial class HomePageView : ContentPage
         _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
     }
 
+
+    //Limpa o timer ao sair da tela
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        // Para o timer ao sair da tela
+        _timer?.Dispose();
+        _timer = null;
+    }
+
     private async void CheckAlarms(object state)
     {
         try
@@ -97,14 +107,15 @@ public partial class HomePageView : ContentPage
             // Carrega os alarmes do banco e armazena na lista
             var _alarmeList = await LoadAlarmsFromDatabaseAsync();
 
-
             foreach (var alarm in _alarmeList)
             {
                 // Verifica se o horário atual coincide com o horário do alarme
                 if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
                 {
-                    // Altere a cor do Border
-                   
+                    var alarmBorder = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
+
+                    alarmBorder.BackgroundColor = Colors.Red;
+
 
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }
@@ -122,6 +133,7 @@ public partial class HomePageView : ContentPage
         }
     }
 
+
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
@@ -135,10 +147,10 @@ public partial class HomePageView : ContentPage
 
 
     //Conta quantos alarmes foram carregados
-    private async Task ShowAlarmCountAsync()
-    {
-        await DisplayAlert("Informação", $"Alarmes atuais: {_alarmeList.Count}", "OK");
-    }
+    //private async Task ShowAlarmCountAsync()
+    //{
+    //    await DisplayAlert("Informação", $"Alarmes atuais: {_alarmeList.Count}", "OK");
+    //}
 
     //Falta implementar as funcionalidades
 

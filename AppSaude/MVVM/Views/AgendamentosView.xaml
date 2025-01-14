@@ -9,6 +9,7 @@
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="FontSize" Value="Large"/>
+            <Setter Property="TextColor" Value="Black"/>
             <Setter Property="CharacterSpacing" Value="2"/>
             <Setter Property="HorizontalTextAlignment" Value="Center"/>         
         </Style>
@@ -18,7 +19,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid BackgroundColor="white">
+    <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition  Height="60"/>
@@ -30,9 +31,8 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border  
-                        Margin="5,10,5,10"
-                            >
+                    <Border 
+                        Margin="5,10,5,10">
                         
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="6" />
@@ -43,7 +43,7 @@
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
-                                        <SwipeItem BackgroundColor="#195986"
+                                        <SwipeItem BackgroundColor="#05395e"
                                          Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAgendaCommand}"                                            
                                          Text="Excluir" />
                                     </SwipeItems>
@@ -53,7 +53,7 @@
                                     <Border>
                                         <VerticalStackLayout>
                                             <Border        
-                                                BackgroundColor="#05395e" 
+                                                BackgroundColor="#195986" 
                                                 Margin="0,0,0,10"
                                                 >
                                                 <VerticalStackLayout>                                               
@@ -61,52 +61,61 @@
                                                       TextColor="White"
                                                       FontSize="40"                                       
                                                       Text="{Binding SpecialistName}"
-                                                      Grid.Row="0"/>
+                                                      Grid.Row="0"
+                                                      />
 
                                                     <Label 
                                                       TextColor="White"
                                                       FontSize="30"  
                                                       Text="{Binding Specialty}"
-                                                      Grid.Row="1"/>
-                                                
+                                                      Grid.Row="1"
+                                                      />                                                
                                                  </VerticalStackLayout>
                                             </Border>
 
-                                            <HorizontalStackLayout
-                                        Margin="0,10,0,10"
-                                        Grid.Row="2"
-                                        HorizontalOptions="Center">
+                                            <HorizontalStackLayout                                                
+                                                Margin="0,0,0,20"
+                                                Grid.Row="2"
+                                                HorizontalOptions="Center">
+                                                
                                                 <Label   
+                                                  FontSize="25"
+                                                  TextColor="Black"
                                                   Text="{Binding SelectedDate, StringFormat='{0:dd/MM/yyyy}'}"
                                                 />
                                                 <Label
-                                                Text=" às "/>
-                                                <Label   
-                                                  Text="{Binding AppointmentDateTime, StringFormat='{}{0:hh\\:mm}h'}"
-                                                  />
-
+                                                    VerticalOptions="Center"
+                                                    TextColor="Black"
+                                                    Text=" às "/>
+                                                <Label  
+                                                    FontSize="25"                                                
+                                                    TextColor="Black"
+                                                    Text="{Binding AppointmentDateTime, StringFormat='{}{0:hh\\:mm}h'}"
+                                                />
                                             </HorizontalStackLayout>
 
-                                            <Label                                     
-                                              Text="{Binding PostalCode}"
-                                              Grid.Row="3"/>
+                                            <Label        
+                                                FontSize="15"
+                                                TextColor="Black"
+                                                Text="{Binding PostalCode}"
+                                                Grid.Row="3"
+                                            />
 
-                                            <Label                                     
-                                              Text="{Binding Street}"
-                                              Grid.Row="4"/>
+                                            <Label    
+                                                FontSize="20"
+                                                TextColor="Black"
+                                                Text="{Binding Street}"
+                                                Grid.Row="4"
+                                            />
 
-                                            <Label                                     
-                                              Text="{Binding Neighborhood}"
-                                              Grid.Row="5"/>
-
-
-
+                                            <Label 
+                                                FontSize="15"
+                                                TextColor="Black"
+                                                Text="{Binding Neighborhood}"
+                                                Grid.Row="5"
+                                            />
                                         </VerticalStackLayout>
-
-
                                     </Border>
-
-
                                 </Grid>
                             </SwipeView>
                             <!-- Fim -->

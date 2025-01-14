@@ -2,8 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels"            
-             x:Class="AppSaude.MVVM.Views.HomePageView"
-             BackgroundColor="White"
+             x:Class="AppSaude.MVVM.Views.HomePageView"             
              Title="Página Inicial"
              >
 
@@ -133,9 +132,9 @@
                                             <RoundRectangle CornerRadius="6" />
                                         </Border.StrokeShape>
 
-                                       <VerticalStackLayout x:Name="alarmVSL">
+                                       <VerticalStackLayout>
 
-                                         <Border StrokeThickness="0" Stroke="White" BackgroundColor="#05395e">
+                                         <Border x:Name="alarmBorder" StrokeThickness="0" Stroke="White" BackgroundColor="#195986">
                                             <HorizontalStackLayout                                                  
                                                 Grid.Row="0"
                                                 Spacing="0" HorizontalOptions="Center">                                                 
@@ -144,8 +143,9 @@
                                                          CharacterSpacing="6"
                                                          TextColor="White"
                                                          Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"
-                                                     />                                                                                       
-                                             </HorizontalStackLayout>
+                                                     />               
+                                                                        
+                                            </HorizontalStackLayout>
                                          </Border>
                                             <Label
                                                     x:Name="lblMName"  
@@ -160,7 +160,7 @@
                                                     Grid.Row="3"
                                                     Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="20" />
 
-                                        </VerticalStackLayout>
+                                       </VerticalStackLayout>
                                          
                                     </Border>
                                 </Grid>
@@ -193,7 +193,7 @@
                                         
                                         <VerticalStackLayout HorizontalOptions="Center">
 
-                                         <Border StrokeThickness="0" Stroke="White" BackgroundColor="#05395e">
+                                        <Border StrokeThickness="0" Stroke="White" BackgroundColor="#195986">
                                             <HorizontalStackLayout                                            
                                                 Grid.Row="0"
                                                 Spacing="1" HorizontalOptions="Center">

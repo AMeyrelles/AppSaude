@@ -6,12 +6,12 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#d4def6</Color>
-    <Color x:Key="PrimaryDark">Black</Color>
-    <Color x:Key="PrimaryDarkText">black</Color>
-    <Color x:Key="Secondary">Black</Color>
-    <Color x:Key="SecondaryDarkText">Black</Color>
-    <Color x:Key="Tertiary">Black</Color>
+    <Color x:Key="Primary">#195986</Color>
+    <Color x:Key="PrimaryDark">#5184c0</Color>
+    <Color x:Key="PrimaryDarkText">#91bff6</Color>
+    <Color x:Key="Secondary">#5184c0</Color>
+    <Color x:Key="SecondaryDarkText">White</Color>
+    <Color x:Key="Tertiary">#d4def6</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
