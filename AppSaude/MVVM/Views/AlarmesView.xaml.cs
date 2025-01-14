@@ -69,8 +69,7 @@ public partial class AlarmesView : ContentPage
 
         // Exibe a quantidade de alarmes carregados
         Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");
-        await ShowAlarmCountAsync();
-
+        
         try
         {
             // O BindingContext é da ViewModel que contém o DisplayCommand
@@ -87,7 +86,7 @@ public partial class AlarmesView : ContentPage
         }
 
         // Configura o timer para chamar o método de verificação a cada 1 minuto
-        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
     }
 
     private async void CheckAlarms(object state)
@@ -107,7 +106,7 @@ public partial class AlarmesView : ContentPage
                 {
                     // Dispara notificação, som e navega para a tela de alarme
                     await OnAudioTriggered();
-                    await ScheduleAlarmAsync(alarm.ReminderTime);                    
+                    await ScheduleAlarmAsync(alarm.ReminderTime);                
                    
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }

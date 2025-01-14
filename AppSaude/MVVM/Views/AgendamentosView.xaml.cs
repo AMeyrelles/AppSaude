@@ -63,7 +63,6 @@ public partial class AgendamentosView : ContentPage
 
         // Exibe a quantidade de agendamentos carregados
         Console.WriteLine($"agendamento carregados: {_agendamentoList.Count}");
-        await ShowAgendamentoCountAsync();
 
         try
         {

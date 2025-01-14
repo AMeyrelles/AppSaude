@@ -66,8 +66,7 @@ public partial class HomePageView : ContentPage
         _alarmeList = await LoadAlarmsFromDatabaseAsync();
 
         // Exibe a quantidade de alarmes carregados
-        Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");
-        await ShowAlarmCountAsync();
+        Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");    
 
         try
         {

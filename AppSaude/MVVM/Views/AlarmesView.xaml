@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"             
              x:Class="AppSaude.MVVM.Views.AlarmesView"
-             BackgroundColor="White"
              Title="Alarmes">
 
     <ContentPage.Resources>
@@ -11,20 +10,16 @@
             <Setter Property="TextColor" Value="Black"/>
             <Setter Property="FontSize" Value="Large"/>
             <Setter Property="CharacterSpacing" Value="2"/>
-            <Setter Property="HorizontalTextAlignment" Value="Center"/>
-            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
-            <Setter Property="Padding" Value="0,0,0,5"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>           
         </Style>
 
         <Style TargetType="Border">
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="BackgroundColor" Value="LightSteelBlue"/>
+         
         </Style>
 
     </ContentPage.Resources>
 
-    <Grid BackgroundColor="AliceBlue">
+    <Grid Margin="5,10,5,0" BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition  Height="60"/>
@@ -32,43 +27,70 @@
 
         <CollectionView ItemsSource="{Binding Alarmes}"
                         SelectedItem="{Binding AlarmeAtual}"
-                        SelectionMode="Single">  
-            
-                <CollectionView.ItemTemplate>                    
+                        SelectionMode="Single"
+                        >
+
+            <CollectionView.ItemTemplate>                    
                 <DataTemplate>
-                    <Border>
+                    <Border 
+                        Margin="5,10,5,10">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="6" />
                         </Border.StrokeShape>
-                        
+
                         <VerticalStackLayout >
                             <!--  Implementado para deletar deslizando -->    
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
-                                        <SwipeItem BackgroundColor="Blue"
+                                        <SwipeItem BackgroundColor="#195986"
                                             Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAlarmeCommand}"                                            
                                             Text="Excluir" />
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
 
-                                <Grid RowDefinitions="Auto, Auto, Auto, Auto">                                                                    
-                                    <Label 
-                                     FontSize="40"                                       
-                                     Text="{Binding MedicationName}"
-                                     Grid.Row="0"/>
+                                <Grid RowDefinitions="Auto, Auto, Auto, Auto">
+                                    <Border>
+                                        <VerticalStackLayout >
 
-                                    <Label   
-                                        Text="{Binding ReminderTime, StringFormat='{}{0:hh\\:mm}h'}"
-                                          Grid.Row="1"/>
+                                            <Border 
+                                                BackgroundColor="#05395e" 
+                                                Margin="0,0,0,10">
 
-                                    <Label                                     
-                                    Text="{Binding PatientName}"
-                                    Grid.Row="2"/>                         
-                           
-                                <Label                                     
-                                    Text="{Binding Description}"
-                                    Grid.Row="3"/>
+                                                <VerticalStackLayout>
+                                                    <Label 
+                                                       TextColor="White"
+                                                       FontSize="40"                                       
+                                                       Text="{Binding MedicationName}"
+                                                       Grid.Row="0"/>
+
+                                                    <Label  
+                                                        TextColor="White"
+                                                        FontSize="20"
+                                                        Text="{Binding ReminderTime, StringFormat='{}{0:hh\\:mm}h'}"
+                                                        Grid.Row="1"/>
+        
+                                                </VerticalStackLayout>
+   
+
+                                            </Border>
+
+
+
+                                            <Label 
+                                                 Margin="0,0,0,20"
+                                                 FontSize="20"
+                                                 Text="{Binding PatientName}"
+                                                 Grid.Row="2"/>
+
+                                            <Label
+                                                 FontSize="15"
+                                                 Text="{Binding Description}"
+                                                 Grid.Row="3"/>
+
+                                        </VerticalStackLayout>
+
+                                    </Border>
                                     
                                 </Grid>                                
                             </SwipeView>
