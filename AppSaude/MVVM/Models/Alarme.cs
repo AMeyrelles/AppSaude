@@ -28,8 +28,8 @@ namespace AppSaude.MVVM.Models
         // Horário em que o medicamento será tomado
         [NotNull]
         public TimeSpan ReminderTime { get; set; }
-
         public bool IsEnabled { get; set; }
+        public bool IsNotified { get; set; } // Verifica se o alarme ja foi chamado
 
     }
 }

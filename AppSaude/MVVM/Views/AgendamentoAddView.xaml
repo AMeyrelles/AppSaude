@@ -152,7 +152,7 @@
                       x:Name="btnCancelarAgendamento"                           
                       TextColor="White"
                       Text="CANCELAR"                 
-                      HeightRequest="50"
+                      HeightRequest="60"
                       WidthRequest="100"  
                       Margin="20"                             
                       />
@@ -163,7 +163,7 @@
                       Command="{Binding SaveCommand}"                                               
                       TextColor="White"
                       Text="SALVAR"                 
-                      HeightRequest="50"
+                      HeightRequest="60"
                       WidthRequest="100" 
                       Margin="20"
                           />

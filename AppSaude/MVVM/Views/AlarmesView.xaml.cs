@@ -82,7 +82,7 @@ public partial class AlarmesView : ContentPage
         }
 
         // Configura o timer para chamar o método de verificação a cada 1 minuto
-        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
     }
 
     //Limpa o timer ao sair da tela
@@ -107,13 +107,26 @@ public partial class AlarmesView : ContentPage
 
             foreach (var alarm in alarmeList)
             {
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                Console.WriteLine($"Verificando alarmes às {now:HH:mm}");
+
+                // Verifica se o alarme está desativado
+                if (!alarm.IsEnabled)
                 {
+                    Console.WriteLine($"Alarme '{alarm.MedicationName}' está desativado e será ignorado.");
+                    continue; // Ignora este alarme e passa para o próximo
+                }
+
+                // Verifica se o horário atual coincide com o horário do alarme
+                if (!alarm.IsNotified && now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                {
+                    alarm.IsNotified = true; // Evita notificações repetidas
+
                     // Dispara notificação, som e navega para a tela de alarme
                     await OnAudioTriggered();
-                    await ScheduleAlarmAsync(alarm.ReminderTime);                
-                   
+                    await ScheduleAlarmAsync(alarm.ReminderTime);
+                    Console.WriteLine($"Alarme encontrado: {alarm.MedicationName} às {alarm.ReminderTime}");
+
+                    await _service.UpdateAlarme(alarm); // Atualiza o banco
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }
             }
@@ -183,4 +196,29 @@ public partial class AlarmesView : ContentPage
         await Navigation.PushAsync(new AlarmeAddView(_service, _servicesAndroid));
     }
 
+    //Switch para habilitar/desabilitar alarme
+    private async void AlarmSwitch_Toggled(object sender, ToggledEventArgs e)
+    {
+        var switchControl = sender as Switch;
+
+        if (switchControl?.BindingContext is Alarme alarme)
+        {
+            alarme.IsEnabled = e.Value;
+
+            try
+            {
+                await _service.UpdateAlarme(alarme); // Atualiza o banco de dados
+                Console.WriteLine($"Alarme '{alarme.MedicationName}' habilitado: {alarme.IsEnabled}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atualizar o alarme: {ex.Message}");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Alerta!", "Alarme OFF", "OK");
+            Console.WriteLine("Erro: BindingContext inválido para o Switch.");
+        }
+    }
 }

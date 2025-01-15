@@ -1,8 +1,8 @@
+using AppSaude.MVVM.Models;
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
-using Plugin.LocalNotification;
-using Plugin.Maui.Audio;
-using System.Timers;
+
+
 
 namespace AppSaude.MVVM.Views
 {
@@ -14,6 +14,7 @@ namespace AppSaude.MVVM.Views
         public string MessageToast { get; set; }
 
         private readonly List<DateTime> _alarmList = new();
+
 
         public AlarmeAddView(IService servicos, IServiceAndroid serviceAndroid)
         {
@@ -85,6 +86,24 @@ namespace AppSaude.MVVM.Views
         {
             await Navigation.PopAsync();
         }
-      
+
+        private async void AlarmSwitch_Toggled(object sender, ToggledEventArgs e)
+        {
+
+            var switchControl = sender as Switch;
+
+            if (switchControl?.BindingContext is Alarme alarme)
+            {
+                alarme.IsEnabled = e.Value;
+               
+                await _service.AddAlarme(alarme);
+            }
+            else
+            {
+                Console.WriteLine("Erro: BindingContext do Switch é nulo.");
+            }
+        }
+
     }
 }
+

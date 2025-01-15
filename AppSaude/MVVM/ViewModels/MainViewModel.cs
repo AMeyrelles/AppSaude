@@ -271,20 +271,12 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        //Muda a cor do Border quando a condição for atendida
-        private bool _isHighlighted;
-        public bool IsHighlighted
+        private bool _isEnabled;
+        public bool IsEnabled
         {
-            get => _isHighlighted;
-            set
-            {
-                _isHighlighted = value;
-                OnPropertyChanged();
-            }
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value);
         }
-
-        public Command ToggleHighlightCommand => new Command(() => IsHighlighted = !IsHighlighted);
-
 
         public ICommand DeleteAlarmeCommand { get; set; }
         public ICommand DeleteAgendaCommand { get; set; }

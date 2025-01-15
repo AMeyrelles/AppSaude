@@ -21,8 +21,8 @@
 
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition  Height="60"/>
+            <RowDefinition Height="85*"/>
+            <RowDefinition  Height="10*"/>
         </Grid.RowDefinitions>
 
         <CollectionView ItemsSource="{Binding Agendamentos}"
@@ -131,10 +131,10 @@
             <Button
                Margin="10"
                Grid.Row="1"            
-               HeightRequest="50"
-               WidthRequest="50"
+               HeightRequest="70"
+               WidthRequest="70"
                CornerRadius="10"
-               BackgroundColor="#d4def6"
+               BackgroundColor="#5184c0"
                ImageSource="plus.png"
                x:Name="btnAdd"
                Clicked="btnAdd_Clicked">

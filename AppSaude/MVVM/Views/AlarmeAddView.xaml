@@ -60,7 +60,32 @@
                 <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
               </Border>
 
-                <!-- TimerPicker -->
+            <Border Stroke="AliceBlue">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="6" />
+                </Border.StrokeShape>
+                
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label                         
+                        Padding="0,0,0,0"
+                        FontSize="Medium"
+                        TextColor="White"
+                        Text="Ative o alarme para receber a notificação"                        
+                    />
+                    
+                    <Switch  
+                      HorizontalOptions="Center"
+                      x:Name="AlarmSwitch"
+                      IsToggled="{Binding AlarmeAtual.IsEnabled}"
+                      OnColor="#5184c0"
+                      ThumbColor="White"
+                      Toggled="AlarmSwitch_Toggled"                     
+                    />
+
+                </VerticalStackLayout>
+
+            </Border>
+            <!-- TimerPicker -->
                <Border                                          
                      WidthRequest="390"
                      HeightRequest="130"
@@ -99,7 +124,7 @@
                              x:Name="btnCancelarAlarme"                          
                              TextColor="White"
                              Text="CANCELAR"                 
-                             HeightRequest="50"
+                             HeightRequest="60"
                              WidthRequest="100"  
                              Margin="20"                             
               />
@@ -110,7 +135,7 @@
                              x:Name="btnAddAlarme"                           
                              TextColor="White"
                              Text="SALVAR"                 
-                             HeightRequest="50"
+                             HeightRequest="60"
                              WidthRequest="100" 
                              Margin="20"
               />

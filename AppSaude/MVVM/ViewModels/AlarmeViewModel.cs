@@ -109,16 +109,11 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
-        //Muda a cor do Border quando a condição for atendida
-        private Color _borderColor = Colors.LightSteelBlue;
-        public Color BorderColor
+        private bool _isEnabled;
+        public bool IsEnabled
         {
-            get => _borderColor;
-            set
-            {
-                _borderColor = value;
-                OnPropertyChanged(nameof(BorderColor));
-            }
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value);
         }
 
         public ICommand SaveCommand { get; set; }
