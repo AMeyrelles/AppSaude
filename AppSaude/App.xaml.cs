@@ -29,7 +29,7 @@ namespace AppSaude
             _servicesAndroid = servicesAndroid;
 
             // Configurar a página inicial
-            MainPage = new NavigationPage(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
+            MainPage = new NavigationPage(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));           
         }
 
         // Método de manipulação para NotificationActionTapped
@@ -53,7 +53,7 @@ namespace AppSaude
                     else
                     {
                         // Se sua MainPage não for um NavigationPage, substitua pela sua navegação personalizada
-                        await Application.Current.MainPage.Navigation.PushAsync(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
+                        await Application.Current.MainPage.Navigation.PushAsync(new AlarmesView(_alarmeService, _servicesAndroid, _audioManager));
                     }
                 });
             }

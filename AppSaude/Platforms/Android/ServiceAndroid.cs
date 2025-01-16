@@ -33,16 +33,21 @@ namespace AppSaude
                     StopForeground(StopForegroundFlags.Remove);
                 }
                 else
-                {
-                    StopForeground(true);
-                }
-                StopSelfResult(startId);
+                    StopSelfResult(startId);
             }
             return StartCommandResult.NotSticky;
         }
-          
+
+
+        public bool IsRunning { get; private set; } = false;
         public void Start()
         {
+            if (!IsRunning)
+            {
+                IsRunning = true;
+                // Código para iniciar o serviço
+                Console.WriteLine("Serviço iniciado.");
+            }
 
             Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
             startService.SetAction("START_SERVICE");
@@ -51,6 +56,13 @@ namespace AppSaude
 
         public void Stop()
         {
+            if (IsRunning)
+            {
+                IsRunning = false;
+                // Código para parar o serviço
+                Console.WriteLine("Serviço parado.");
+            }
+
             Intent stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
             stopIntent.SetAction("STOP_SERVICE");
             MainActivity.ActivityCurrent.StartService(stopIntent);
@@ -63,12 +75,13 @@ namespace AppSaude
             manager.CreateNotificationChannel(channel);
             Notification notification = new Notification.Builder(this, "ServiceChannel")
                 .SetContentTitle("Estou trabalhando!")
-                .SetSmallIcon(Resource.Drawable.abc_ab_share_pack_mtrl_alpha)
-                .SetOngoing(true)
+                .SetSmallIcon(Resource.Drawable.icon_mais)
+                .SetOngoing(true)                
                 .Build();
 
             StartForeground(100, notification);
 
         }
+
     }
 }

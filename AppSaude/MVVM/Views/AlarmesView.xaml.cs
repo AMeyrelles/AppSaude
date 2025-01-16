@@ -14,7 +14,7 @@ public partial class AlarmesView : ContentPage
 
     private List<Alarme> _alarmeList = new List<Alarme>();
    
-    public AlarmesView(IService servico, IAudioManager audioManager, IServiceAndroid servicesAndroid)
+    public AlarmesView(IService servico, IServiceAndroid servicesAndroid , IAudioManager audioManager)
     {
         InitializeComponent();
 
@@ -69,8 +69,7 @@ public partial class AlarmesView : ContentPage
         try
         {
             // O BindingContext é da ViewModel que contém o DisplayCommand
-            var viewModel = BindingContext as MainViewModel;
-            if (viewModel != null)
+            if (BindingContext is MainViewModel viewModel)
             {
                 // Dispara o DisplayCommand para carregar os dados automaticamente
                 viewModel.DisplayCommand.Execute(null);
@@ -158,7 +157,7 @@ public partial class AlarmesView : ContentPage
                 Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                 {
                     AutoCancel = true,
-                    IconSmallName = { ResourceName = "bell.png" }
+                    IconSmallName = { ResourceName = "icon_mais_.svg" }
                 }
             };
 
@@ -206,9 +205,10 @@ public partial class AlarmesView : ContentPage
             alarme.IsEnabled = e.Value;
 
             try
-            {
+            {           
                 await _service.UpdateAlarme(alarme); // Atualiza o banco de dados
                 Console.WriteLine($"Alarme '{alarme.MedicationName}' habilitado: {alarme.IsEnabled}");
+
             }
             catch (Exception ex)
             {

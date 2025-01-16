@@ -124,7 +124,7 @@ public partial class AgendamentosView : ContentPage
             {
                 NotificationId = 100,
                 Title = "Lembrete de Remédio",
-                Description = "É hora de tomar seu remédio!",
+                Description = "HOJE você tem um agendamento!",
                 Schedule = new NotificationRequestSchedule
                 {
                     NotifyTime = alarmDateTime // Usa o DateTime com a data de hoje e o horário do alarme
@@ -133,7 +133,7 @@ public partial class AgendamentosView : ContentPage
                 Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                 {
                     AutoCancel = true,
-                    IconSmallName = { ResourceName = "appicon.svg" }
+                    IconSmallName = { ResourceName = "icon_mais_.svg" }
                 }
             };
             await LocalNotificationCenter.Current.Show(notification);

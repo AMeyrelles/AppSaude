@@ -8,6 +8,7 @@ namespace AppSaude
 {
     public interface IServiceAndroid
     {
+        bool IsRunning { get; }
         void Start();
         void Stop();
     }

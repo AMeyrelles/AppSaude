@@ -10,8 +10,7 @@ namespace AppSaude.MVVM.Views
     {
         private readonly IService _service;    
 
-        IServiceAndroid _servicesAndroid;
-        public string MessageToast { get; set; }
+        IServiceAndroid _servicesAndroid;       
 
         private readonly List<DateTime> _alarmList = new();
 
@@ -87,6 +86,8 @@ namespace AppSaude.MVVM.Views
             await Navigation.PopAsync();
         }
 
+
+        //Adiciona o valor do Switch ao banco de dados
         private async void AlarmSwitch_Toggled(object sender, ToggledEventArgs e)
         {
 

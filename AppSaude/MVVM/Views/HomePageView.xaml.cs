@@ -69,9 +69,8 @@ public partial class HomePageView : ContentPage
 
         try
         {
-            // O BindingContext é da ViewModel que contém o DisplayCommand
-            var viewModel = BindingContext as MainViewModel;
-            if (viewModel != null)
+            // O BindingContext é da ViewModel que contém o DisplayCommand            
+            if (BindingContext is MainViewModel viewModel)
             {
                 // Dispara o DisplayCommand para carregar os dados automaticamente
                 viewModel.DisplayCommand.Execute(null);
@@ -84,6 +83,7 @@ public partial class HomePageView : ContentPage
 
         // Configura o timer para chamar o método de verificação a cada 1 minuto
         _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+        ativaService();
     }
 
 
@@ -137,7 +137,7 @@ public partial class HomePageView : ContentPage
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AlarmesView(_services, _audioManager, _servicesAndroid));
+        await Navigation.PushAsync(new AlarmesView(_services, _servicesAndroid, _audioManager));
     }
 
     private async void btnAgendamentos_Clicked(object sender, EventArgs e)
@@ -164,5 +164,19 @@ public partial class HomePageView : ContentPage
     private async void btnNoticacao_Clicked(object sender, EventArgs e)
     {
         await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+    }
+
+    //Inicia o serviço em primeiro Plano
+    public void ativaService()
+    {
+        if (!_servicesAndroid.IsRunning)
+        {
+            _servicesAndroid.Start(); // Inicia o serviço
+        }
+        else
+        {
+            Console.WriteLine("O serviço já está em execução.");
+        }
+
     }
 }
