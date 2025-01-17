@@ -116,6 +116,13 @@ namespace AppSaude.MVVM.ViewModels
             set => SetProperty(ref _isEnabled, value);
         }
 
+        private DateTime _lastNotifiedDate;
+        public DateTime LastNotifiedDate
+        {
+            get => _lastNotifiedDate;
+            set => SetProperty(ref _lastNotifiedDate, value);
+        }
+
         public ICommand SaveCommand { get; set; }
         public ICommand UpdateCommand { get; set; }
         public ICommand DeleteCommand { get; set; }

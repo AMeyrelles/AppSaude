@@ -3,6 +3,7 @@ using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
+using System.Security.Claims;
 
 namespace AppSaude.MVVM.Views;
 
@@ -96,13 +97,21 @@ public partial class AgendamentosView : ContentPage
             foreach (var agendamento in _agendamentoList)
             {
                 // Verifica se o horário atual coincide com o horário do alarme
-                if (now.Hour == agendamento.AppointmentDateTime.Hours && now.Minute == agendamento.AppointmentDateTime.Minutes)
+                if (!agendamento.IsNotified && now.Hour == agendamento.AppointmentDateTime.Hours && now.Minute == agendamento.AppointmentDateTime.Minutes)
                 {
+                    agendamento.IsNotified = true;
+
                     // Dispara notificação, som e navega para a tela de alarme
                     await OnAudioTriggered();
                     await ScheduleAgendamentoAsync(agendamento.AppointmentDateTime);
 
+                    await _service.UpdateAgendamento(agendamento); // Atualiza o banco
+
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
+                }
+                else 
+                { 
+                    Console.WriteLine("Nenhum agendamento encontrado para HOJE."); 
                 }
             }
         }
@@ -122,9 +131,9 @@ public partial class AgendamentosView : ContentPage
 
             var notification = new NotificationRequest
             {
-                NotificationId = 100,
+                NotificationId = 103,
                 Title = "Lembrete de Remédio",
-                Description = "HOJE você tem um agendamento!",
+                Description = "Agendamento marcado para HOJE!!!",
                 Schedule = new NotificationRequestSchedule
                 {
                     NotifyTime = alarmDateTime // Usa o DateTime com a data de hoje e o horário do alarme

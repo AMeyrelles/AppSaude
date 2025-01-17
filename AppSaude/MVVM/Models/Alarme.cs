@@ -30,6 +30,7 @@ namespace AppSaude.MVVM.Models
         public TimeSpan ReminderTime { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsNotified { get; set; } // Verifica se o alarme ja foi chamado
+        public DateTime? LastNotifiedDate { get; set; } // Nova propriedade
 
     }
 }

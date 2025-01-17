@@ -43,21 +43,33 @@
                   <Border.StrokeShape>
                      <RoundRectangle CornerRadius="6" />
                   </Border.StrokeShape>
-                       <Entry Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"/>
+                       <Entry                            
+                           TextChanged="OnLetterEntryTextChanged"
+                           MaxLength="20"
+                           Text="{Binding AlarmeAtual.MedicationName, Mode=TwoWay}"  x:Name="txtName" Placeholder="Nome do medicamento"
+                       />
                 </Border>
 
               <Border Stroke="AliceBlue">
                      <Border.StrokeShape>
                          <RoundRectangle CornerRadius="6" />
                      </Border.StrokeShape>
-                <Entry TextColor="White" Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"/>
+                <Entry 
+                    TextChanged="OnLetterEntryTextChanged"
+                    MaxLength="20"
+                    TextColor="White" Text="{Binding AlarmeAtual.PatientName, Mode=TwoWay}" x:Name="txtNameuser" Placeholder="Quem vai tomar?"
+                />
               </Border>
 
               <Border Stroke="AliceBlue">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="6" />
                 </Border.StrokeShape>
-                <Entry Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"/>
+                <Entry 
+                    TextChanged="OnCustomEntryTextChanged"
+                    MaxLength="100"
+                    Text="{Binding AlarmeAtual.Description, Mode=TwoWay}" x:Name="txtDescrição" Placeholder="Insira o uma descrição"
+                />
               </Border>
 
             <Border Stroke="AliceBlue">

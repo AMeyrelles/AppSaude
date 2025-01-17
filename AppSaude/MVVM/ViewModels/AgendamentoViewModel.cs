@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace AppSaude.MVVM.ViewModels
 {
@@ -165,6 +166,23 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+        //Data minima
+        private DateTime _minDate;
+
+        public new event PropertyChangedEventHandler PropertyChanged;
+        public DateTime MinDate
+        {
+            get => _minDate;
+            set
+            {
+                if (_minDate != value)
+                {
+                    _minDate = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinDate)));
+                }
+            }
+        }     
+
         // Hora
         private TimeSpan _appointmentDateTime;
         public TimeSpan AppointmentDateTime
@@ -187,9 +205,11 @@ namespace AppSaude.MVVM.ViewModels
         public ICommand DisplayCommand { get; set; }
 
 
+        //Define hora e data minima 
         public AgendamentoViewModel()
         {
             AppointmentDateTime = new TimeSpan(8, 0, 0); // 08:00
+            MinDate = DateTime.Today; // Define o valor inicial como a data atual
         }
 
         public AgendamentoViewModel(IService agendamentoRepository)

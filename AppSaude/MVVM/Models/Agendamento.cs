@@ -39,8 +39,12 @@ namespace AppSaude.MVVM.Models
         [NotNull]
         public DateTime SelectedDate { get; set; }
 
+        public DateTime MinDate { get; set; }
+
         [MaxLength(100)]
         public string DescriptionAppointments { get; set; }
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } 
+
+        public bool IsNotified { get; set; } // Verifica se o agendamento ja foi chamado
     }
 }

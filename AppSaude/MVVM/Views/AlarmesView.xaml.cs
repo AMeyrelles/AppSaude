@@ -12,7 +12,7 @@ public partial class AlarmesView : ContentPage
     private readonly IAudioManager _audioManager;
     IServiceAndroid _servicesAndroid;    
 
-    private List<Alarme> _alarmeList = new List<Alarme>();
+    private List<Alarme> _alarmeList = new();
    
     public AlarmesView(IService servico, IServiceAndroid servicesAndroid , IAudioManager audioManager)
     {
@@ -98,7 +98,7 @@ public partial class AlarmesView : ContentPage
     {
         try
         {
-            // Obtém o horário atual
+            // Obtém a data e o horário atual
             DateTime now = DateTime.Now;
 
             // Carrega os alarmes do banco e armazena na lista
@@ -115,17 +115,28 @@ public partial class AlarmesView : ContentPage
                     continue; // Ignora este alarme e passa para o próximo
                 }
 
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (!alarm.IsNotified && now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                // Verifica se o alarme já foi notificado hoje
+                if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date)
                 {
-                    alarm.IsNotified = true; // Evita notificações repetidas
+                    Console.WriteLine($"Alarme '{alarm.MedicationName}' as {alarm.ReminderTime} já foi notificado hoje. Ignorando.");
+
+                    continue; // Ignora este alarme
+                }
+
+
+                // Verifica se o horário atual coincide com o horário do alarme
+                if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                {
+                    // Marca o alarme como notificado para hoje
+                    alarm.LastNotifiedDate = now;
 
                     // Dispara notificação, som e navega para a tela de alarme
                     await OnAudioTriggered();
                     await ScheduleAlarmAsync(alarm.ReminderTime);
                     Console.WriteLine($"Alarme encontrado: {alarm.MedicationName} às {alarm.ReminderTime}");
 
-                    await _service.UpdateAlarme(alarm); // Atualiza o banco
+                    // Atualiza o alarme no banco
+                    await _service.UpdateAlarme(alarm);
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }
             }
@@ -135,6 +146,7 @@ public partial class AlarmesView : ContentPage
             Console.WriteLine($"Erro ao verificar alarmes: {ex.Message}");
         }
     }
+
 
     //Dispara a notificacao
     private async Task ScheduleAlarmAsync(TimeSpan reminderTime)
@@ -203,12 +215,21 @@ public partial class AlarmesView : ContentPage
         if (switchControl?.BindingContext is Alarme alarme)
         {
             alarme.IsEnabled = e.Value;
-
             try
-            {           
-                await _service.UpdateAlarme(alarme); // Atualiza o banco de dados
-                Console.WriteLine($"Alarme '{alarme.MedicationName}' habilitado: {alarme.IsEnabled}");
-
+            {
+                if (alarme.IsEnabled)
+                {                    
+                    await _service.UpdateAlarme(alarme); // Atualiza o banco de dados
+                    Console.WriteLine($"Alarme '{alarme.MedicationName}' habilitado: {alarme.IsEnabled}");
+                    return;
+                }
+                else
+                {
+                    alarme.IsEnabled = false;
+                    await _service.UpdateAlarme(alarme); // Atualiza o banco de dados
+                    await DisplayAlert("Alerta!", "Você tem alarmes inativos, verifique se é isto mesmo!", "OK");
+                    Console.WriteLine($"Alarme '{alarme.MedicationName}' desativado: {alarme.IsEnabled}");
+                }          
             }
             catch (Exception ex)
             {

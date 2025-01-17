@@ -1,6 +1,7 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
+using System.Text.RegularExpressions;
 
 namespace AppSaude.MVVM.Views;
 
@@ -16,6 +17,9 @@ public partial class AgendamentoAddView : ContentPage
 
         var viewModel = new AgendamentoViewModel(services);
         BindingContext = viewModel;
+
+        // Define o MinimumDate como a data atual
+        datePickerControl.MinimumDate = DateTime.Today;
     }   
 
     //Botão para salvar o agendamento
@@ -129,5 +133,30 @@ public partial class AgendamentoAddView : ContentPage
         await Navigation.PopAsync();
     }
 
+    //Entry com apenas letras
+    private void OnLetterEntryTextChanged(object sender, TextChangedEventArgs e)
+    {
+        // Remove todos os caracteres que não sejam letras
+        var entry = (Entry)sender;
+        entry.Text = string.Concat(e.NewTextValue.Where(c => char.IsLetter(c) || char.IsWhiteSpace(c)));
+    }
 
+    //Entry com apenas números
+    private void OnNumericEntryTextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        entry.Text = string.Concat(e.NewTextValue.Where(char.IsDigit));
+    }
+
+    //Entry com letras, números e traços
+    private void OnCustomEntryTextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+        if (!Regex.IsMatch(e.NewTextValue, pattern))
+        {
+            // Reverte para o último valor válido
+            entry.Text = e.OldTextValue;
+        }
+    }
 }

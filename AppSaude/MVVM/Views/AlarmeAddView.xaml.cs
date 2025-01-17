@@ -1,6 +1,7 @@
 using AppSaude.MVVM.Models;
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
+using System.Text.RegularExpressions;
 
 
 
@@ -105,6 +106,25 @@ namespace AppSaude.MVVM.Views
             }
         }
 
+        //Insere nas Entrys apenas letras e espaço
+        private void OnLetterEntryTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Remove todos os caracteres que não sejam letras
+            var entry = (Entry)sender;
+            entry.Text = string.Concat(e.NewTextValue.Where(c => char.IsLetter(c) || char.IsWhiteSpace(c)));
+        }
+
+        //Insere nas Entrys letras, números, espaços e traços
+        private void OnCustomEntryTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var entry = (Entry)sender;
+            string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+            if (!Regex.IsMatch(e.NewTextValue, pattern))
+            {
+                // Reverte para o último valor válido
+                entry.Text = e.OldTextValue;
+            }
+        }
     }
 }
 
