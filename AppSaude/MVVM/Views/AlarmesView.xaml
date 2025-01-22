@@ -25,7 +25,7 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="85*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
 
         <CollectionView ItemsSource="{Binding Alarmes}"

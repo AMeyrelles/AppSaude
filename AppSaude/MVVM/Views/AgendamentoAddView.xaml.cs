@@ -9,7 +9,7 @@ public partial class AgendamentoAddView : ContentPage
 {
 	private readonly IService _services;
 
-    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
+    private readonly List<DateTime> _agendamentoList = new();
     public AgendamentoAddView(IService services)
 	{
         InitializeComponent();

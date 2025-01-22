@@ -15,7 +15,6 @@ namespace AppSaude.MVVM.Views
 
         private readonly List<DateTime> _alarmList = new();
 
-
         public AlarmeAddView(IService servicos, IServiceAndroid serviceAndroid)
         {
             InitializeComponent();
@@ -40,7 +39,7 @@ namespace AppSaude.MVVM.Views
 
                 if (status != PermissionStatus.Granted)
                 {
-                    await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
+                    await DisplayAlert("Alerta", "Aceite para receber as notificações!", "OK");
                     status = await Permissions.RequestAsync<Permissions.PostNotifications>();
                 }
 
@@ -64,10 +63,9 @@ namespace AppSaude.MVVM.Views
         private async void btnAddAlarme_Clicked(object sender, EventArgs e)
         {
             TimeSpan selectedTime = TimePickerControl.Time;
-
             DateTime now = DateTime.Now;
 
-            DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
+            DateTime alarmDateTime = new(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
 
             if (alarmDateTime <= now)
             {
@@ -78,7 +76,7 @@ namespace AppSaude.MVVM.Views
 
             _servicesAndroid.Start();
 
-            await VerifyPermissionsAsync();            
+            await VerifyPermissionsAsync();
         }
 
         //Botão de voltar
@@ -87,11 +85,9 @@ namespace AppSaude.MVVM.Views
             await Navigation.PopAsync();
         }
 
-
         //Adiciona o valor do Switch ao banco de dados
         private async void AlarmSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-
             var switchControl = sender as Switch;
 
             if (switchControl?.BindingContext is Alarme alarme)
