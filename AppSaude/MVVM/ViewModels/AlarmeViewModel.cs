@@ -133,7 +133,7 @@ namespace AppSaude.MVVM.ViewModels
         {
             ReminderTime = new TimeSpan(8, 0, 0); // 08:00
         }
-        public AlarmeViewModel(IService alarmeRepository)
+        public AlarmeViewModel(IServicesTeste alarmeRepository)
         {
 
             // Inicializa o serviço de alarme
@@ -215,7 +215,7 @@ namespace AppSaude.MVVM.ViewModels
             });
         }
 
-        public async Task Refresh(IService alarmeService)
+        public async Task Refresh(IServicesTeste alarmeService)
         {
             try
             {

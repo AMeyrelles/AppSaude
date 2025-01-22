@@ -9,12 +9,12 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentosView : ContentPage
 {
-	private readonly IService _service;
+	private readonly IServicesTeste _service;
 
     private readonly IAudioManager  _audioManager;
 
     private List<Agendamento> _agendamentoList = new();
-    public AgendamentosView(IService services, IAudioManager audioManager)
+    public AgendamentosView(IServicesTeste services, IAudioManager audioManager)
     {
         InitializeComponent();
 

@@ -2,7 +2,7 @@
 
 namespace AppSaude.Services
 {
-    public interface IService
+    public interface IServicesTeste
     {
 
         Task InitializeAsync();

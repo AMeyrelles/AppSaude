@@ -4,7 +4,8 @@ using Microsoft.Extensions.Logging;
 using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
 
-namespace AppSaude
+namespace AppSaude.Platforms.Android
+
 {
     public static class MauiProgram
     {
@@ -12,25 +13,34 @@ namespace AppSaude
         {
             var builder = MauiApp.CreateBuilder();
 
+            // Registra serviços específicos de plataforma
 #if ANDROID
-            builder.Services.AddTransient<IServiceAndroid, ServiceAndroid>();   
-           
+             builder.Services.AddTransient<IServiceAndroid, ServiceAndroid>();
 #endif
+
+            // Configuração do aplicativo
             builder
                 .UseMauiApp<App>()
-                .UseLocalNotification()                
+                .UseLocalNotification() // Registra a notificação local
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });                                
+                });
 
+            // Adiciona logs apenas em DEBUG
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton(AudioManager.Current);
-            builder.Services.AddSingleton<IService, Service>();
-            builder.Services.AddTransient<HomePageView>();  
+
+            // Adiciona serviços Singleton
+            builder.Services.AddSingleton(AudioManager.Current); // Gerenciador de Áudio
+            builder.Services.AddSingleton<IServicesTeste, ServicesTeste>(); // Serviço de dados
+            builder.Services.AddSingleton<IAlarmService, AlarmService>(); // Serviço de alarmes
+                      
+
+            // Adiciona páginas com diferentes ciclos de vida
+            builder.Services.AddTransient<HomePageView>(); // Página inicial
 
             return builder.Build();
         }

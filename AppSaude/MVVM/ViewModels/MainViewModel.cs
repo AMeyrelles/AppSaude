@@ -10,7 +10,7 @@ namespace AppSaude.MVVM.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
-        private readonly IService _service;      
+        private readonly IServicesTeste _service;      
 
         public AlarmeViewModel AlarmeViewModel { get; set; }
         public AgendamentoViewModel AgendamentoViewModel { get; set; }
@@ -282,7 +282,7 @@ namespace AppSaude.MVVM.ViewModels
         public ICommand DeleteAgendaCommand { get; set; }
         public ICommand DisplayCommand { get; set; }
 
-        public MainViewModel(IService servicesRepository)
+        public MainViewModel(IServicesTeste servicesRepository)
         {
             // Inicializa o serviço
             _ = servicesRepository.InitializeAsync();
@@ -356,7 +356,7 @@ namespace AppSaude.MVVM.ViewModels
         }
 
 
-        public async Task Refresh(IService alarmeService)
+        public async Task Refresh(IServicesTeste alarmeService)
         {
             try
             {

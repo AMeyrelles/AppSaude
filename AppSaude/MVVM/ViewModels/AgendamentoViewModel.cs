@@ -212,7 +212,7 @@ namespace AppSaude.MVVM.ViewModels
             MinDate = DateTime.Today; // Define o valor inicial como a data atual
         }
 
-        public AgendamentoViewModel(IService agendamentoRepository)
+        public AgendamentoViewModel(IServicesTeste agendamentoRepository)
         {
 
             // Inicializa o serviço de alarme
@@ -296,7 +296,7 @@ namespace AppSaude.MVVM.ViewModels
         }
 
         //Instância a lista e a atualiza
-        public async Task Refresh(IService _servicos)
+        public async Task Refresh(IServicesTeste _servicos)
         {
             try
             {

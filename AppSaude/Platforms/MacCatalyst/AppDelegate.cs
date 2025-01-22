@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using AppSaude.Platforms.Android;
+using Foundation;
 
 namespace AppSaude
 {

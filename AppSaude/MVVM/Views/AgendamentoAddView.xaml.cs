@@ -7,10 +7,10 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentoAddView : ContentPage
 {
-	private readonly IService _services;
+	private readonly IServicesTeste _services;
 
-    private readonly List<DateTime> _agendamentoList = new();
-    public AgendamentoAddView(IService services)
+    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
+    public AgendamentoAddView(IServicesTeste services)
 	{
         InitializeComponent();
         _services = services;

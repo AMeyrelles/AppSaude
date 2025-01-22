@@ -3,7 +3,7 @@ using SQLite;
 
 namespace AppSaude.Services
 {
-    public class Service : IService
+    public class ServicesTeste : IServicesTeste
     {
 
         private SQLiteAsyncConnection _dbConnection;

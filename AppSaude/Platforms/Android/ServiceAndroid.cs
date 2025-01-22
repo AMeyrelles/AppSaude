@@ -2,10 +2,8 @@
 using AppSaude.Services;
 using Android.App;
 using Android.Content;
-using Android.Util;
-using Service = Android.App.Service;
-using Resource = AppSaude.Resource;
-using Android.Runtime;
+using AppSaude.Platforms.Android;
+using Android.Content.PM;
 
 
 namespace AppSaude
@@ -13,43 +11,85 @@ namespace AppSaude
     [Service(ForegroundServiceType = Android.Content.PM.ForegroundService.TypeDataSync)]
     public class ServiceAndroid : Service, IServiceAndroid
     {
-        public override IBinder OnBind(Intent intent)
-        {
-            throw new NotImplementedException();
-        }
-        [return: GeneratedEnum]
-        public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
-        {
-            if (intent.Action == "START_SERVICE")
-            {
-                System.Diagnostics.Debug.WriteLine("Serviço inicado!");
-                RegisterNotification();
-            }
-            else if (intent.Action == "STOP_SERVICE")
-            {
-                System.Diagnostics.Debug.WriteLine("Serviço encerrado!");
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
-                {
-                    StopForeground(StopForegroundFlags.Remove);
-                }
-                else
-                    StopSelfResult(startId);
-            }
-            return StartCommandResult.NotSticky;
-        }
-
-
         public bool IsRunning { get; private set; } = false;
+        private CancellationTokenSource _cancellationTokenSource;
+
+        private IAlarmService _alarmService { get; }            
+
+        public override IBinder OnBind(Intent intent) => null;
+        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _ = ExecuteAlarmServiceAsync(_cancellationTokenSource.Token);
+            return StartCommandResult.Sticky;
+        }
+
+        private async Task ExecuteAlarmServiceAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                RegisterNotification();
+
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        if (_alarmService == null)
+                        {
+                            Console.WriteLine("ServiceAndroid: Erro: _alarmService não foi inicializado.");
+                            return;
+                        }
+
+                        await CheckAlarmsAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"ServiceAndroid: Erro ao verificar alarmes: {ex.Message}");
+                    }
+
+                    try
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ServiceAndroid: Erro na execução do serviço: {ex.Message}");
+            }
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            IsRunning = false;
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
+
         public void Start()
         {
             if (!IsRunning)
             {
                 IsRunning = true;
-                // Código para iniciar o serviço
-                Console.WriteLine("Serviço iniciado.");
+                Console.WriteLine("ServiceAndroid: Serviço iniciado.");
             }
 
-            Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
+            if (MainActivity.ActivityCurrent == null)
+            {
+                Console.WriteLine("Erro: MainActivity.ActivityCurrent está null.");
+                return;
+            }
+
+            Intent startService = new(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
             startService.SetAction("START_SERVICE");
             MainActivity.ActivityCurrent.StartService(startService);
         }
@@ -59,29 +99,52 @@ namespace AppSaude
             if (IsRunning)
             {
                 IsRunning = false;
-                // Código para parar o serviço
-                Console.WriteLine("Serviço parado.");
+                Console.WriteLine("ServiceAndroid: Serviço parado.");
             }
 
-            Intent stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
+            if (MainActivity.ActivityCurrent == null)
+            {
+                Console.WriteLine("Erro: MainActivity.ActivityCurrent está null.");
+                return;
+            }
+
+            Intent stopIntent = new(MainActivity.ActivityCurrent, this.Class);
             stopIntent.SetAction("STOP_SERVICE");
             MainActivity.ActivityCurrent.StartService(stopIntent);
         }
 
         private void RegisterNotification()
         {
-            NotificationChannel channel = new NotificationChannel("ServiceChannel", "Servico Teste", NotificationImportance.Max);
-            NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
-            manager.CreateNotificationChannel(channel);
-            Notification notification = new Notification.Builder(this, "ServiceChannel")
-                .SetContentTitle("Estou trabalhando!")
-                .SetSmallIcon(Resource.Drawable.icon_mais)
-                .SetOngoing(true)                
-                .Build();
+            try
+            {
+                NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
+                NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
+                manager.CreateNotificationChannel(channel);
 
-            StartForeground(100, notification);
+                Notification notification = new Notification.Builder(this, "ServiceChannel")
+                    .SetContentTitle("Lembre+")
+                    .SetContentText("Estou trabalhando!")
+                    .SetSmallIcon(Resource.Drawable.icon_mais)
+                    .SetOngoing(true)
+                    .Build();
 
+                StartForeground(100, notification);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao registrar notificação: {ex.Message}");
+            }
         }
 
+        public async Task CheckAlarmsAsync()
+        {
+            if (_alarmService == null)
+            {
+                Console.WriteLine("Erro: _alarmService não foi inicializado.");
+                return;
+            }
+
+            await _alarmService.CheckAlarms();
+        }
     }
 }

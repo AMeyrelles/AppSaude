@@ -9,23 +9,19 @@ namespace AppSaude.MVVM.Views
 {
     public partial class AlarmeAddView : ContentPage
     {
-        private readonly IService _service;    
-
-        IServiceAndroid _servicesAndroid;       
+        private readonly IServicesTeste _services;
 
         private readonly List<DateTime> _alarmList = new();
 
-        public AlarmeAddView(IService servicos, IServiceAndroid serviceAndroid)
+        public AlarmeAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
         {
             InitializeComponent();
-           
-            _service = servicos ?? throw new ArgumentNullException(nameof(servicos), "O serviço de alarme não foi fornecido.");
 
-            _servicesAndroid = serviceAndroid ?? throw new ArgumentNullException(nameof(servicos), "O serviço não foi fornecido.");
+            // Atribuir dependências injetadas
+            _services = services ?? throw new ArgumentNullException(nameof(services));
 
-            _servicesAndroid = serviceAndroid;
 
-            var viewModel = new AlarmeViewModel(_service);
+            var viewModel = new AlarmeViewModel(_services);
 
             BindingContext = viewModel;            
         }
@@ -72,9 +68,7 @@ namespace AppSaude.MVVM.Views
                 alarmDateTime = alarmDateTime.AddDays(1);
             }
 
-            _alarmList.Add(alarmDateTime);
-
-            _servicesAndroid.Start();
+            _alarmList.Add(alarmDateTime);           
 
             await VerifyPermissionsAsync();
         }
@@ -94,7 +88,7 @@ namespace AppSaude.MVVM.Views
             {
                 alarme.IsEnabled = e.Value;
                
-                await _service.AddAlarme(alarme);
+                await _services.AddAlarme(alarme);
             }
             else
             {
