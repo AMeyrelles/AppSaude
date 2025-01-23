@@ -71,7 +71,7 @@ namespace AppSaude.Services
 
                 var alarms = await LoadAlarmsFromDatabaseAsync();
                 Console.WriteLine("AlarmService: Passei pelo LoadAlarmsFromDatabaseAsync");
-                Console.WriteLine($"AlarmService: Alarmes verificados às {now}");
+                Console.WriteLine($"AlarmService: Alarmes verificados às {now.Hour}:{now.Minute}");
 
                 if (alarms == null || !alarms.Any())
                 {

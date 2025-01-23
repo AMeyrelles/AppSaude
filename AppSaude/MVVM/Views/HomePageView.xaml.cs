@@ -61,8 +61,8 @@ public partial class HomePageView : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        StartService();
 
-        
         // Carrega os alarmes do banco e armazena na lista
         _alarmeList = await LoadAlarmsFromDatabaseAsync();
 
@@ -103,14 +103,15 @@ public partial class HomePageView : ContentPage
     {
         _ = _alarmService.CheckAlarms();
         try
-        {            
+        {
+            
             // Obtém o horário atual
             DateTime now = DateTime.Now;
 
             // Carrega os alarmes do banco e armazena na lista
             var _alarmeList = await LoadAlarmsFromDatabaseAsync();
             var alarms = await _services.GetAlarmes();
-            AtivaService();
+            
 
             if (alarms == null || !alarms.Any())
             {
@@ -182,7 +183,7 @@ public partial class HomePageView : ContentPage
 
     //Inicia o serviço em primeiro Plano
 
-    public  void AtivaService()
+    public  void StartService()
     {
         if (!_servicesAndroid.IsRunning)
         {

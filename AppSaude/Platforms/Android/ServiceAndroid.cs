@@ -6,17 +6,19 @@ using AppSaude.Platforms.Android;
 using Android.Content.PM;
 
 
-namespace AppSaude
+namespace AppSaude.Platforms.Android
 {
-    [Service(ForegroundServiceType = Android.Content.PM.ForegroundService.TypeDataSync)]
+    [Service(ForegroundServiceType = ForegroundService.TypeDataSync)]
     public class ServiceAndroid : Service, IServiceAndroid
     {
         public bool IsRunning { get; private set; } = false;
         private CancellationTokenSource _cancellationTokenSource;
 
-        private IAlarmService _alarmService { get; }            
+        private IAlarmService _alarmService { get; }
 
         public override IBinder OnBind(Intent intent) => null;
+
+
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             _cancellationTokenSource?.Cancel();
@@ -33,21 +35,22 @@ namespace AppSaude
             {
                 RegisterNotification();
 
+                if (_alarmService == null)
+                {
+                    Console.WriteLine("ServiceAndroid: Erro: _alarmService não foi inicializado.");
+                    throw new InvalidOperationException("O serviço de alarmes não está configurado corretamente.");
+                }
+
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     try
                     {
-                        if (_alarmService == null)
-                        {
-                            Console.WriteLine("ServiceAndroid: Erro: _alarmService não foi inicializado.");
-                            return;
-                        }
-
                         await CheckAlarmsAsync();
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"ServiceAndroid: Erro ao verificar alarmes: {ex.Message}");
+                        Console.WriteLine($"ServiceAndroid: Erro ao verificar alarmes: {ex.Message}\n{ex.StackTrace}");
+                        await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken); // Pequeno atraso em caso de falha
                     }
 
                     try
@@ -62,7 +65,7 @@ namespace AppSaude
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ServiceAndroid: Erro na execução do serviço: {ex.Message}");
+                Console.WriteLine($"ServiceAndroid: Erro na execução do serviço: {ex.Message}\n{ex.StackTrace}");
             }
         }
 

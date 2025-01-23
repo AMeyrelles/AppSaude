@@ -15,7 +15,7 @@ namespace AppSaude.Platforms.Android
 
             // Registra serviços específicos de plataforma
 #if ANDROID
-             builder.Services.AddTransient<IServiceAndroid, ServiceAndroid>();
+             builder.Services.AddSingleton<IServiceAndroid, ServiceAndroid>();
 #endif
 
             // Configuração do aplicativo
