@@ -21,8 +21,7 @@ public partial class AlarmesView : ContentPage
         _servicesAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
         var viewModel = new MainViewModel(services);
-        BindingContext = viewModel;
-         
+        BindingContext = viewModel;         
     }
         
     protected override async void OnAppearing()

@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels" 
              x:Class="AppSaude.MVVM.Views.NotificacaoView"
              Title="Notificações">
 
 
+
+
+    <!-- Styles da Página HOME  -->
+    <ContentPage.Resources>
+        <!-- Style dos Buttons -->
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,10,10,10"/>
+            <Setter Property="HeightRequest" Value="140"/>
+            <Setter Property="WidthRequest" Value="140"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+
+        <!-- Style das Label -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="FontSize" Value="Small"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+        </Style>
+
+        <!-- Style do Border -->
+        <Style TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="WidthRequest" Value="290"/>
+        </Style>
+
+    </ContentPage.Resources>
     <ScrollView>
         <Grid>
             
@@ -21,10 +54,12 @@
                           Text="Alarmes" FontSize="20" FontAttributes="Bold" Margin="0,20,0,10" />
                         -->
                 <CollectionView             
-                     ItemsSource="{Binding NotificacaoAlarme}" Margin="0,20,0,20">
+                     ItemsSource="{Binding NotificacaoAlarmes}" Margin="0,20,0,20"
+                     SelectedItem="{Binding NotificacaoAlarmeAtual}"
+                     SelectionMode="Single"
+                     >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -43,33 +78,45 @@
                                     </Border.StrokeShape>
 
                                     <VerticalStackLayout>
-                                        <Border x:Name="alarmBorder" StrokeThickness="0" Stroke="White" BackgroundColor="#195986">
-                                            <HorizontalStackLayout                                                  
+                                        <!--  Implementado para deletar deslizando -->
+                                        <SwipeView>
+                                            <SwipeView.LeftItems>
+                                                <SwipeItems>
+                                                    <SwipeItem BackgroundColor="#05395e"
+                                                      Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteNACommand}"                                            
+                                                      Text="Excluir" />
+                                                </SwipeItems>
+                                            </SwipeView.LeftItems>
+
+                                            <Grid RowDefinitions="Auto, Auto, Auto, Auto">
+                                                <Border x:Name="alarmBorder" StrokeThickness="0" Stroke="White" BackgroundColor="#195986">
+                                                    <HorizontalStackLayout                                                  
                                                 Grid.Row="0"
                                                 Spacing="0" HorizontalOptions="Center">
-                                                <Image Source="despertador_64px" WidthRequest="30" HeightRequest="30" />
-                                                <Label                                              
+                                                        <Image Source="despertador_64px" WidthRequest="30" HeightRequest="30" />
+                                                        <Label                                              
                                                    CharacterSpacing="6"
                                                    TextColor="White"
                                                    Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"
                                                 />
 
-                                            </HorizontalStackLayout>
-                                        </Border>
-                                        <Label
-                                           x:Name="lblMName"  
-                                           Grid.Row="1"
-                                           Text="{Binding MedicationName}" FontSize="30" 
-                                        />
-
-                                        <Label 
-                                          Grid.Row="2"
-                                          Text="às"/>
-
-                                        <Label 
-                                          Grid.Row="3"
-                                          Text="{Binding ReminderTime, StringFormat='{0:hh\\:mm}h'}" FontSize="20" 
-                                        />
+                                                    </HorizontalStackLayout>
+                                                </Border>
+                                                <Label
+                                                      x:Name="lblMName"  
+                                                      Grid.Row="1"
+                                                      Text="{Binding MedicationNameNA}" FontSize="30" 
+                                                />
+                                                <Label 
+                                                   Grid.Row="2"
+                                                      Text="às"
+                                                />
+                                                <Label 
+                                                     Grid.Row="3"
+                                                     Text="{Binding ReminderTimeNA, StringFormat='{0:hh\\:mm}h'}" FontSize="20" 
+                                                />
+                                            </Grid>
+                                        </SwipeView>
                                     </VerticalStackLayout>
                                 </Border>
                             </Grid>

@@ -121,7 +121,7 @@ public partial class HomePageView : ContentPage
 
             foreach (var alarm in alarms)
             {
-                if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
+                //if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
 
                 // Verifica se o horário atual coincide com o horário do alarme
                 if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
@@ -129,8 +129,6 @@ public partial class HomePageView : ContentPage
                     var alarmBorder = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
 
                     alarmBorder.BackgroundColor = Colors.Red;
-
-
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }
                 else
@@ -171,6 +169,7 @@ public partial class HomePageView : ContentPage
     //Btn Notification
     private async void btnNotificacao_Clicked(object sender, EventArgs e)
     {
+        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
         await Navigation.PushAsync(new NotificacaoView(_services));
     }
 

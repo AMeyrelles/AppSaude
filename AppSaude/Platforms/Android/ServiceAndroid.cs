@@ -169,19 +169,45 @@ namespace AppSaude
                 }
 
                 foreach (var alarm in alarms)
-                {
+                {                   
+                    if (alarm.IsNotified)
+                    {                                                
+                            alarm.IsNotified = false;
+                            // Cria uma instância de NotificacaoAlarme a partir de Alarme
+                            var notificacaoAlarme = new NotificacaoAlarme
+                            {
+                                IdNA = alarm.Id,
+                                MedicationNameNA = alarm.MedicationName,
+                                PatientNameNA = alarm.PatientName,
+                                DescriptionNA = alarm.Description,
+                                ReminderTimeNA = alarm.ReminderTime,
+                                IsEnabledNA = alarm.IsEnabled,
+                                IsNotifiedNA = alarm.IsNotified,
+                                LastNotifiedDateNA = alarm.LastNotifiedDate
+                            };
+
+                            //Adiciona a instancia em notificação alarme
+                            await _services.AddNotAlarme(notificacaoAlarme);
+                            ////Atualiza o alarme no banco de dados
+                            await _services.UpdateAlarme(alarm);
+
+                            continue;                        
+                    }
+
                     if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
 
                     if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
                     {
                         alarm.LastNotifiedDate = now;
+                        alarm.IsNotified = true;
 
                         await OnAudioTriggered();
                         await ScheduleAlarmAsync(alarm);
 
 
                         ////Atualiza o alarme no banco de dados
-                        //await _services.UpdateAlarme(alarm);
+                        await _services.UpdateAlarme(alarm);
+
                         Console.WriteLine("SERVICEANDROID: Passei pelo Foreach");
                     }
                 }

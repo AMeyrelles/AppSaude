@@ -82,23 +82,6 @@ namespace AppSaude.Services
                     if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
                     {
                         alarm.LastNotifiedDate = now;
-
-                        // Cria uma instância de NotificacaoAlarme a partir de Alarme
-                        var notificacaoAlarme = new NotificacaoAlarme
-                        {
-                            IdNA = alarm.Id,
-                            MedicationNameNA = alarm.MedicationName,
-                            PatientNameNA = alarm.PatientName,
-                            DescriptionNA = alarm.Description,
-                            ReminderTimeNA = alarm.ReminderTime,
-                            IsEnabledNA = alarm.IsEnabled,
-                            IsNotifiedNA = alarm.IsNotified,
-                            LastNotifiedDateNA = alarm.LastNotifiedDate
-                        };
-
-                        //Adiciona a instancia em notificação alarme
-                        await _services.AddNotAlarme(notificacaoAlarme);
-
                         Console.WriteLine("AlarmeService: Passei pelo Foreach");
                     }
                 }
