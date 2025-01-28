@@ -8,12 +8,14 @@ namespace AppSaude.MVVM.Views;
 public partial class AgendamentoAddView : ContentPage
 {
 	private readonly IServicesTeste _services;
+    private readonly IServiceAndroid _serviceAndroid;
 
     private readonly List<DateTime> _agendamentoList = new List<DateTime>();
-    public AgendamentoAddView(IServicesTeste services)
+    public AgendamentoAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
 	{
         InitializeComponent();
-        _services = services;
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
         var viewModel = new AgendamentoViewModel(services);
         BindingContext = viewModel;
@@ -25,6 +27,7 @@ public partial class AgendamentoAddView : ContentPage
     //Botão para salvar o agendamento
     private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
     {
+        StartService();
         // Obtém a data e a hora selecionadas
         DateTime selectedDate = datePickerControl.Date;
         TimeSpan selectedTime = timePickerControl.Time;
@@ -159,4 +162,19 @@ public partial class AgendamentoAddView : ContentPage
             entry.Text = e.OldTextValue;
         }
     }
+
+    public void StartService()
+    {
+        if (!_serviceAndroid.IsRunning)
+        {
+            _serviceAndroid.Start(); // Inicia o serviço
+        }
+        else
+        {
+            Console.WriteLine("HOMEPAGE: O serviço já está em execução.");
+        }
+
+    }
+
+    //FIM
 }

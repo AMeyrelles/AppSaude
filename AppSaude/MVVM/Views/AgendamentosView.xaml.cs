@@ -9,18 +9,20 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentosView : ContentPage
 {
-	private readonly IServicesTeste _service;
+	private readonly IServicesTeste _services;
+    private readonly IServiceAndroid _serviceAndroid;
 
     private readonly IAudioManager  _audioManager;
 
     private List<Agendamento> _agendamentoList = new();
-    public AgendamentosView(IServicesTeste services, IAudioManager audioManager)
+    public AgendamentosView(IServicesTeste services, IAudioManager audioManager, IServiceAndroid servicesAndroid)
     {
         InitializeComponent();
 
         _audioManager = audioManager;
 
-        _service = services;
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
         var viewModel = new MainViewModel(services);
 
@@ -33,7 +35,7 @@ public partial class AgendamentosView : ContentPage
         try
         {
             // Busca todos os agendamentos do banco de dados usando o serviço
-            var agendamento = await _service.GetAgendamentos();
+            var agendamento = await _services.GetAgendamentos();
 
             // Verifica se a lista retornada não é nula
             if (agendamento == null)
@@ -105,7 +107,7 @@ public partial class AgendamentosView : ContentPage
                     await OnAudioTriggered();
                     await ScheduleAgendamentoAsync(agendamento.AppointmentDateTime);
 
-                    await _service.UpdateAgendamento(agendamento); // Atualiza o banco
+                    await _services.UpdateAgendamento(agendamento); // Atualiza o banco
 
                     break; // Se encontrou o alarme, não precisa continuar verificando os outros
                 }
@@ -173,6 +175,6 @@ public partial class AgendamentosView : ContentPage
 
     private async void btnAdd_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AgendamentoAddView(_service));
+        await Navigation.PushAsync(new AgendamentoAddView(_services, _serviceAndroid));
     }
 }

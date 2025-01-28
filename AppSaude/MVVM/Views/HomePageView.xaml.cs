@@ -157,15 +157,8 @@ public partial class HomePageView : ContentPage
 
     private async void btnAgendamentos_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AgendamentosView(_services, _audioManager));
+        await Navigation.PushAsync(new AgendamentosView(_services, _audioManager, _servicesAndroid));
     }
-
-
-    //Conta quantos alarmes foram carregados
-    //private async Task ShowAlarmCountAsync()
-    //{
-    //    await DisplayAlert("Informação", $"Alarmes atuais: {_alarmeList.Count}", "OK");
-    //}
 
     //Falta implementar as funcionalidades
 
@@ -176,9 +169,9 @@ public partial class HomePageView : ContentPage
     }
 
     //Btn Notification
-    private async void btnNoticacao_Clicked(object sender, EventArgs e)
+    private async void btnNotificacao_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+        await Navigation.PushAsync(new NotificacaoView(_services));
     }
 
     //Inicia o serviço em primeiro Plano

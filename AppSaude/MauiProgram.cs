@@ -1,11 +1,11 @@
-﻿using AppSaude.MVVM.Views;
-using AppSaude.Services;
+﻿using AppSaude.Services;
 using Microsoft.Extensions.Logging;
 using Plugin.LocalNotification;
 using Plugin.Maui.Audio;
+using AppSaude.Platforms.Android;
+using AppSaude.MVVM.Views;
 
 namespace AppSaude.Platforms.Android
-
 {
     public static class MauiProgram
     {
@@ -13,36 +13,53 @@ namespace AppSaude.Platforms.Android
         {
             var builder = MauiApp.CreateBuilder();
 
-            // Registra serviços específicos de plataforma
 #if ANDROID
-             builder.Services.AddSingleton<IServiceAndroid, ServiceAndroid>();
+            // Registra serviços específicos para Android
+            builder.Services.AddSingleton<IServiceAndroid, ServiceAndroid>();
+                      
 #endif
 
-            // Configuração do aplicativo
+            // Configuração geral do aplicativo
             builder
                 .UseMauiApp<App>()
-                .UseLocalNotification() // Registra a notificação local
+                .UseLocalNotification()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            // Adiciona logs apenas em DEBUG
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
-            // Adiciona serviços Singleton
+            // Serviços gerais do aplicativo
             builder.Services.AddSingleton(AudioManager.Current); // Gerenciador de Áudio
             builder.Services.AddSingleton<IServicesTeste, ServicesTeste>(); // Serviço de dados
-            builder.Services.AddSingleton<IAlarmService, AlarmService>(); // Serviço de alarmes
-                      
+            builder.Services.AddSingleton<IAlarmService, AlarmService>();
 
-            // Adiciona páginas com diferentes ciclos de vida
+            // Registra páginas
             builder.Services.AddTransient<HomePageView>(); // Página inicial
 
-            return builder.Build();
+            var app = builder.Build();
+
+            // Valida serviços (apenas para debug)
+#if DEBUG
+            ValidateServices(app.Services);
+#endif
+
+            return app;
+        }
+
+        private static void ValidateServices(IServiceProvider serviceProvider)
+        {
+            var alarmService = serviceProvider.GetService<IAlarmService>();
+            if (alarmService == null)
+                Console.WriteLine("Erro: IAlarmService não foi registrado corretamente.");
+
+            var serviceAndroid = serviceProvider.GetService<IServiceAndroid>();
+            if (serviceAndroid == null)
+                Console.WriteLine("Erro: IServiceAndroid não foi registrado corretamente.");            
         }
     }
 }

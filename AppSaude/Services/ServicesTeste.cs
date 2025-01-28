@@ -24,6 +24,7 @@ namespace AppSaude.Services
 
                 await _dbConnection.CreateTableAsync<Alarme>();
                 await _dbConnection.CreateTableAsync<Agendamento>();
+                await _dbConnection.CreateTableAsync<NotificacaoAlarme>();
             }
 
         }
@@ -93,5 +94,62 @@ namespace AppSaude.Services
             return agendamento;
         }
 
+
+        //Notificações
+        //NotificacoesAlarme
+
+        public async Task<int> AddNotAlarme(NotificacaoAlarme notAlarme)
+        {
+            await _semaphore.WaitAsync();
+            try
+            {
+                return await _dbConnection.InsertAsync(notAlarme);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+        public async Task<int> DeleteNotAlarme(NotificacaoAlarme notAlarme)
+        {
+            return await _dbConnection.DeleteAsync(notAlarme);
+        }
+        public async Task<int> UpdateNotAlarme(NotificacaoAlarme notAlarme)
+        {
+            return await _dbConnection.UpdateAsync(notAlarme);
+        }
+
+        public async Task<List<NotificacaoAlarme>> GetNotAlarmes()
+        {
+            return await _dbConnection.Table<NotificacaoAlarme>().ToListAsync();
+        }
+
+        public async Task<NotificacaoAlarme> GetNotAlarme(int id)
+        {
+            return await _dbConnection.Table<NotificacaoAlarme>().FirstOrDefaultAsync(x => x.IdNA == id);
+        }
+
+
+        //NotificacoesAgendamento
+        public async Task<int> DeleteNotAgendamento(NotificacaoAgendamento notAgendamento)
+        {
+            return await _dbConnection.DeleteAsync(notAgendamento);
+        }
+
+        public async Task<int> UpdateNotAgendamento(NotificacaoAgendamento notAgendamento)
+        {
+            return await _dbConnection.UpdateAsync(notAgendamento);
+        }
+
+        public async Task<List<NotificacaoAgendamento>> GetNotAgendamentos()
+        {
+            return await _dbConnection.Table<NotificacaoAgendamento>().ToListAsync();
+        }
+
+        public async Task<NotificacaoAgendamento> GetNotAgendamento(int id)
+        {
+            return await _dbConnection.Table<NotificacaoAgendamento>().FirstOrDefaultAsync(x => x.IdNAg == id);
+        }
+//FIM
     }
 }

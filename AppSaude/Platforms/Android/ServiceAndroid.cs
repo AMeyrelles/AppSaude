@@ -4,68 +4,78 @@ using Android.App;
 using Android.Content;
 using AppSaude.Platforms.Android;
 using Android.Content.PM;
+using Plugin.Maui.Audio;
+using AppSaude.MVVM.Models;
+using Android.Media;
+using Plugin.LocalNotification;
 
 
-namespace AppSaude.Platforms.Android
+namespace AppSaude
 {
     [Service(ForegroundServiceType = ForegroundService.TypeDataSync)]
-    public class ServiceAndroid : Service, IServiceAndroid
+    public class ServiceAndroid : Service, IServiceAndroid   
     {
-        public bool IsRunning { get; private set; } = false;
+        
+        private IServicesTeste _services;
+        private IAudioManager _audioManager;
+
+        public ServiceAndroid()
+        {
+            // Inicialize manualmente os serviços necessários, se for necessário
+            _services = IPlatformApplication.Current.Services.GetService<IServicesTeste>();
+            _audioManager = IPlatformApplication.Current.Services.GetService<IAudioManager>();
+
+            if (_services == null || _audioManager == null)
+            {
+                throw new InvalidOperationException("Erro ao resolver dependências para ServiceAndroid.");
+            }
+        }
+
+        public ServiceAndroid(IServicesTeste services, IAudioManager audioManager)
+        {
+            _services = services ?? throw new ArgumentNullException(nameof(services));
+            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));
+        }
+        public bool IsRunning { get; set; } = false;
+
         private CancellationTokenSource _cancellationTokenSource;
-
-        private IAlarmService _alarmService { get; }
-
         public override IBinder OnBind(Intent intent) => null;
-
-
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = new CancellationTokenSource();
 
-            _ = ExecuteAlarmServiceAsync(_cancellationTokenSource.Token);
+            _ = ExecuteAsync(_cancellationTokenSource.Token);
+
             return StartCommandResult.Sticky;
         }
 
-        private async Task ExecuteAlarmServiceAsync(CancellationToken cancellationToken)
+        private async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                RegisterNotification();
+            RegisterNotification();
 
-                if (_alarmService == null)
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
                 {
-                    Console.WriteLine("ServiceAndroid: Erro: _alarmService não foi inicializado.");
-                    throw new InvalidOperationException("O serviço de alarmes não está configurado corretamente.");
+                    await CheckAlarms();
+                    await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"SERVICEANDROID: Erro ao executar serviço: {ex.Message}");
+                    await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
                 }
 
-                while (!cancellationToken.IsCancellationRequested)
+                try
                 {
-                    try
-                    {
-                        await CheckAlarmsAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"ServiceAndroid: Erro ao verificar alarmes: {ex.Message}\n{ex.StackTrace}");
-                        await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken); // Pequeno atraso em caso de falha
-                    }
-
-                    try
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        break;
-                    }
+                    await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ServiceAndroid: Erro na execução do serviço: {ex.Message}\n{ex.StackTrace}");
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
         }
 
@@ -118,36 +128,163 @@ namespace AppSaude.Platforms.Android
 
         private void RegisterNotification()
         {
+            NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
+            NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
+            manager.CreateNotificationChannel(channel);
+
+            Notification notification = new Notification.Builder(this, "ServiceChannel")
+                .SetContentTitle("Lembre+")
+                .SetContentText("Estou trabalhando!")
+                .SetSmallIcon(Resource.Drawable.icon_mais)
+                .SetOngoing(true)
+                .Build();
+
+            StartForeground(100, notification);
+
+        }
+
+
+
+        //INICIO - ALARMES E SUA FUNCIONALIDADES
+        public Task InitializeAsync()
+        {
+            return CheckAlarms();
+        }
+        public async Task CheckAlarms()
+        {
             try
             {
-                NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
-                NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
-                manager.CreateNotificationChannel(channel);
+                await VerifyPermissionsAsync();
 
-                Notification notification = new Notification.Builder(this, "ServiceChannel")
-                    .SetContentTitle("Lembre+")
-                    .SetContentText("Estou trabalhando!")
-                    .SetSmallIcon(Resource.Drawable.icon_mais)
-                    .SetOngoing(true)
-                    .Build();
+                // Obtém a data e o horário atual
+                DateTime now = DateTime.Now;
 
-                StartForeground(100, notification);
+                var alarms = await LoadAlarmsFromDatabaseAsync();
+                Console.WriteLine($"SERVICEANDROID: Alarmes verificados às {now.Hour}:{now.Minute}");
+
+                if (alarms == null || !alarms.Any())
+                {
+                    Console.WriteLine("SERVICEANDROID: Nenhum alarme encontrado.");
+                    return;
+                }
+
+                foreach (var alarm in alarms)
+                {
+                    if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
+
+                    if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                    {
+                        alarm.LastNotifiedDate = now;
+
+                        await OnAudioTriggered();
+                        await ScheduleAlarmAsync(alarm);
+
+
+                        ////Atualiza o alarme no banco de dados
+                        //await _services.UpdateAlarme(alarm);
+                        Console.WriteLine("SERVICEANDROID: Passei pelo Foreach");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao registrar notificação: {ex.Message}");
+                Console.WriteLine($"SERVICEANDROID : Erro ao verificar alarmes: {ex.Message}");
             }
         }
-
-        public async Task CheckAlarmsAsync()
+        private async Task<List<Alarme>> LoadAlarmsFromDatabaseAsync()
         {
-            if (_alarmService == null)
+            try
             {
-                Console.WriteLine("Erro: _alarmService não foi inicializado.");
-                return;
-            }
+                // Busca todos os alarmes do banco de dados usando o serviço
+                var alarms = await _services.GetAlarmes();
 
-            await _alarmService.CheckAlarms();
+                // Verifica se a lista retornada não é nula
+                if (alarms == null)
+                {
+                    Console.WriteLine("SERVICEANDROID : Nenhum alarme encontrado no banco de dados.");
+                    return new List<Alarme>();
+                }
+
+                Console.WriteLine($"SERVICEANDROID : Total de alarmes encontrados: {alarms.Count}");
+                return alarms;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SERVICEANDROID : Erro ao carregar alarmes: {ex.Message}");
+                return new List<Alarme>();
+            }
         }
+        private async Task OnAudioTriggered()
+        {
+            var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("ola_esta_na_hora_de_tomar_o_seu_medicamento_tom.mp3"));
+            player.Play();
+            player.PlaybackEnded += (sender, e) =>
+            {
+                player.Dispose();
+            };
+        }
+        //Dispara a mensagem de notificacao
+        private async Task ScheduleAlarmAsync(Alarme alarm)
+        {
+            try
+            {
+                // Define a hora exata do alarme para hoje
+                DateTime alarmDateTime = DateTime.Now.Date.Add(alarm.ReminderTime);
+
+                var notification = new NotificationRequest
+                {
+                    NotificationId = alarm.Id, // ID único para identificar a notificação
+                    Title = "Lembrete de Remédio",
+                    Description = $"Hora de tomar: {alarm.MedicationName}",
+                    Schedule = new NotificationRequestSchedule
+                    {
+                        NotifyTime = alarmDateTime,
+                        RepeatType = NotificationRepeat.Daily // Repete diariamente (se necessário)
+                    },
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        AutoCancel = true,
+                        IconSmallName = { ResourceName = "sino" }
+                    }
+                };
+
+                await LocalNotificationCenter.Current.Show(notification);
+                Console.WriteLine("SERVICEANDROID: Notificação agendada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SERVICEANDROID: Erro ao agendar a notificação: {ex.Message}");
+            }
+        }
+        private static async Task VerifyPermissionsAsync()
+        {
+            try
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                if (status != PermissionStatus.Granted)
+                {
+
+                    status = await Permissions.RequestAsync<Permissions.PostNotifications>();
+                }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    Console.WriteLine("Permissão para notificações concedida!");
+                }
+                else
+                {
+                    Console.WriteLine("Permissão para notificações negada!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao verificar permissões: {ex.Message}");
+            }
+        }
+
+        //FIM - ALARMES E SUA FUNCIONALIDADES
     }
+
 }
+

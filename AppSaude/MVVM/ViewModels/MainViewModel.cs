@@ -14,6 +14,7 @@ namespace AppSaude.MVVM.ViewModels
 
         public AlarmeViewModel AlarmeViewModel { get; set; }
         public AgendamentoViewModel AgendamentoViewModel { get; set; }
+        public NotificacaoAlarmeViewModel NotificacaoAlarmeViewModel { get; set; }
 
         private ObservableCollection<Alarme> _alarmes;
         public ObservableCollection<Alarme> Alarmes
@@ -158,6 +159,35 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+
+        private ObservableCollection<NotificacaoAlarme> notificacaoAlarmes;
+        public ObservableCollection<NotificacaoAlarme> NotificacaoAlarmes
+        {
+            get => notificacaoAlarmes;
+            set
+            {
+                if (notificacaoAlarmes != value)
+                {
+                    notificacaoAlarmes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private NotificacaoAlarme _notificacaoAlarmeAtual;
+        public NotificacaoAlarme NotificacaoAlarmeAtual
+        {
+            get => _notificacaoAlarmeAtual;
+            set
+            {
+                if (_notificacaoAlarmeAtual != value)
+                {
+                    _notificacaoAlarmeAtual = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         //private int _apointmentsId;
         //public int AppointmentsID
         //{
@@ -280,6 +310,7 @@ namespace AppSaude.MVVM.ViewModels
 
         public ICommand DeleteAlarmeCommand { get; set; }
         public ICommand DeleteAgendaCommand { get; set; }
+        public ICommand DeleteNACommand { get; set; }
         public ICommand DisplayCommand { get; set; }
 
         public MainViewModel(IServicesTeste servicesRepository)
@@ -294,17 +325,18 @@ namespace AppSaude.MVVM.ViewModels
             Alarmes = new ObservableCollection<Alarme>();
             Agendamentos = new ObservableCollection<Agendamento>();
 
+            //DELETE ALARME 
             DeleteAlarmeCommand = new Command(async () =>
             {
                 if (AlarmeAtual == null)
                 {
-                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhum alarme selecionado.", "OK");
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhuma alarme selecionada.", "OK");
                     return;
                 }
 
                 try
                 {
-                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Excluir alarme???", "SIM", "NÃO");
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Deseja exluir?", "SIM", "NÃO");
                     if (resposta)
                     {
                         await servicesRepository.DeleteAlarme(AlarmeAtual);
@@ -317,6 +349,7 @@ namespace AppSaude.MVVM.ViewModels
                 }
             });
 
+            //DELETE AGENDAMENTO
             DeleteAgendaCommand = new Command(async () =>
             {
                 if (AgendamentoAtual == null)
@@ -331,6 +364,30 @@ namespace AppSaude.MVVM.ViewModels
                     if (resposta)
                     {
                         await servicesRepository.DeleteAgendamento(AgendamentoAtual);
+                        await Refresh(servicesRepository);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
+            //DELETE NOTIFICACAO ALARME 
+            DeleteNACommand = new Command(async () =>
+            {
+                if (NotificacaoAlarmeAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhuma notificação selecionada.", "OK");
+                    return;
+                }
+
+                try
+                {
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Deseja exluir?", "SIM", "NÃO");
+                    if (resposta)
+                    {
+                        await servicesRepository.DeleteNotAlarme(NotificacaoAlarmeAtual);
                         await Refresh(servicesRepository);
                     }
                 }
@@ -356,28 +413,36 @@ namespace AppSaude.MVVM.ViewModels
         }
 
 
-        public async Task Refresh(IServicesTeste alarmeService)
+        public async Task Refresh(IServicesTeste serviceServices)
         {
             try
             {
                 //Inicia a coleção sempre que chamado
                 Alarmes = new ObservableCollection<Alarme>();
                 Agendamentos = new ObservableCollection<Agendamento>();
+                NotificacaoAlarmes = new ObservableCollection<NotificacaoAlarme>();
 
                 // Recupera os alarmes do serviço e atualiza a coleção ObservableCollection
-                var alarmesList = await alarmeService.GetAlarmes();
-                var agendamentosList = await alarmeService.GetAgendamentos();
+                var alarmesList = await serviceServices.GetAlarmes();
+                var agendamentosList = await serviceServices.GetAgendamentos();
+                var alarmeNotificacaoList = await serviceServices.GetNotAlarmes();
 
+                Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
+                foreach (var alarme in alarmesList)
+                {
+                    Alarmes.Add(alarme);  // Adiciona os alarmes retornados à coleção            
+                }
+
+                Agendamentos.Clear();
                 foreach (var agendamento in agendamentosList)
                 {
                     Agendamentos.Add(agendamento); // Adiciona os alarmes retornados à coleção   
                 }
 
-                //Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
-                foreach (var alarme in alarmesList)
+                NotificacaoAlarmes.Clear();
+                foreach (var alarmeNot in alarmeNotificacaoList)
                 {
-                    Alarmes.Add(alarme);  // Adiciona os alarmes retornados à coleção             
-
+                    NotificacaoAlarmes.Add(alarmeNot);  // Adiciona os notificação de alarmes retornados à coleção            
                 }
             }
             catch (Exception ex)

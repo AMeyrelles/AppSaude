@@ -11,6 +11,8 @@ namespace AppSaude.MVVM.Views
     {
         private readonly IServicesTeste _services;
 
+        private readonly IServiceAndroid _serviceAndroid;
+
         private readonly List<DateTime> _alarmList = new();
 
         public AlarmeAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
@@ -19,6 +21,7 @@ namespace AppSaude.MVVM.Views
 
             // Atribuir dependências injetadas
             _services = services ?? throw new ArgumentNullException(nameof(services));
+            _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
 
             var viewModel = new AlarmeViewModel(_services);
@@ -68,7 +71,9 @@ namespace AppSaude.MVVM.Views
                 alarmDateTime = alarmDateTime.AddDays(1);
             }
 
-            _alarmList.Add(alarmDateTime);           
+            _alarmList.Add(alarmDateTime);
+
+            StartService();
 
             await VerifyPermissionsAsync();
         }
@@ -115,6 +120,21 @@ namespace AppSaude.MVVM.Views
                 entry.Text = e.OldTextValue;
             }
         }
+
+        public void StartService()
+        {
+            if (!_serviceAndroid.IsRunning)
+            {
+                _serviceAndroid.Start(); // Inicia o serviço
+            }
+            else
+            {
+                Console.WriteLine("HOMEPAGE: O serviço já está em execução.");
+            }
+
+        }
+
+        //FIM
     }
 }
 

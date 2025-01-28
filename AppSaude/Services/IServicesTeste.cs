@@ -4,7 +4,6 @@ namespace AppSaude.Services
 {
     public interface IServicesTeste
     {
-
         Task InitializeAsync();
         Task<List<Alarme>> GetAlarmes();
         Task<Alarme> GetAlarme(int Id);
@@ -20,5 +19,12 @@ namespace AppSaude.Services
         Task<int> UpdateAgendamento(Agendamento agendamento);
         Task SetUpDb();
 
+        //Notificacao Getters e Setters
+               
+        Task<List<NotificacaoAlarme>> GetNotAlarmes();
+        Task<NotificacaoAlarme> GetNotAlarme(int Id);
+        Task<int> AddNotAlarme(NotificacaoAlarme notAlarme);
+        Task<int> DeleteNotAlarme(NotificacaoAlarme notAlarme);
+        Task<int> UpdateNotAlarme(NotificacaoAlarme notAlarme);
     }
 }

@@ -9,12 +9,9 @@ namespace AppSaude.Services
     {
         private readonly IServicesTeste _services;
         private readonly IAudioManager _audioManager;
-        private readonly TimeSpan reminderTime;
-
-
         public async Task InitializeAsync()
         {
-           await CheckAlarms();
+            await CheckAlarms();
         }
         public AlarmService(IServicesTeste services, IAudioManager audioManager)
         {
@@ -70,7 +67,6 @@ namespace AppSaude.Services
                 DateTime now = DateTime.Now;
 
                 var alarms = await LoadAlarmsFromDatabaseAsync();
-                Console.WriteLine("AlarmService: Passei pelo LoadAlarmsFromDatabaseAsync");
                 Console.WriteLine($"AlarmService: Alarmes verificados às {now.Hour}:{now.Minute}");
 
                 if (alarms == null || !alarms.Any())
@@ -87,11 +83,22 @@ namespace AppSaude.Services
                     {
                         alarm.LastNotifiedDate = now;
 
-                        await OnAudioTriggered();
-                        await ScheduleAlarmAsync(alarm);                                          
+                        // Cria uma instância de NotificacaoAlarme a partir de Alarme
+                        var notificacaoAlarme = new NotificacaoAlarme
+                        {
+                            IdNA = alarm.Id,
+                            MedicationNameNA = alarm.MedicationName,
+                            PatientNameNA = alarm.PatientName,
+                            DescriptionNA = alarm.Description,
+                            ReminderTimeNA = alarm.ReminderTime,
+                            IsEnabledNA = alarm.IsEnabled,
+                            IsNotifiedNA = alarm.IsNotified,
+                            LastNotifiedDateNA = alarm.LastNotifiedDate
+                        };
 
-                        //Atualiza o alarme no banco de dados
-                        await _services.UpdateAlarme(alarm);
+                        //Adiciona a instancia em notificação alarme
+                        await _services.AddNotAlarme(notificacaoAlarme);
+
                         Console.WriteLine("AlarmeService: Passei pelo Foreach");
                     }
                 }
@@ -108,7 +115,7 @@ namespace AppSaude.Services
             var player = _audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("ola_esta_na_hora_de_tomar_o_seu_medicamento_tom.mp3"));
             player.Play();
             player.PlaybackEnded += (sender, e) =>
-            {                
+            {
                 player.Dispose();
             };
         }
@@ -145,7 +152,6 @@ namespace AppSaude.Services
                 Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
             }
         }
-
 
         private static async Task VerifyPermissionsAsync()
         {

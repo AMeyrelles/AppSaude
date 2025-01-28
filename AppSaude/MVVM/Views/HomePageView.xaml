@@ -63,8 +63,8 @@
                     <VerticalStackLayout Margin="5">
                         <Button                          
                             x:Name="btnNoticacao" 
-                           Clicked="btnNoticacao_Clicked"
-                             ImageSource="sino_64px.png"/>
+                            Clicked="btnNotificacao_Clicked"
+                            ImageSource="sino_64px.png"/>
 
                         <Label Text="Notificação"/>
 
