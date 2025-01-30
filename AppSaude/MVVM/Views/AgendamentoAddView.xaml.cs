@@ -1,6 +1,7 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
 namespace AppSaude.MVVM.Views;
@@ -10,7 +11,6 @@ public partial class AgendamentoAddView : ContentPage
 	private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
 
-    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
     public AgendamentoAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
 	{
         InitializeComponent();
@@ -27,49 +27,11 @@ public partial class AgendamentoAddView : ContentPage
     //Botão para salvar o agendamento
     private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
     {
-        StartService();
-        // Obtém a data e a hora selecionadas
-        DateTime selectedDate = datePickerControl.Date;
-        TimeSpan selectedTime = timePickerControl.Time;
-
-        // Combina a data e a hora
-        DateTime agendamentoDateTime = selectedDate.Date.Add(selectedTime);
-
-        // Verifica se a data selecionada é no passado
-        if (selectedDate < DateTime.Now.Date)
-        {
-            await DisplayAlert("Erro", "A data selecionada não pode ser no passado.", "OK");
-            return;
-        }
-
-        //Dispara notificação
-        if (selectedDate.Date == agendamentoDateTime.Date)
-        {
-            var notification = new NotificationRequest
-            {
-                NotificationId = 102,
-                Title = "ALERTA!",
-                Description = "Você tem um agendamento marcado HOJE!",
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = agendamentoDateTime
-                },
-                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-                {
-                    AutoCancel = true,
-                    IconSmallName = { ResourceName = "bell.png" }
-                }
-            };
-
-           await LocalNotificationCenter.Current.Show(notification);
-        }
-
-        // Adiciona o agendamento à lista (opcional)
-        _agendamentoList.Add(selectedDate);
+        //Inicia o serviço 
+        StartService();  
 
         // Configura a notificação
         await VerifyPermissionsAsync();
-        ScheduleNotificationDay(selectedDate);
     }
 
     //Dispara notificação

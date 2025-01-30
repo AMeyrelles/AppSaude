@@ -8,6 +8,7 @@ using Plugin.Maui.Audio;
 using AppSaude.MVVM.Models;
 using Android.Media;
 using Plugin.LocalNotification;
+using Microsoft.Maui.Controls;
 
 
 namespace AppSaude
@@ -18,6 +19,7 @@ namespace AppSaude
         
         private IServicesTeste _services;
         private IAudioManager _audioManager;
+
 
         public ServiceAndroid()
         {
@@ -183,15 +185,15 @@ namespace AppSaude
                                 ReminderTimeNA = alarm.ReminderTime,
                                 IsEnabledNA = alarm.IsEnabled,
                                 IsNotifiedNA = alarm.IsNotified,
-                                LastNotifiedDateNA = alarm.LastNotifiedDate
+                                LastNotifiedDateNA = alarm.LastNotifiedDate                                
                             };
 
                             //Adiciona a instancia em notificação alarme
                             await _services.AddNotAlarme(notificacaoAlarme);
                             ////Atualiza o alarme no banco de dados
-                            await _services.UpdateAlarme(alarm);
+                            await _services.UpdateAlarme(alarm);                      
 
-                            continue;                        
+                        continue;                        
                     }
 
                     if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;

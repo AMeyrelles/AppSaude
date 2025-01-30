@@ -56,6 +56,31 @@ public partial class HomePageView : ContentPage
         }
     }
 
+    //CARREGA A LIS DE NOTIFICACOES
+    private async Task<List<NotificacaoAlarme>> LoadNotificacaoFromDatabaseAsync()
+    {
+        try
+        {
+            // Busca todos os alarmes do banco de dados usando o serviço
+            var notificacao = await _services.GetNotAlarmes();
+
+            // Verifica se a lista retornada não é nula
+            if (notificacao == null)
+            {
+                Console.WriteLine("NOTIFICACAOVIEW : Nenhum notificacao de alarme encontrado no banco de dados.");
+                return new List<NotificacaoAlarme>();
+            }
+
+            Console.WriteLine($"NOTIFICACAOVIEW : Total de notificação de alarmes encontrados: {notificacao.Count}");
+            return notificacao;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"NOTIFICACAOVIEW : Erro ao carregar alarmes: {ex.Message}");
+            return new List<NotificacaoAlarme>();
+        }
+    }
+
     //Carregar os dados ao carregar a tela
     private Timer _timer;
     protected override async void OnAppearing()
@@ -84,8 +109,7 @@ public partial class HomePageView : ContentPage
         }
 
         // Configura o timer para chamar o método de verificação a cada 1 minuto
-        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
-        
+        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));        
     }
 
 
@@ -110,6 +134,7 @@ public partial class HomePageView : ContentPage
 
             // Carrega os alarmes do banco e armazena na lista
             var _alarmeList = await LoadAlarmsFromDatabaseAsync();
+            var _notificacaoList = await LoadNotificacaoFromDatabaseAsync();
             var alarms = await _services.GetAlarmes();
             
 
@@ -123,19 +148,37 @@ public partial class HomePageView : ContentPage
             {
                 //if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
 
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                if (alarm.IsNotified)
                 {
-                    var alarmBorder = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
+                    var lblLabel = this.FindByName<Label>("lblNameAlarme"); // Altere a cor do Border
 
-                    alarmBorder.BackgroundColor = Colors.Red;
-                    break; // Se encontrou o alarme, não precisa continuar verificando os outros
+                    if (lblLabel != null)
+                    {
+                        lblLabel.BackgroundColor = Colors.Green;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Border 1 'lblNameAlarme' não encontrado.");
+                    }
+                    continue;
                 }
-                else
-                {  // Localize o Border no layout (supondo que você tenha um Border com o nome "alarmVSL")
-                    var alarmVSL = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
 
-                    alarmVSL.BackgroundColor = Colors.LightSteelBlue;
+                if (!alarm.IsNotified)
+                {
+                    // Encontra o Border pelo nome definido no XAML
+                    var lblLabel = this.FindByName<Label>("lblNameAlarme");
+
+                    if (lblLabel != null)
+                    {
+                        // Altera a cor do Border usando Color.FromArgb para o valor hexadecimal
+                        lblLabel.BackgroundColor = Color.FromArgb("#195986");
+                    }
+                    else
+                    {
+                        // Log ou tratamento de erro caso o Border não seja encontrado
+                        Console.WriteLine("Border 2 'lblNameAlarme' não encontrado.");
+                    }
+                    continue;
                 }
             }
         }
@@ -169,7 +212,7 @@ public partial class HomePageView : ContentPage
     //Btn Notification
     private async void btnNotificacao_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+        //await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
         await Navigation.PushAsync(new NotificacaoView(_services));
     }
 

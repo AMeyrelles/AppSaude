@@ -9,10 +9,10 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentosView : ContentPage
 {
-	private readonly IServicesTeste _services;
+    private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
 
-    private readonly IAudioManager  _audioManager;
+    private readonly IAudioManager _audioManager;
 
     private List<Agendamento> _agendamentoList = new();
     public AgendamentosView(IServicesTeste services, IAudioManager audioManager, IServiceAndroid servicesAndroid)
@@ -91,30 +91,71 @@ public partial class AgendamentosView : ContentPage
         try
         {
             // Obtém o horário atual
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
+            var currentTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0);
 
-            // Carrega os alarmes do banco e armazena na lista
+            // Carrega os agendamentos do banco e armazena na lista
             var _agendamentoList = await LoadAgendamentoFromDatabaseAsync();
 
             foreach (var agendamento in _agendamentoList)
             {
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (!agendamento.IsNotified && now.Hour == agendamento.AppointmentDateTime.Hours && now.Minute == agendamento.AppointmentDateTime.Minutes)
+                // Verifica se o horário atual coincide com o horário do agendamento
+                if (!agendamento.IsNotified
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && now.Hour == agendamento.AppointmentDateTime.Hours
+                    && now.Minute == agendamento.AppointmentDateTime.Minutes)
                 {
                     agendamento.IsNotified = true;
+                    agendamento.IsEnabled = true;
 
-                    // Dispara notificação, som e navega para a tela de alarme
+                    // Dispara notificação e som 
                     await OnAudioTriggered();
                     await ScheduleAgendamentoAsync(agendamento.AppointmentDateTime);
 
                     await _services.UpdateAgendamento(agendamento); // Atualiza o banco
+                    Console.WriteLine($"Notificando: {agendamento.SpecialistName} em " +
+                        $"{agendamento.AppointmentDateTime.Hours}:{agendamento.AppointmentDateTime.Minutes}");
+                }
+                else if (agendamento.IsNotified)
+                {
+                    Console.WriteLine($"Agendamento já notificado!{agendamento.SpecialistName}, {agendamento.SelectedDate}");
+                }
 
-                    break; // Se encontrou o alarme, não precisa continuar verificando os outros
+                // Verifica se o agendamento é para hoje
+                if (!agendamento.IsNotified
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && now.Hour == agendamento.AppointmentDateTime.Hours)
+                {
+                    await ScheduleDailyReminderAsync(agendamento.AppointmentDateTime);
                 }
-                else 
-                { 
-                    Console.WriteLine("Nenhum agendamento encontrado para HOJE."); 
-                }
+
+                if (agendamento.IsNotified && agendamento.IsEnabled
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && now.Minute == agendamento.AppointmentDateTime.Minutes)      
+                {
+                    agendamento.IsEnabled = false;
+                    var notificacaoAgendamento = new NotificacaoAgendamento
+                    {
+                        SpecialistNameNAg = agendamento.SpecialistName,
+                        SpecialtyNAg = agendamento.Specialty,
+                        PostalCodeNAg = agendamento.PostalCode,
+                        StreetNAg = agendamento.Street,
+                        NeighborhoodNAg = agendamento.Neighborhood,
+                        CityNAg = agendamento.City,
+                        AppointmentDateTimeNAg = agendamento.AppointmentDateTime,
+                        SelectedDateNAg = agendamento.SelectedDate,
+                        MinDate = agendamento.MinDate,
+                        DescriptionAppointmentsNAg = agendamento.DescriptionAppointments,
+                        IsEnabledNAg = agendamento.IsEnabled,
+                        IsNotifiedNAg = agendamento.IsNotified
+                    };
+
+                    await _services.AddNotAgendamento(notificacaoAgendamento);
+                    await _services.UpdateAgendamento(agendamento);
+                }               
             }
         }
         catch (Exception ex)
@@ -134,7 +175,7 @@ public partial class AgendamentosView : ContentPage
             var notification = new NotificationRequest
             {
                 NotificationId = 103,
-                Title = "Lembrete de Remédio",
+                Title = "Lembrete do agendamento!",
                 Description = "Agendamento marcado para HOJE!!!",
                 Schedule = new NotificationRequestSchedule
                 {
@@ -144,7 +185,39 @@ public partial class AgendamentosView : ContentPage
                 Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                 {
                     AutoCancel = true,
-                    IconSmallName = { ResourceName = "icon_mais_.svg" }
+                    IconSmallName = { ResourceName = "sino" }
+                }
+            };
+            await LocalNotificationCenter.Current.Show(notification);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao agendar a notificação: {ex.Message}");
+        }
+    }
+
+    //Dispara a notificacao
+    private async Task ScheduleDailyReminderAsync(TimeSpan reminderTime)
+    {
+        try
+        {
+            // Cria um DateTime combinando a data atual com o horário do alarme
+            DateTime alarmDateTime = DateTime.Now.Date.Add(reminderTime); // Cria a data e hora completa
+
+            var notification = new NotificationRequest
+            {
+                NotificationId = 104,
+                Title = "Lembrete do agendamento!",
+                Description = "Você tem um agendamento marcado para HOJE!!!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = alarmDateTime // Usa o DateTime com a data de hoje e o horário do alarme
+                },
+                //Sound = "careless_whisper.mp3", // Caminho para o arquivo de som da notificação
+                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                {
+                    AutoCancel = true,
+                    IconSmallName = { ResourceName = "sino" }
                 }
             };
             await LocalNotificationCenter.Current.Show(notification);

@@ -43,8 +43,7 @@ namespace AppSaude.MVVM.Models
 
         [MaxLength(100)]
         public string DescriptionAppointments { get; set; }
-        public bool IsEnabled { get; set; } 
-
+        public bool IsEnabled { get; set; }
         public bool IsNotified { get; set; } // Verifica se o agendamento ja foi chamado
     }
 }

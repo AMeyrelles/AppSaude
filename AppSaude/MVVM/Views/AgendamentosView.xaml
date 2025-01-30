@@ -25,9 +25,11 @@
             <RowDefinition  Height="15*"/>
         </Grid.RowDefinitions>
 
-        <CollectionView ItemsSource="{Binding Agendamentos}"
-                        SelectedItem="{Binding AgendamentoAtual}"
-                        SelectionMode="Single">
+        <CollectionView
+            Margin="2"
+            ItemsSource="{Binding Agendamentos}"           
+            SelectedItem="{Binding AgendamentoAtual}"
+            SelectionMode="Single">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>

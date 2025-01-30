@@ -114,6 +114,13 @@ namespace AppSaude.MVVM.ViewModels
             set => SetProperty(ref _isEnabledNA, value);
         }
 
+        private bool _isNotifiedNA;
+        public bool IsNotifiedNA
+        {
+            get => _isNotifiedNA;
+            set => SetProperty(ref _isNotifiedNA, value);
+        }
+
         private DateTime _lastNotifiedDateNA;
         public DateTime LastNotifiedDateNA
         {

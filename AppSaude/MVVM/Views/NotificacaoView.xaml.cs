@@ -18,7 +18,7 @@ public partial class NotificacaoView : ContentPage
         BindingContext = viewModel;
 
     }
-
+   
     protected override async void OnAppearing()
     {
         base.OnAppearing();        
@@ -37,7 +37,6 @@ public partial class NotificacaoView : ContentPage
             await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
-
 
     private async Task<List<NotificacaoAlarme>> LoadNotificacaoFromDatabaseAsync()
     {

@@ -15,6 +15,7 @@ namespace AppSaude.MVVM.ViewModels
         public AlarmeViewModel AlarmeViewModel { get; set; }
         public AgendamentoViewModel AgendamentoViewModel { get; set; }
         public NotificacaoAlarmeViewModel NotificacaoAlarmeViewModel { get; set; }
+        public NotificacaoAlarmeViewModel NotificacaoAgendamentoViewModel { get; set; }
 
         private ObservableCollection<Alarme> _alarmes;
         public ObservableCollection<Alarme> Alarmes
@@ -188,6 +189,34 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+        private ObservableCollection<NotificacaoAgendamento> _notificacaoAgendamentos;
+        public ObservableCollection<NotificacaoAgendamento> NotificacaoAgendamentos
+        {
+            get => _notificacaoAgendamentos;
+            set
+            {
+                if (_notificacaoAgendamentos != value)
+                {
+                    _notificacaoAgendamentos = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private NotificacaoAgendamento _notificacaoAgendamentoAtual;
+        public NotificacaoAgendamento NotificacaoAgendamentoAtual
+        {
+            get => _notificacaoAgendamentoAtual;
+            set
+            {
+                if (_notificacaoAgendamentoAtual != value)
+                {
+                    _notificacaoAgendamentoAtual = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         //private int _apointmentsId;
         //public int AppointmentsID
         //{
@@ -311,6 +340,7 @@ namespace AppSaude.MVVM.ViewModels
         public ICommand DeleteAlarmeCommand { get; set; }
         public ICommand DeleteAgendaCommand { get; set; }
         public ICommand DeleteNACommand { get; set; }
+        public ICommand DeleteNAgCommand { get; set; }
         public ICommand DisplayCommand { get; set; }
 
         public MainViewModel(IServicesTeste servicesRepository)
@@ -397,6 +427,30 @@ namespace AppSaude.MVVM.ViewModels
                 }
             });
 
+            //DELETE NOTIFICACAO AGENDAMENTO 
+            DeleteNAgCommand = new Command(async () =>
+            {
+                if (NotificacaoAgendamentoAtual == null)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", "Nenhuma notificação selecionada.", "OK");
+                    return;
+                }
+
+                try
+                {
+                    var resposta = await App.Current.MainPage.DisplayAlert("Alerta", "Deseja exluir?", "SIM", "NÃO");
+                    if (resposta)
+                    {
+                        await servicesRepository.DeleteNotAgendamento(NotificacaoAgendamentoAtual);
+                        await Refresh(servicesRepository);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await App.Current.MainPage.DisplayAlert("Erro", ex.Message, "OK");
+                }
+            });
+
             DisplayCommand = new Command(async () =>
             {
 
@@ -421,11 +475,13 @@ namespace AppSaude.MVVM.ViewModels
                 Alarmes = new ObservableCollection<Alarme>();
                 Agendamentos = new ObservableCollection<Agendamento>();
                 NotificacaoAlarmes = new ObservableCollection<NotificacaoAlarme>();
+                NotificacaoAgendamentos = new ObservableCollection<NotificacaoAgendamento>();             
 
                 // Recupera os alarmes do serviço e atualiza a coleção ObservableCollection
                 var alarmesList = await serviceServices.GetAlarmes();
                 var agendamentosList = await serviceServices.GetAgendamentos();
                 var alarmeNotificacaoList = await serviceServices.GetNotAlarmes();
+                var agendamentoNotificacaoList = await serviceServices.GetNotAgendamentos();
 
                 Alarmes.Clear(); // Limpa a coleção antes de adicionar novos dados
                 foreach (var alarme in alarmesList)
@@ -443,6 +499,12 @@ namespace AppSaude.MVVM.ViewModels
                 foreach (var alarmeNot in alarmeNotificacaoList)
                 {
                     NotificacaoAlarmes.Add(alarmeNot);  // Adiciona os notificação de alarmes retornados à coleção            
+                }
+
+                NotificacaoAgendamentos.Clear();
+                foreach (var agendamentoNot in agendamentoNotificacaoList)
+                {
+                    NotificacaoAgendamentos.Add(agendamentoNot);  // Adiciona os notificação de alarmes retornados à coleção            
                 }
             }
             catch (Exception ex)
