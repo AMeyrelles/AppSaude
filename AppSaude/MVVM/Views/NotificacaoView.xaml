@@ -2,10 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local ="clr-namespace:AppSaude.MVVM.ViewModels" 
-             x:Class="AppSaude.MVVM.Views.NotificacaoView"
+             x:Class="AppSaude.MVVM.Views.NotificacaoView"              
+             Background="White"
              Title="Notificações">
-
-
 
 
     <!-- Styles da Página HOME  -->
@@ -26,17 +25,17 @@
             <Setter Property="BackgroundColor" Value="White"/>
             <Setter Property="HorizontalOptions" Value="Center"/>
             <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="WidthRequest" Value="290"/>            
+            <Setter Property="WidthRequest" Value="390"/>
         </Style>
 
     </ContentPage.Resources>
     <ScrollView>
-        <Grid>
-            
-        <Grid.RowDefinitions>
-            <RowDefinition/>           
-        </Grid.RowDefinitions>
-            
+        <Grid ColumnDefinitions="100*">
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
             <VerticalStackLayout                    
                    Grid.Row="1">
 
@@ -53,7 +52,7 @@
                      >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -84,15 +83,14 @@
                                                 <Border x:Name="alarmBorder" StrokeThickness="0" Stroke="White" BackgroundColor="#195986"
                                                         >
                                                     <HorizontalStackLayout                                                  
-                                                Grid.Row="0"
-                                                Spacing="0" HorizontalOptions="Center">
-                                                        <Image Source="despertador_64px" WidthRequest="30" HeightRequest="30" />
-                                                        <Label                                              
-                                                   CharacterSpacing="6"
-                                                   TextColor="White"
-                                                   Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"
-                                                />
-
+                                                        Grid.Row="0"
+                                                        Spacing="0" HorizontalOptions="Center">
+                                                              <Image Source="despertador_64px" WidthRequest="30" HeightRequest="30" />
+                                                              <Label                                                                     
+                                                                 CharacterSpacing="6"
+                                                                 TextColor="White"
+                                                                 Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,5" Padding="10,0,0,0"
+                                                              />
                                                     </HorizontalStackLayout>
                                                 </Border>
                                                 <Label                                                      
@@ -170,7 +168,7 @@
                                                             <Label                                                   
                                                                   CharacterSpacing="5"
                                                                   TextColor="White"
-                                                                  Text="Agendamento" FontSize="20" FontAttributes="Bold"  Padding="10,0,10,0"/>
+                                                                  Text="Agendamento" FontSize="20" FontAttributes="Bold" Margin="0,5,0,5" Padding="10,0,10,0"/>
 
                                                         </HorizontalStackLayout>
                                                     </Border>

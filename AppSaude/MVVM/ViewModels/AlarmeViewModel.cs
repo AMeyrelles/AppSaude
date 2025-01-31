@@ -2,6 +2,7 @@
 using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 
 
@@ -95,7 +96,6 @@ namespace AppSaude.MVVM.ViewModels
 
 
         private TimeSpan _reminderTime;
-
         public TimeSpan ReminderTime
         {
             get => _reminderTime;
@@ -114,6 +114,18 @@ namespace AppSaude.MVVM.ViewModels
         {
             get => _isEnabled;
             set => SetProperty(ref _isEnabled, value);
+        }
+
+        private bool _isNotified;
+        public bool IsNotified
+        {
+            get => _isNotified;
+            set => SetProperty(ref _isNotified, value);
+        }
+        public new event PropertyChangedEventHandler PropertyChanged;
+        protected new virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private DateTime _lastNotifiedDate;

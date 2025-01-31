@@ -117,7 +117,7 @@ public partial class AgendamentoAddView : ContentPage
     private void OnCustomEntryTextChanged(object sender, TextChangedEventArgs e)
     {
         var entry = (Entry)sender;
-        string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+        string pattern = @"^[\p{L}0-9\s\-]*$"; // Permite letras, números, espaços , traços e acentos
         if (!Regex.IsMatch(e.NewTextValue, pattern))
         {
             // Reverte para o último valor válido

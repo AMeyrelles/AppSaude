@@ -172,7 +172,9 @@ namespace AppSaude
 
                 foreach (var alarm in alarms)
                 {                   
-                    if (alarm.IsNotified)
+                    if (alarm.IsNotified 
+                        && now.Hour == alarm.ReminderTime.Hours 
+                        && now.Minute == alarm.ReminderTime.Minutes) //testar para ver se salva no mesmo horario
                     {                                                
                             alarm.IsNotified = false;
                             // Cria uma instância de NotificacaoAlarme a partir de Alarme
@@ -191,9 +193,9 @@ namespace AppSaude
                             //Adiciona a instancia em notificação alarme
                             await _services.AddNotAlarme(notificacaoAlarme);
                             ////Atualiza o alarme no banco de dados
-                            await _services.UpdateAlarme(alarm);                      
+                            await _services.UpdateAlarme(alarm);                    
 
-                        continue;                        
+                            continue;                        
                     }
 
                     if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
@@ -211,6 +213,8 @@ namespace AppSaude
                         await _services.UpdateAlarme(alarm);
 
                         Console.WriteLine("SERVICEANDROID: Passei pelo Foreach");
+
+                        break;
                     }
                 }
             }

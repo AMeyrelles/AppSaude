@@ -11,10 +11,9 @@ public partial class AgendamentosView : ContentPage
 {
     private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
-
     private readonly IAudioManager _audioManager;
 
-    private List<Agendamento> _agendamentoList = new();
+    private List<Agendamento> _agendamentoList = new();    
     public AgendamentosView(IServicesTeste services, IAudioManager audioManager, IServiceAndroid servicesAndroid)
     {
         InitializeComponent();
@@ -99,6 +98,8 @@ public partial class AgendamentosView : ContentPage
 
             foreach (var agendamento in _agendamentoList)
             {
+                 agendamento.IsEnabled = true;
+
                 // Verifica se o horário atual coincide com o horário do agendamento
                 if (!agendamento.IsNotified
                     && now.Month == agendamento.SelectedDate.Month
@@ -114,6 +115,8 @@ public partial class AgendamentosView : ContentPage
                     await ScheduleAgendamentoAsync(agendamento.AppointmentDateTime);
 
                     await _services.UpdateAgendamento(agendamento); // Atualiza o banco
+                    
+
                     Console.WriteLine($"Notificando: {agendamento.SpecialistName} em " +
                         $"{agendamento.AppointmentDateTime.Hours}:{agendamento.AppointmentDateTime.Minutes}");
                 }
@@ -122,21 +125,36 @@ public partial class AgendamentosView : ContentPage
                     Console.WriteLine($"Agendamento já notificado!{agendamento.SpecialistName}, {agendamento.SelectedDate}");
                 }
 
-                // Verifica se o agendamento é para hoje
                 if (!agendamento.IsNotified
                     && now.Month == agendamento.SelectedDate.Month
                     && now.Day == agendamento.SelectedDate.Day
-                    && now.Hour == agendamento.AppointmentDateTime.Hours)
+                    && agendamento.NotificationDailyCount == 0
+                    )
                 {
+
                     await ScheduleDailyReminderAsync(agendamento.AppointmentDateTime);
+
+                    agendamento.NotificationDailyCount++;
+
+                    await _services.UpdateAgendamento(agendamento); // Atualiza o banco
+
+
+                    Console.WriteLine($"Notificando: {agendamento.SpecialistName} em " +
+                        $"{agendamento.AppointmentDateTime.Hours}:{agendamento.AppointmentDateTime.Minutes}");
                 }
+                else if (agendamento.IsNotified)
+                {
+                    Console.WriteLine($"Agendamento já notificado!{agendamento.SpecialistName}, {agendamento.SelectedDate}");
+                }
+
 
                 if (agendamento.IsNotified && agendamento.IsEnabled
                     && now.Month == agendamento.SelectedDate.Month
                     && now.Day == agendamento.SelectedDate.Day
-                    && now.Minute == agendamento.AppointmentDateTime.Minutes)      
+                    && now.Minute == agendamento.AppointmentDateTime.Minutes
+                    && agendamento.NotificationCount == 0)
                 {
-                    agendamento.IsEnabled = false;
+
                     var notificacaoAgendamento = new NotificacaoAgendamento
                     {
                         SpecialistNameNAg = agendamento.SpecialistName,
@@ -153,9 +171,11 @@ public partial class AgendamentosView : ContentPage
                         IsNotifiedNAg = agendamento.IsNotified
                     };
 
+                    agendamento.IsEnabled = false;
+                    agendamento.NotificationCount++; // Incrementa o contador para impedir repetições futuras
                     await _services.AddNotAgendamento(notificacaoAgendamento);
                     await _services.UpdateAgendamento(agendamento);
-                }               
+                }
             }
         }
         catch (Exception ex)
@@ -163,6 +183,7 @@ public partial class AgendamentosView : ContentPage
             Console.WriteLine($"Erro ao verificar agendamentos: {ex.Message}");
         }
     }
+
 
     //Dispara a notificacao
     private async Task ScheduleAgendamentoAsync(TimeSpan reminderTime)
