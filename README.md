@@ -40,18 +40,18 @@ Breve descrição do seu projeto
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-projeto.git
+   git clone https://github.com/AMeyrelles/AppSaude.git
 Restaure os pacotes NuGet:
 
 bash
 
 dotnet restore
 🚀 Executando o Projeto
-Abra a solução SeuProjeto.sln no Visual Studio 2022
+Abra a solução AppSaude.sln no Visual Studio 2022
 
 Selecione o ambiente de execução na barra superior:
 
-Plataforma: Android/iOS/Windows (de acordo com seu dispositivo alvo)
+Plataforma: Android
 
 Dispositivo: Selecione emulador/dispositivo físico
 
