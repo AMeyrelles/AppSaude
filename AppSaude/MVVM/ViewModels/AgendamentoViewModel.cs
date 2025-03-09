@@ -198,6 +198,7 @@ namespace AppSaude.MVVM.ViewModels
             }
         }
 
+<<<<<<< HEAD
         private DateTime _lastNotifiedDate;
         public DateTime LastNotifiedDate
         {
@@ -213,6 +214,8 @@ namespace AppSaude.MVVM.ViewModels
         }
 
 
+=======
+>>>>>>> Primeira_Branch
         //Commandos CRUD
         public ICommand SaveCommand { get; set; }
         public ICommand UpdateCommand { get; set; }
@@ -227,7 +230,11 @@ namespace AppSaude.MVVM.ViewModels
             MinDate = DateTime.Today; // Define o valor inicial como a data atual
         }
 
+<<<<<<< HEAD
         public AgendamentoViewModel(IServicesTeste agendamentoRepository)
+=======
+        public AgendamentoViewModel(IService agendamentoRepository)
+>>>>>>> Primeira_Branch
         {
 
             // Inicializa o serviço de alarme
@@ -311,7 +318,11 @@ namespace AppSaude.MVVM.ViewModels
         }
 
         //Instância a lista e a atualiza
+<<<<<<< HEAD
         public async Task Refresh(IServicesTeste _servicos)
+=======
+        public async Task Refresh(IService _servicos)
+>>>>>>> Primeira_Branch
         {
             try
             {

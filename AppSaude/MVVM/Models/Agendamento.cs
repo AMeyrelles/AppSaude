@@ -9,6 +9,7 @@ namespace AppSaude.MVVM.Models
         public int AppointmentsId { get; set; }
 
         // Nome do especialista
+<<<<<<< HEAD
         [MaxLength(100)]
         public string SpecialistName { get; set; }
 
@@ -31,6 +32,30 @@ namespace AppSaude.MVVM.Models
         // Cidade
         [MaxLength(100)]
         public string City { get; set; } = "Cidade";
+=======
+        [NotNull, MaxLength(100)]
+        public string SpecialistName { get; set; }
+
+        // Nome da especialidade
+        [NotNull, MaxLength(50)]
+        public string Specialty { get; set; }
+
+        // Codigo postal
+        [MaxLength(30)]
+        public string PostalCode { get; set; }
+
+        // Rua
+        [NotNull, MaxLength(100)]
+        public string Street { get; set; }
+
+        //Bairro
+        [NotNull, MaxLength(100)]
+        public string Neighborhood { get; set; }
+
+        // Cidade
+        [NotNull, MaxLength(50)]
+        public string City { get; set; }
+>>>>>>> Primeira_Branch
 
         // Horário do agendamento
         [NotNull]
@@ -43,6 +68,7 @@ namespace AppSaude.MVVM.Models
 
         [MaxLength(100)]
         public string DescriptionAppointments { get; set; }
+<<<<<<< HEAD
         public bool IsEnabled { get; set; } // Verifica se o agendamento esta habilitado
         public bool IsNotified { get; set; } // Verifica se o agendamento ja foi notificado
         public int NotificationCount { get; set; } = 0;
@@ -51,3 +77,10 @@ namespace AppSaude.MVVM.Models
     }
 }
 
+=======
+        public bool IsEnabled { get; set; } 
+
+        public bool IsNotified { get; set; } // Verifica se o agendamento ja foi chamado
+    }
+}
+>>>>>>> Primeira_Branch

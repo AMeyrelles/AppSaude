@@ -1,13 +1,8 @@
 ﻿using AppSaude.MVVM.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AppSaude.Services
 {
-    public interface IAlarmeService
+    public interface IService
     {
 
         Task InitializeAsync();
@@ -16,6 +11,13 @@ namespace AppSaude.Services
         Task<int> AddAlarme(Alarme alarme);
         Task<int> DeleteAlarme(Alarme alarme);
         Task<int> UpdateAlarme(Alarme alarme);
+
+
+        Task<List<Agendamento>> GetAgendamentos();
+        Task<Agendamento> GetAgendamento(int Id);
+        Task<int> AddAgendamento(Agendamento agendamento);
+        Task<int> DeleteAgendamento(Agendamento agendamento);
+        Task<int> UpdateAgendamento(Agendamento agendamento);
         Task SetUpDb();
 
     }

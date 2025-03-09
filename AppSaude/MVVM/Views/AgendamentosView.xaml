@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AppSaude.MVVM.ViewModels"            
+             x:Class="AppSaude.MVVM.Views.AgendamentosView"                         
+             Title="Agendamentos"
+             IconImageSource="calendar_64px.png">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="Large"/>
+            <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="CharacterSpacing" Value="2"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>         
+        </Style>
+
+        <Style TargetType="Border">
+
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85*"/>
+            <RowDefinition  Height="10*"/>
+        </Grid.RowDefinitions>
+
+        <CollectionView ItemsSource="{Binding Agendamentos}"
+                        SelectedItem="{Binding AgendamentoAtual}"
+                        SelectionMode="Single">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border 
+                        Margin="5,10,5,10">
+                        
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout >
+                            <!--  Implementado para deletar deslizando -->
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem BackgroundColor="#05395e"
+                                         Command = "{Binding Source = {RelativeSource AncestorType = {x:Type local:MainViewModel}}, Path = DeleteAgendaCommand}"                                            
+                                         Text="Excluir" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+
+                                <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                                    <Border>
+                                        <VerticalStackLayout>
+                                            <Border        
+                                                BackgroundColor="#195986" 
+                                                Margin="0,0,0,10"
+                                                >
+                                                <VerticalStackLayout>                                               
+                                                    <Label 
+                                                      TextColor="White"
+                                                      FontSize="40"                                       
+                                                      Text="{Binding SpecialistName}"
+                                                      Grid.Row="0"
+                                                      />
+
+                                                    <Label 
+                                                      TextColor="White"
+                                                      FontSize="30"  
+                                                      Text="{Binding Specialty}"
+                                                      Grid.Row="1"
+                                                      />                                                
+                                                 </VerticalStackLayout>
+                                            </Border>
+
+                                            <HorizontalStackLayout                                                
+                                                Margin="0,0,0,20"
+                                                Grid.Row="2"
+                                                HorizontalOptions="Center">
+                                                
+                                                <Label   
+                                                  FontSize="25"
+                                                  TextColor="Black"
+                                                  Text="{Binding SelectedDate, StringFormat='{0:dd/MM/yyyy}'}"
+                                                />
+                                                <Label
+                                                    VerticalOptions="Center"
+                                                    TextColor="Black"
+                                                    Text=" às "/>
+                                                <Label  
+                                                    FontSize="25"                                                
+                                                    TextColor="Black"
+                                                    Text="{Binding AppointmentDateTime, StringFormat='{}{0:hh\\:mm}h'}"
+                                                />
+                                            </HorizontalStackLayout>
+
+                                            <Label        
+                                                FontSize="15"
+                                                TextColor="Black"
+                                                Text="{Binding PostalCode}"
+                                                Grid.Row="3"
+                                            />
+
+                                            <Label    
+                                                FontSize="20"
+                                                TextColor="Black"
+                                                Text="{Binding Street}"
+                                                Grid.Row="4"
+                                            />
+
+                                            <Label 
+                                                FontSize="15"
+                                                TextColor="Black"
+                                                Text="{Binding Neighborhood}"
+                                                Grid.Row="5"
+                                            />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
+                            </SwipeView>
+                            <!-- Fim -->
+
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="1"  HorizontalOptions="Center">
+
+            <Button
+               Margin="10"
+               Grid.Row="1"            
+               HeightRequest="70"
+               WidthRequest="70"
+               CornerRadius="10"
+               BackgroundColor="#5184c0"
+               ImageSource="plus.png"
+               x:Name="btnAdd"
+               Clicked="btnAdd_Clicked">
+
+            </Button>
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>

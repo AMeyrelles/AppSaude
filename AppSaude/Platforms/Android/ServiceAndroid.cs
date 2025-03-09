@@ -2,16 +2,24 @@
 using AppSaude.Services;
 using Android.App;
 using Android.Content;
+<<<<<<< HEAD
 using AppSaude.Platforms.Android;
 using Android.Content.PM;
 using Plugin.Maui.Audio;
 using AppSaude.MVVM.Models;
 using Plugin.LocalNotification;
 using Microsoft.Maui.Controls;
+=======
+using Android.Util;
+using Service = Android.App.Service;
+using Resource = AppSaude.Resource;
+using Android.Runtime;
+>>>>>>> Primeira_Branch
 
 
 namespace AppSaude
 {
+<<<<<<< HEAD
     [Service(ForegroundServiceType = ForegroundService.TypeDataSync)]
     public class ServiceAndroid : Service, IServiceAndroid   
     {
@@ -89,11 +97,44 @@ namespace AppSaude
             _cancellationTokenSource = null;
         }
 
+=======
+    [Service(ForegroundServiceType = Android.Content.PM.ForegroundService.TypeDataSync)]
+    public class ServiceAndroid : Service, IServiceAndroid
+    {
+        public override IBinder OnBind(Intent intent)
+        {
+            throw new NotImplementedException();
+        }
+        [return: GeneratedEnum]
+        public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
+        {
+            if (intent.Action == "START_SERVICE")
+            {
+                System.Diagnostics.Debug.WriteLine("Serviço inicado!");
+                RegisterNotification();
+            }
+            else if (intent.Action == "STOP_SERVICE")
+            {
+                System.Diagnostics.Debug.WriteLine("Serviço encerrado!");
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+                {
+                    StopForeground(StopForegroundFlags.Remove);
+                }
+                else
+                    StopSelfResult(startId);
+            }
+            return StartCommandResult.NotSticky;
+        }
+
+
+        public bool IsRunning { get; private set; } = false;
+>>>>>>> Primeira_Branch
         public void Start()
         {
             if (!IsRunning)
             {
                 IsRunning = true;
+<<<<<<< HEAD
                 Console.WriteLine("ServiceAndroid: Serviço iniciado.");
             }
 
@@ -104,6 +145,13 @@ namespace AppSaude
             }
 
             Intent startService = new(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
+=======
+                // Código para iniciar o serviço
+                Console.WriteLine("Serviço iniciado.");
+            }
+
+            Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
+>>>>>>> Primeira_Branch
             startService.SetAction("START_SERVICE");
             MainActivity.ActivityCurrent.StartService(startService);
         }
@@ -113,6 +161,7 @@ namespace AppSaude
             if (IsRunning)
             {
                 IsRunning = false;
+<<<<<<< HEAD
                 Console.WriteLine("ServiceAndroid: Serviço parado.");
             }
 
@@ -123,12 +172,20 @@ namespace AppSaude
             }
 
             Intent stopIntent = new(MainActivity.ActivityCurrent, this.Class);
+=======
+                // Código para parar o serviço
+                Console.WriteLine("Serviço parado.");
+            }
+
+            Intent stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
+>>>>>>> Primeira_Branch
             stopIntent.SetAction("STOP_SERVICE");
             MainActivity.ActivityCurrent.StartService(stopIntent);
         }
 
         private void RegisterNotification()
         {
+<<<<<<< HEAD
             NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
             NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
             manager.CreateNotificationChannel(channel);
@@ -138,12 +195,22 @@ namespace AppSaude
                 .SetContentText("Estou trabalhando!")
                 .SetSmallIcon(Resource.Drawable.icon_mais)
                 .SetOngoing(true)
+=======
+            NotificationChannel channel = new NotificationChannel("ServiceChannel", "Servico Teste", NotificationImportance.Max);
+            NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
+            manager.CreateNotificationChannel(channel);
+            Notification notification = new Notification.Builder(this, "ServiceChannel")
+                .SetContentTitle("Estou trabalhando!")
+                .SetSmallIcon(Resource.Drawable.icon_mais)
+                .SetOngoing(true)                
+>>>>>>> Primeira_Branch
                 .Build();
 
             StartForeground(100, notification);
 
         }
 
+<<<<<<< HEAD
 
 
         //INICIO - ALARMES E SUA FUNCIONALIDADES
@@ -319,3 +386,7 @@ namespace AppSaude
 
 }
 
+=======
+    }
+}
+>>>>>>> Primeira_Branch

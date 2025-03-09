@@ -7,6 +7,7 @@ namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentoAddView : ContentPage
 {
+<<<<<<< HEAD
 	private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
 
@@ -15,6 +16,15 @@ public partial class AgendamentoAddView : ContentPage
         InitializeComponent();
         _services = services ?? throw new ArgumentNullException(nameof(services));
         _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
+=======
+	private readonly IService _services;
+
+    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
+    public AgendamentoAddView(IService services)
+	{
+        InitializeComponent();
+        _services = services;
+>>>>>>> Primeira_Branch
 
         var viewModel = new AgendamentoViewModel(services);
         BindingContext = viewModel;
@@ -26,11 +36,56 @@ public partial class AgendamentoAddView : ContentPage
     //Botão para salvar o agendamento
     private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
     {
+<<<<<<< HEAD
         //Inicia o serviço 
         StartService();  
 
         // Configura a notificação
         await VerifyPermissionsAsync();        
+=======
+        // Obtém a data e a hora selecionadas
+        DateTime selectedDate = datePickerControl.Date;
+        TimeSpan selectedTime = timePickerControl.Time;
+
+        // Combina a data e a hora
+        DateTime agendamentoDateTime = selectedDate.Date.Add(selectedTime);
+
+        // Verifica se a data selecionada é no passado
+        if (selectedDate < DateTime.Now.Date)
+        {
+            await DisplayAlert("Erro", "A data selecionada não pode ser no passado.", "OK");
+            return;
+        }
+
+        //Dispara notificação
+        if (selectedDate.Date == agendamentoDateTime.Date)
+        {
+            var notification = new NotificationRequest
+            {
+                NotificationId = 102,
+                Title = "ALERTA!",
+                Description = "Você tem um agendamento marcado HOJE!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = agendamentoDateTime
+                },
+                Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                {
+                    AutoCancel = true,
+                    IconSmallName = { ResourceName = "bell.png" }
+                }
+            };
+
+           await LocalNotificationCenter.Current.Show(notification);
+        }
+
+        // Adiciona o agendamento à lista (opcional)
+        _agendamentoList.Add(selectedDate);
+
+        // Configura a notificação
+        await VerifyPermissionsAsync();
+        ScheduleNotificationDay(selectedDate);
+>>>>>>> Primeira_Branch
     }
 
     //Dispara notificação
@@ -116,13 +171,18 @@ public partial class AgendamentoAddView : ContentPage
     private void OnCustomEntryTextChanged(object sender, TextChangedEventArgs e)
     {
         var entry = (Entry)sender;
+<<<<<<< HEAD
         string pattern = @"^[\p{L}0-9\s\-]*$"; // Permite letras, números, espaços , traços e acentos
+=======
+        string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+>>>>>>> Primeira_Branch
         if (!Regex.IsMatch(e.NewTextValue, pattern))
         {
             // Reverte para o último valor válido
             entry.Text = e.OldTextValue;
         }
     }
+<<<<<<< HEAD
 
     public void StartService()
     {
@@ -138,4 +198,6 @@ public partial class AgendamentoAddView : ContentPage
     }
 
     //FIM
+=======
+>>>>>>> Primeira_Branch
 }
