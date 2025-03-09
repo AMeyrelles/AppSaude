@@ -63,7 +63,7 @@ bash
 
 dotnet clean
 dotnet build
-🗄️ Configuração do Banco de Dados (Se aplicável)
+🗄️
 O projeto utiliza SQLite com os seguintes pacotes:
 
 sqlite-net-pcl
