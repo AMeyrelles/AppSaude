@@ -55,6 +55,7 @@
                             </Border>                            
                         </VerticalStackLayout>
                 
+<<<<<<< Updated upstream
                       </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
@@ -62,6 +63,75 @@
            <HorizontalStackLayout  Grid.Row="2" HorizontalOptions="Center">
                        
                             <Button      
+=======
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label                         
+                        Padding="0,0,0,0"
+                        FontSize="Medium"
+                        TextColor="White"
+                        Text="Ative o alarme para receber a notificação"                        
+                    />
+                    
+                    <Switch  
+                      HorizontalOptions="Center"
+                      x:Name="AlarmSwitch"
+                      IsToggled="{Binding AlarmeAtual.IsEnabled}"
+                      OnColor="#5184c0"
+                      ThumbColor="White"
+                      Toggled="AlarmSwitch_Toggled"                     
+                    />
+
+                </VerticalStackLayout>
+
+            </Border>
+            <!-- TimerPicker -->
+               <Border                                          
+                     WidthRequest="390"
+                     HeightRequest="130"
+                     HorizontalOptions="Center"
+                     Stroke="AliceBlue"                    
+                     >
+                   <Border.StrokeShape>
+                     <RoundRectangle CornerRadius="6" />
+                   </Border.StrokeShape>
+
+                   <VerticalStackLayout HorizontalOptions="Center">
+                      <Label 
+                        Padding="0,0,0,0"
+                        FontSize="Medium"
+                        TextColor="White"
+                        Text="Insira o horario do alarme"                        
+                      />
+
+                      <TimePicker  
+                         Time="{Binding AlarmeAtual.ReminderTime}"
+                         FontSize="50"
+                         TextColor="White"
+                         BackgroundColor="#195986"
+                         HorizontalOptions="Center"
+                         x:Name="TimePickerControl" 
+                      />
+
+                   </VerticalStackLayout>
+               </Border>
+
+        </VerticalStackLayout>
+        </ScrollView>
+        <HorizontalStackLayout                 
+               Grid.Row="2" HorizontalOptions="Center">
+               
+              <Button      
+                             Clicked="btnCancelarAlarme_Clicked"                             
+                             x:Name="btnCancelarAlarme"                          
+                             TextColor="White"
+                             Text="CANCELAR"                 
+                             HeightRequest="60"
+                             WidthRequest="100"  
+                             Margin="20"                             
+              />
+
+              <Button      
+>>>>>>> Stashed changes
                              Command="{Binding SaveCommand}"
                              
                              x:Name="btnAddAlarme"                           

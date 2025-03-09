@@ -373,8 +373,13 @@
     </Style>
 
     <Style TargetType="TimePicker">
+<<<<<<< Updated upstream
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent"/>
+=======
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource AzulSeis}}" />
+        <Setter Property="BackgroundColor" Value="#195986"/>
+>>>>>>> Stashed changes
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="MinimumHeightRequest" Value="44"/>
@@ -412,8 +417,13 @@
     </Style>
 
     <Style TargetType="NavigationPage">
+<<<<<<< Updated upstream
         <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
         <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
+=======
+        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource AzulSeis}, Dark={StaticResource AzulSeis}}" />
+        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+>>>>>>> Stashed changes
         <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource White}}" />
     </Style>
 
