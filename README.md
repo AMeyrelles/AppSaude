@@ -20,7 +20,7 @@ BRASIL 2025
 
 EXECUTANDO O PROJETO
 
-# AppSaude (Lembre+)
+# AppSaude (Lembre+) V.0.1.0
 
 [![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-8.0+-512BD4?logo=.net)](https://dotnet.microsoft.com/apps/maui)
 [![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-5C2D91?logo=visual-studio)](https://visualstudio.microsoft.com/)
@@ -31,16 +31,16 @@ Breve descrição do seu projeto
 
 - [.NET SDK 8.0 ou superior](https://dotnet.microsoft.com/download)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) com as cargas de trabalho:
-  - **Desenvolvimento para dispositivos móveis com .NET MAUI**
-  - **Desenvolvimento ASP.NET e para a Web** (se aplicável)
+  - **Desenvolvimento para dispositivos móveis com .NET MAUI** 
 - Gerenciador de pacotes NuGet
-- Dispositivo/simulador para teste (Android/iOS/Windows conforme configurado)
+- Dispositivo/simulador para teste (Android)
 
 ## 🛠️ Instalação
 
 1. Clone o repositório:
    ```bash
    git clone https://github.com/AMeyrelles/AppSaude.git
+
 Restaure os pacotes NuGet:
 
 bash
@@ -63,6 +63,7 @@ bash
 
 dotnet clean
 dotnet build
+
 🗄️
 O projeto utiliza SQLite com os seguintes pacotes:
 
