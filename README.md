@@ -77,12 +77,17 @@ Verifique os scripts SQL na pasta Scripts/
 Execute o projeto - O banco será criado automaticamente no primeiro uso
 
 📂 Estrutura do Projeto
+
 Projeto/
+
 ├── Models/          # Modelos de dados
 
   Agendamento.cs
+  
   Alarme.cs
+  
   NotificacaoAgendamento.cs
+  
   NotificacaoAlarme
 
 ├── ViewModels/      # ViewModels (MVVM)
