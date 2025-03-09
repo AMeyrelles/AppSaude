@@ -88,37 +88,58 @@ Projeto/
 ├── ViewModels/      # ViewModels (MVVM)
 
   AgendamentoViewModel
+  
   AlarmeViewModel
+  
   MainViewModel
+  
   NotificacaoAgendamentoViewModel
+  
   NotificacaoAlarmeViewModel
 
 
 ├── Views/           # Páginas e componentes UI
 
   AgendamentoView
+  
   AgendamentoAddView
+  
   AlarmeView
+  
   AlarmeAddView
+  
   HomePageView
+  
   NotificacaoView
 
 ├── Services/        # Serviços e lógica de negócios
+
   AlarmeService
+  
   IAlarmeService
+  
   IMessage
+  
   IServiceAndroid
+  
   IServiceTeste
+  
   IServiceTeste
 
 ├── Resources/       # Assets, estilos e traduções
 
   AppIcon
+  
   Converters
+  
   Fonts
+  
   Images
+  
   Raw
+  
   Splash
+  
   Styles
 
 └──AppSaude.csproj
