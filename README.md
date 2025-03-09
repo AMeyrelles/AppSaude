@@ -185,4 +185,6 @@ Permissão no Android (configurar em Platforms/Android/AndroidManifest.xml)
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
 
+//FIM
+
 
