@@ -83,70 +83,70 @@ Projeto/
 
 ├── Models/          # Modelos de dados
 
-  Agendamento.cs
+│   ├──  Agendamento.cs
   
-  Alarme.cs
+│   ├──  Alarme.cs
   
-  NotificacaoAgendamento.cs
+│   ├──  NotificacaoAgendamento.cs
   
-  NotificacaoAlarme
+│   ├──  NotificacaoAlarme
 
 ├── ViewModels/      # ViewModels (MVVM)
 
-  AgendamentoViewModel
+│   ├──  AgendamentoViewModel
   
-  AlarmeViewModel
+│   ├──  AlarmeViewModel
   
-  MainViewModel
+│   ├──  MainViewModel
   
-  NotificacaoAgendamentoViewModel
+│   ├──  NotificacaoAgendamentoViewModel
   
-  NotificacaoAlarmeViewModel
+│   ├──  NotificacaoAlarmeViewModel
 
 
 ├── Views/           # Páginas e componentes UI
 
-  AgendamentoView
+│   ├──  AgendamentoView
   
-  AgendamentoAddView
+│   ├──  AgendamentoAddView
   
-  AlarmeView
+│   ├──  AlarmeView
   
-  AlarmeAddView
+│   ├──  AlarmeAddView
   
-  HomePageView
+│   ├──  HomePageView
   
-  NotificacaoView
+│   ├──  NotificacaoView
 
 ├── Services/        # Serviços e lógica de negócios
 
-  AlarmeService
+│   ├── AlarmeService
   
-  IAlarmeService
+│   ├──  IAlarmeService
   
-  IMessage
+│   ├──  IMessage
   
-  IServiceAndroid
+│   ├──  IServiceAndroid
   
-  IServiceTeste
+│   ├──  IServiceTeste
   
-  IServiceTeste
+│   ├──  IServiceTeste
 
 ├── Resources/       # Assets, estilos e traduções
 
-  AppIcon
+│   ├──  AppIcon
   
-  Converters
+│   ├──  Converters
   
-  Fonts
+│   ├──  Fonts
   
-  Images
+│   ├──  Images
   
-  Raw
+│   ├──  Raw
   
-  Splash
+│   ├──  Splash
   
-  Styles
+│   ├──  Styles
 
 └──AppSaude.csproj
 
