@@ -7,13 +7,12 @@ namespace AppSaude
 {
     public partial class App : Application
     {
-        private readonly IService _alarmeService;
-
+        private readonly IServicesTeste _services;
         private readonly IAudioManager _audioManager;
+        private readonly IServiceAndroid _servicesAndroid;
+        private readonly IAlarmService _alarmeService;
 
-        IServiceAndroid _servicesAndroid;
-
-        public App(IService alarmeService, IServiceAndroid servicesAndroid, IAudioManager audioManager)
+        public App(IServicesTeste services, IServiceAndroid servicesAndroid, IAudioManager audioManager, IAlarmService alarmeService)
         {
             InitializeComponent();
 
@@ -21,15 +20,16 @@ namespace AppSaude
             LocalNotificationCenter.Current.NotificationActionTapped += Current_NotificationActionTapped;
 
             // Atribuir dependências injetadas
+            _services = services ?? throw new ArgumentNullException(nameof(services));
             _alarmeService = alarmeService ?? throw new ArgumentNullException(nameof(alarmeService));
-            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));
+            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));        
+            _servicesAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
-            _audioManager = audioManager;
-
-            _servicesAndroid = servicesAndroid;
 
             // Configurar a página inicial
-            MainPage = new NavigationPage(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));           
+            MainPage = new NavigationPage(new HomePageView(_services, _servicesAndroid, _audioManager, _alarmeService));
+
+    
         }
 
         // Método de manipulação para NotificationActionTapped
@@ -48,12 +48,12 @@ namespace AppSaude
                     var navigationPage = (Application.Current.MainPage as NavigationPage);
                     if (navigationPage != null)
                     {
-                        await navigationPage.PushAsync(new HomePageView(_alarmeService, _servicesAndroid, _audioManager));
+                        await navigationPage.PushAsync(new HomePageView(_services, _servicesAndroid, _audioManager, _alarmeService));
                     }
                     else
                     {
                         // Se sua MainPage não for um NavigationPage, substitua pela sua navegação personalizada
-                        await Application.Current.MainPage.Navigation.PushAsync(new AlarmesView(_alarmeService, _servicesAndroid, _audioManager));
+                        await Application.Current.MainPage.Navigation.PushAsync(new AlarmesView(_services, _servicesAndroid));
                     }
                 });
             }

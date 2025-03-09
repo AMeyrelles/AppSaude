@@ -10,6 +10,7 @@ namespace AppSaude.MVVM.Views;
 public partial class AgendamentosView : ContentPage
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
     private readonly IAudioManager _audioManager;
@@ -24,16 +25,29 @@ public partial class AgendamentosView : ContentPage
     private List<Agendamento> _agendamentoList = new();
     public AgendamentosView(IService services, IAudioManager audioManager)
 >>>>>>> Primeira_Branch
+=======
+    private readonly IServicesTeste _services;
+    private readonly IServiceAndroid _serviceAndroid;
+    private readonly IAudioManager _audioManager;
+
+    private List<Agendamento> _agendamentoList = new();    
+    public AgendamentosView(IServicesTeste services, IAudioManager audioManager, IServiceAndroid servicesAndroid)
+>>>>>>> Primeira_Branch
     {
         InitializeComponent();
 
         _audioManager = audioManager;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         _services = services ?? throw new ArgumentNullException(nameof(services));
         _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 =======
         _service = services;
+>>>>>>> Primeira_Branch
+=======
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 >>>>>>> Primeira_Branch
 
         var viewModel = new MainViewModel(services);
@@ -48,9 +62,13 @@ public partial class AgendamentosView : ContentPage
         {
             // Busca todos os agendamentos do banco de dados usando o serviço
 <<<<<<< HEAD
+<<<<<<< HEAD
             var agendamento = await _services.GetAgendamentos();
 =======
             var agendamento = await _service.GetAgendamentos();
+>>>>>>> Primeira_Branch
+=======
+            var agendamento = await _services.GetAgendamentos();
 >>>>>>> Primeira_Branch
 
             // Verifica se a lista retornada não é nula
@@ -107,6 +125,7 @@ public partial class AgendamentosView : ContentPage
         try
         {
             // Obtém o horário atual
+<<<<<<< HEAD
 <<<<<<< HEAD
             var now = DateTime.Now;
             var currentTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0);
@@ -197,28 +216,99 @@ public partial class AgendamentosView : ContentPage
                     await _services.UpdateAgendamento(agendamento);
 =======
             DateTime now = DateTime.Now;
+=======
+            var now = DateTime.Now;
+            var currentTime = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0);
+>>>>>>> Primeira_Branch
 
-            // Carrega os alarmes do banco e armazena na lista
+            // Carrega os agendamentos do banco e armazena na lista
             var _agendamentoList = await LoadAgendamentoFromDatabaseAsync();
 
             foreach (var agendamento in _agendamentoList)
             {
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (!agendamento.IsNotified && now.Hour == agendamento.AppointmentDateTime.Hours && now.Minute == agendamento.AppointmentDateTime.Minutes)
+                 agendamento.IsEnabled = true;
+
+                // Verifica se o horário atual coincide com o horário do agendamento
+                if (!agendamento.IsNotified
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && now.Hour == agendamento.AppointmentDateTime.Hours
+                    && now.Minute == agendamento.AppointmentDateTime.Minutes)
                 {
                     agendamento.IsNotified = true;
+                    agendamento.IsEnabled = true;
 
-                    // Dispara notificação, som e navega para a tela de alarme
+                    // Dispara notificação e som 
                     await OnAudioTriggered();
                     await ScheduleAgendamentoAsync(agendamento.AppointmentDateTime);
 
-                    await _service.UpdateAgendamento(agendamento); // Atualiza o banco
+                    await _services.UpdateAgendamento(agendamento); // Atualiza o banco
+                    
 
-                    break; // Se encontrou o alarme, não precisa continuar verificando os outros
+                    Console.WriteLine($"Notificando: {agendamento.SpecialistName} em " +
+                        $"{agendamento.AppointmentDateTime.Hours}:{agendamento.AppointmentDateTime.Minutes}");
                 }
+<<<<<<< HEAD
                 else 
                 { 
                     Console.WriteLine("Nenhum agendamento encontrado para HOJE."); 
+>>>>>>> Primeira_Branch
+=======
+                else if (agendamento.IsNotified)
+                {
+                    Console.WriteLine($"Agendamento já notificado!{agendamento.SpecialistName}, {agendamento.SelectedDate}");
+                }
+
+                if (!agendamento.IsNotified
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && agendamento.NotificationDailyCount == 0
+                    )
+                {
+
+                    await ScheduleDailyReminderAsync(agendamento.AppointmentDateTime);
+
+                    agendamento.NotificationDailyCount++;
+
+                    await _services.UpdateAgendamento(agendamento); // Atualiza o banco
+
+
+                    Console.WriteLine($"Notificando: {agendamento.SpecialistName} em " +
+                        $"{agendamento.AppointmentDateTime.Hours}:{agendamento.AppointmentDateTime.Minutes}");
+                }
+                else if (agendamento.IsNotified)
+                {
+                    Console.WriteLine($"Agendamento já notificado!{agendamento.SpecialistName}, {agendamento.SelectedDate}");
+                }
+
+
+                if (agendamento.IsNotified && agendamento.IsEnabled
+                    && now.Month == agendamento.SelectedDate.Month
+                    && now.Day == agendamento.SelectedDate.Day
+                    && now.Minute == agendamento.AppointmentDateTime.Minutes
+                    && agendamento.NotificationCount == 0)
+                {
+
+                    var notificacaoAgendamento = new NotificacaoAgendamento
+                    {
+                        SpecialistNameNAg = agendamento.SpecialistName,
+                        SpecialtyNAg = agendamento.Specialty,
+                        PostalCodeNAg = agendamento.PostalCode,
+                        StreetNAg = agendamento.Street,
+                        NeighborhoodNAg = agendamento.Neighborhood,
+                        CityNAg = agendamento.City,
+                        AppointmentDateTimeNAg = agendamento.AppointmentDateTime,
+                        SelectedDateNAg = agendamento.SelectedDate,
+                        MinDate = agendamento.MinDate,
+                        DescriptionAppointmentsNAg = agendamento.DescriptionAppointments,
+                        IsEnabledNAg = agendamento.IsEnabled,
+                        IsNotifiedNAg = agendamento.IsNotified
+                    };
+
+                    agendamento.IsEnabled = false;
+                    agendamento.NotificationCount++; // Incrementa o contador para impedir repetições futuras
+                    await _services.AddNotAgendamento(notificacaoAgendamento);
+                    await _services.UpdateAgendamento(agendamento);
 >>>>>>> Primeira_Branch
                 }
             }
@@ -230,8 +320,12 @@ public partial class AgendamentosView : ContentPage
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+>>>>>>> Primeira_Branch
+=======
+
 >>>>>>> Primeira_Branch
     //Dispara a notificacao
     private async Task ScheduleAgendamentoAsync(TimeSpan reminderTime)
@@ -248,7 +342,11 @@ public partial class AgendamentosView : ContentPage
                 Title = "Lembrete do agendamento!",
 =======
                 NotificationId = 103,
+<<<<<<< HEAD
                 Title = "Lembrete de Remédio",
+>>>>>>> Primeira_Branch
+=======
+                Title = "Lembrete do agendamento!",
 >>>>>>> Primeira_Branch
                 Description = "Agendamento marcado para HOJE!!!",
                 Schedule = new NotificationRequestSchedule
@@ -260,6 +358,9 @@ public partial class AgendamentosView : ContentPage
                 {
                     AutoCancel = true,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
                     IconSmallName = { ResourceName = "sino" }
                 }
             };
@@ -272,6 +373,7 @@ public partial class AgendamentosView : ContentPage
     }
 
     //Dispara a notificacao
+<<<<<<< HEAD
     private async Task ScheduleDailyReminderAsync(Agendamento _agendamento)
     {
         try
@@ -285,12 +387,34 @@ public partial class AgendamentosView : ContentPage
                 {
                     NotifyTime = DateTime.Now.AddMinutes(1) 
                 },
+=======
+    private async Task ScheduleDailyReminderAsync(TimeSpan reminderTime)
+    {
+        try
+        {
+            // Cria um DateTime combinando a data atual com o horário do alarme
+            DateTime alarmDateTime = DateTime.Now.Date.Add(reminderTime); // Cria a data e hora completa
+
+            var notification = new NotificationRequest
+            {
+                NotificationId = 104,
+                Title = "Lembrete do agendamento!",
+                Description = "Você tem um agendamento marcado para HOJE!!!",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = alarmDateTime // Usa o DateTime com a data de hoje e o horário do alarme
+                },
+                //Sound = "careless_whisper.mp3", // Caminho para o arquivo de som da notificação
+>>>>>>> Primeira_Branch
                 Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                 {
                     AutoCancel = true,
                     IconSmallName = { ResourceName = "sino" }
+<<<<<<< HEAD
 =======
                     IconSmallName = { ResourceName = "icon_mais_.svg" }
+>>>>>>> Primeira_Branch
+=======
 >>>>>>> Primeira_Branch
                 }
             };
@@ -323,9 +447,13 @@ public partial class AgendamentosView : ContentPage
     private async void btnAdd_Clicked(object sender, EventArgs e)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         await Navigation.PushAsync(new AgendamentoAddView(_services, _serviceAndroid));
 =======
         await Navigation.PushAsync(new AgendamentoAddView(_service));
+>>>>>>> Primeira_Branch
+=======
+        await Navigation.PushAsync(new AgendamentoAddView(_services, _serviceAndroid));
 >>>>>>> Primeira_Branch
     }
 }

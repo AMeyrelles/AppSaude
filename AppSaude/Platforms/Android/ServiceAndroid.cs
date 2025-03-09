@@ -3,10 +3,14 @@ using AppSaude.Services;
 using Android.App;
 using Android.Content;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
 using AppSaude.Platforms.Android;
 using Android.Content.PM;
 using Plugin.Maui.Audio;
 using AppSaude.MVVM.Models;
+<<<<<<< HEAD
 using Plugin.LocalNotification;
 using Microsoft.Maui.Controls;
 =======
@@ -15,10 +19,16 @@ using Service = Android.App.Service;
 using Resource = AppSaude.Resource;
 using Android.Runtime;
 >>>>>>> Primeira_Branch
+=======
+using Android.Media;
+using Plugin.LocalNotification;
+using Microsoft.Maui.Controls;
+>>>>>>> Primeira_Branch
 
 
 namespace AppSaude
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
     [Service(ForegroundServiceType = ForegroundService.TypeDataSync)]
     public class ServiceAndroid : Service, IServiceAndroid   
@@ -100,40 +110,96 @@ namespace AppSaude
 =======
     [Service(ForegroundServiceType = Android.Content.PM.ForegroundService.TypeDataSync)]
     public class ServiceAndroid : Service, IServiceAndroid
+=======
+    [Service(ForegroundServiceType = ForegroundService.TypeDataSync)]
+    public class ServiceAndroid : Service, IServiceAndroid   
+>>>>>>> Primeira_Branch
     {
-        public override IBinder OnBind(Intent intent)
+        
+        private IServicesTeste _services;
+        private IAudioManager _audioManager;
+
+
+        public ServiceAndroid()
         {
-            throw new NotImplementedException();
-        }
-        [return: GeneratedEnum]
-        public override StartCommandResult OnStartCommand(Intent intent, [GeneratedEnum] StartCommandFlags flags, int startId)
-        {
-            if (intent.Action == "START_SERVICE")
+            // Inicialize manualmente os serviços necessários, se for necessário
+            _services = IPlatformApplication.Current.Services.GetService<IServicesTeste>();
+            _audioManager = IPlatformApplication.Current.Services.GetService<IAudioManager>();
+
+            if (_services == null || _audioManager == null)
             {
-                System.Diagnostics.Debug.WriteLine("Serviço inicado!");
-                RegisterNotification();
+                throw new InvalidOperationException("Erro ao resolver dependências para ServiceAndroid.");
             }
-            else if (intent.Action == "STOP_SERVICE")
+        }
+
+        public ServiceAndroid(IServicesTeste services, IAudioManager audioManager)
+        {
+            _services = services ?? throw new ArgumentNullException(nameof(services));
+            _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));
+        }
+        public bool IsRunning { get; set; } = false;
+
+        private CancellationTokenSource _cancellationTokenSource;
+        public override IBinder OnBind(Intent intent) => null;
+        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _ = ExecuteAsync(_cancellationTokenSource.Token);
+
+            return StartCommandResult.Sticky;
+        }
+
+        private async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            RegisterNotification();
+
+            while (!cancellationToken.IsCancellationRequested)
             {
-                System.Diagnostics.Debug.WriteLine("Serviço encerrado!");
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+                try
                 {
-                    StopForeground(StopForegroundFlags.Remove);
+                    await CheckAlarms();
+                    await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
                 }
-                else
-                    StopSelfResult(startId);
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"SERVICEANDROID: Erro ao executar serviço: {ex.Message}");
+                    await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
+                }
+
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
-            return StartCommandResult.NotSticky;
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            IsRunning = false;
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
 
+<<<<<<< HEAD
         public bool IsRunning { get; private set; } = false;
+>>>>>>> Primeira_Branch
+=======
 >>>>>>> Primeira_Branch
         public void Start()
         {
             if (!IsRunning)
             {
                 IsRunning = true;
+<<<<<<< HEAD
 <<<<<<< HEAD
                 Console.WriteLine("ServiceAndroid: Serviço iniciado.");
             }
@@ -152,6 +218,18 @@ namespace AppSaude
 
             Intent startService = new Intent(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
 >>>>>>> Primeira_Branch
+=======
+                Console.WriteLine("ServiceAndroid: Serviço iniciado.");
+            }
+
+            if (MainActivity.ActivityCurrent == null)
+            {
+                Console.WriteLine("Erro: MainActivity.ActivityCurrent está null.");
+                return;
+            }
+
+            Intent startService = new(MainActivity.ActivityCurrent, typeof(ServiceAndroid));
+>>>>>>> Primeira_Branch
             startService.SetAction("START_SERVICE");
             MainActivity.ActivityCurrent.StartService(startService);
         }
@@ -161,6 +239,7 @@ namespace AppSaude
             if (IsRunning)
             {
                 IsRunning = false;
+<<<<<<< HEAD
 <<<<<<< HEAD
                 Console.WriteLine("ServiceAndroid: Serviço parado.");
             }
@@ -179,12 +258,25 @@ namespace AppSaude
 
             Intent stopIntent = new Intent(MainActivity.ActivityCurrent, this.Class);
 >>>>>>> Primeira_Branch
+=======
+                Console.WriteLine("ServiceAndroid: Serviço parado.");
+            }
+
+            if (MainActivity.ActivityCurrent == null)
+            {
+                Console.WriteLine("Erro: MainActivity.ActivityCurrent está null.");
+                return;
+            }
+
+            Intent stopIntent = new(MainActivity.ActivityCurrent, this.Class);
+>>>>>>> Primeira_Branch
             stopIntent.SetAction("STOP_SERVICE");
             MainActivity.ActivityCurrent.StartService(stopIntent);
         }
 
         private void RegisterNotification()
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
             NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
@@ -197,12 +289,21 @@ namespace AppSaude
                 .SetOngoing(true)
 =======
             NotificationChannel channel = new NotificationChannel("ServiceChannel", "Servico Teste", NotificationImportance.Max);
+=======
+            NotificationChannel channel = new("ServiceChannel", "Servico Teste", NotificationImportance.Max);
+>>>>>>> Primeira_Branch
             NotificationManager manager = (NotificationManager)MainActivity.ActivityCurrent.GetSystemService(Context.NotificationService);
             manager.CreateNotificationChannel(channel);
+
             Notification notification = new Notification.Builder(this, "ServiceChannel")
-                .SetContentTitle("Estou trabalhando!")
+                .SetContentTitle("Lembre+")
+                .SetContentText("Estou trabalhando!")
                 .SetSmallIcon(Resource.Drawable.icon_mais)
+<<<<<<< HEAD
                 .SetOngoing(true)                
+>>>>>>> Primeira_Branch
+=======
+                .SetOngoing(true)
 >>>>>>> Primeira_Branch
                 .Build();
 
@@ -211,6 +312,9 @@ namespace AppSaude
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
 
 
         //INICIO - ALARMES E SUA FUNCIONALIDADES
@@ -382,11 +486,19 @@ namespace AppSaude
         }
 
         //FIM - ALARMES E SUA FUNCIONALIDADES
+<<<<<<< HEAD
     }
 
 }
 
 =======
+=======
+>>>>>>> Primeira_Branch
     }
+
 }
+<<<<<<< HEAD
+>>>>>>> Primeira_Branch
+=======
+
 >>>>>>> Primeira_Branch

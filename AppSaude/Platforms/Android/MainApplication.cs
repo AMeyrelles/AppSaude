@@ -1,12 +1,19 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace AppSaude
+namespace AppSaude.Platforms.Android
 {
 
     [Application]
-    public class MainApplication(IntPtr handle, JniHandleOwnership ownership) : MauiApplication(handle, ownership)
+    public class MainApplication : MauiApplication
     {
+        public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+            : base(handle, ownership)
+        {
+        }
+
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
     }
+
 }

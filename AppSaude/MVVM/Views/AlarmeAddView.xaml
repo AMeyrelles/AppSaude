@@ -28,14 +28,16 @@
 
     </ContentPage.Resources>
 
+        
+
     <Grid BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-
             <RowDefinition Height="15*"/>           
-        </Grid.RowDefinitions>           
-           
-        <!-- Entrys para inserir os dados -->
+        </Grid.RowDefinitions>
+
+        <ScrollView>
+            <!-- Entrys para inserir os dados -->
         <VerticalStackLayout 
                 Grid.Row="0"
                 Padding="10" >
@@ -145,9 +147,13 @@
 
         </VerticalStackLayout>
 <<<<<<< HEAD
+<<<<<<< HEAD
         </ScrollView>
 =======
 
+>>>>>>> Primeira_Branch
+=======
+        </ScrollView>
 >>>>>>> Primeira_Branch
         <HorizontalStackLayout                 
                Grid.Row="2" HorizontalOptions="Center">
@@ -191,4 +197,5 @@
         </HorizontalStackLayout>
         
     </Grid>
+
 </ContentPage>

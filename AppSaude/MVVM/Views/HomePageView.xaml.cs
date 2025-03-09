@@ -3,27 +3,28 @@ using AppSaude.Services;
 using Plugin.Maui.Audio;
 using AppSaude.MVVM.Models;
 
+
 namespace AppSaude.MVVM.Views;
 
-public partial class HomePageView : ContentPage
+public partial class HomePageView : ContentPage 
 {
-	private readonly IService _services;    
+	private readonly IServicesTeste _services;    
     private readonly IAudioManager _audioManager;
-
-    IServiceAndroid _servicesAndroid;
+    private readonly IServiceAndroid _servicesAndroid;
+    private readonly IAlarmService _alarmService;
 
     private List<Alarme> _alarmeList = new();
 
-    private List<Agendamento> _agendamentoList = new();
-    public HomePageView(IService services, IServiceAndroid servicesAndroid, IAudioManager audioManager)
+    public HomePageView(IServicesTeste services, IServiceAndroid servicesAndroid, IAudioManager audioManager, IAlarmService alarmService)
     {
         InitializeComponent();
 
-        _services = services;
-        _servicesAndroid = servicesAndroid;
-        _audioManager = audioManager;
-
-        var viewModel = new MainViewModel(services);
+        // Atribuir dependências injetadas
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _audioManager = audioManager ?? throw new ArgumentNullException(nameof(audioManager));
+        _servicesAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
+        _alarmService = alarmService ?? throw new ArgumentNullException(nameof(alarmService));
+        var viewModel = new MainViewModel(_services);
 
         BindingContext = viewModel;
 
@@ -44,14 +45,39 @@ public partial class HomePageView : ContentPage
                 return new List<Alarme>();
             }
 
-            Console.WriteLine($"Total de alarmes encontrados: {alarms.Count}");
+            //Console.WriteLine($"HOMEPAGE - de alarmes encontrados: {alarms.Count}");
             return alarms;
         }
         catch (Exception ex)
         {
-            // Trata possíveis erros ao carregar os dados
-            Console.WriteLine($"Erro ao carregar alarmes: {ex.Message}");
+            //Trata possíveis erros ao carregar os dados
+            Console.WriteLine($"HOMEPAGE - Erro ao carregar alarmes: {ex.Message}");
             return new List<Alarme>();
+        }
+    }
+
+    //CARREGA A LIS DE NOTIFICACOES
+    private async Task<List<NotificacaoAlarme>> LoadNotificacaoFromDatabaseAsync()
+    {
+        try
+        {
+            // Busca todos os alarmes do banco de dados usando o serviço
+            var notificacao = await _services.GetNotAlarmes();
+
+            // Verifica se a lista retornada não é nula
+            if (notificacao == null)
+            {
+                Console.WriteLine("NOTIFICACAOVIEW : Nenhum notificacao de alarme encontrado no banco de dados.");
+                return new List<NotificacaoAlarme>();
+            }
+
+            Console.WriteLine($"NOTIFICACAOVIEW : Total de notificação de alarmes encontrados: {notificacao.Count}");
+            return notificacao;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"NOTIFICACAOVIEW : Erro ao carregar alarmes: {ex.Message}");
+            return new List<NotificacaoAlarme>();
         }
     }
 
@@ -60,12 +86,13 @@ public partial class HomePageView : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        StartService();
 
         // Carrega os alarmes do banco e armazena na lista
         _alarmeList = await LoadAlarmsFromDatabaseAsync();
 
         // Exibe a quantidade de alarmes carregados
-        Console.WriteLine($"Alarmes carregados: {_alarmeList.Count}");
+        Console.WriteLine($"HOMEPAGE: Alarmes carregados: {_alarmeList.Count}");
 
         try
         {
@@ -82,8 +109,7 @@ public partial class HomePageView : ContentPage
         }
 
         // Configura o timer para chamar o método de verificação a cada 1 minuto
-        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
-        ativaService();
+        _timer = new Timer(CheckAlarms, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));        
     }
 
 
@@ -99,58 +125,81 @@ public partial class HomePageView : ContentPage
 
     private async void CheckAlarms(object state)
     {
+        _ = _alarmService.CheckAlarms();
         try
         {
+            
             // Obtém o horário atual
             DateTime now = DateTime.Now;
 
             // Carrega os alarmes do banco e armazena na lista
             var _alarmeList = await LoadAlarmsFromDatabaseAsync();
+            var _notificacaoList = await LoadNotificacaoFromDatabaseAsync();
+            var alarms = await _services.GetAlarmes();
+            
 
-            foreach (var alarm in _alarmeList)
+            if (alarms == null || !alarms.Any())
             {
-                // Verifica se o horário atual coincide com o horário do alarme
-                if (now.Hour == alarm.ReminderTime.Hours && now.Minute == alarm.ReminderTime.Minutes)
+                Console.WriteLine("HOMEPAGE: Nenhum alarme encontrado.");
+                return;
+            }
+
+            foreach (var alarm in alarms)
+            {
+                //if (alarm.LastNotifiedDate.HasValue && alarm.LastNotifiedDate.Value.Date == now.Date) continue;
+
+                if (alarm.IsNotified)
                 {
-                    var alarmBorder = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
+                    var lblLabel = this.FindByName<Label>("lblNameAlarme"); // Altere a cor do Border
 
-                    alarmBorder.BackgroundColor = Colors.Red;
-
-
-                    break; // Se encontrou o alarme, não precisa continuar verificando os outros
+                    if (lblLabel != null)
+                    {
+                        lblLabel.BackgroundColor = Colors.Green;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Border 1 'lblNameAlarme' não encontrado.");
+                    }
+                    continue;
                 }
-                else
-                {  // Localize o Border no layout (supondo que você tenha um Border com o nome "alarmVSL")
-                    var alarmVSL = this.FindByName<HorizontalStackLayout>("alarmBorder");    // Altere a cor do Border
 
-                    alarmVSL.BackgroundColor = Colors.LightSteelBlue;
+                if (!alarm.IsNotified)
+                {
+                    // Encontra o Border pelo nome definido no XAML
+                    var lblLabel = this.FindByName<Label>("lblNameAlarme");
+
+                    if (lblLabel != null)
+                    {
+                        // Altera a cor do Border usando Color.FromArgb para o valor hexadecimal
+                        lblLabel.BackgroundColor = Color.FromArgb("#195986");
+                    }
+                    else
+                    {
+                        // Log ou tratamento de erro caso o Border não seja encontrado
+                        Console.WriteLine("Border 2 'lblNameAlarme' não encontrado.");
+                    }
+                    continue;
                 }
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erro ao verificar alarmes: {ex.Message}");
+            Console.WriteLine($"HOMEPAGE: Erro ao verificar alarmes: {ex.Message}");
         }
+        
     }
 
 
     //Button de navegacao para AlarmesView
     private async void btnAlarme_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AlarmesView(_services, _servicesAndroid, _audioManager));
+        await Navigation.PushAsync(new AlarmesView(_services, _servicesAndroid));
     }
 
     private async void btnAgendamentos_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new AgendamentosView(_services, _audioManager));
+        await Navigation.PushAsync(new AgendamentosView(_services, _audioManager, _servicesAndroid));
     }
-
-
-    //Conta quantos alarmes foram carregados
-    //private async Task ShowAlarmCountAsync()
-    //{
-    //    await DisplayAlert("Informação", $"Alarmes atuais: {_alarmeList.Count}", "OK");
-    //}
 
     //Falta implementar as funcionalidades
 
@@ -161,21 +210,23 @@ public partial class HomePageView : ContentPage
     }
 
     //Btn Notification
-    private async void btnNoticacao_Clicked(object sender, EventArgs e)
+    private async void btnNotificacao_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+        //await DisplayAlert("ALERTA!", "Em breve a funcionalidade estará disponivel", "OK");
+        await Navigation.PushAsync(new NotificacaoView(_services));
     }
 
     //Inicia o serviço em primeiro Plano
-    public void ativaService()
+
+    public  void StartService()
     {
         if (!_servicesAndroid.IsRunning)
         {
-            _servicesAndroid.Start(); // Inicia o serviço
+             _servicesAndroid.Start(); // Inicia o serviço
         }
         else
         {
-            Console.WriteLine("O serviço já está em execução.");
+            Console.WriteLine("HOMEPAGE: O serviço já está em execução.");
         }
 
     }

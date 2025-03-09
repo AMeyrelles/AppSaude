@@ -1,12 +1,14 @@
 using AppSaude.MVVM.ViewModels;
 using AppSaude.Services;
 using Plugin.LocalNotification;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
 namespace AppSaude.MVVM.Views;
 
 public partial class AgendamentoAddView : ContentPage
 {
+<<<<<<< HEAD
 <<<<<<< HEAD
 	private readonly IServicesTeste _services;
     private readonly IServiceAndroid _serviceAndroid;
@@ -18,12 +20,20 @@ public partial class AgendamentoAddView : ContentPage
         _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 =======
 	private readonly IService _services;
+=======
+	private readonly IServicesTeste _services;
+    private readonly IServiceAndroid _serviceAndroid;
+>>>>>>> Primeira_Branch
 
-    private readonly List<DateTime> _agendamentoList = new List<DateTime>();
-    public AgendamentoAddView(IService services)
+    public AgendamentoAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
 	{
         InitializeComponent();
+<<<<<<< HEAD
         _services = services;
+>>>>>>> Primeira_Branch
+=======
+        _services = services ?? throw new ArgumentNullException(nameof(services));
+        _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 >>>>>>> Primeira_Branch
 
         var viewModel = new AgendamentoViewModel(services);
@@ -36,6 +46,7 @@ public partial class AgendamentoAddView : ContentPage
     //Botão para salvar o agendamento
     private async void btnAddAgendamento_Clicked(object sender, EventArgs e)
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
         //Inicia o serviço 
         StartService();  
@@ -85,6 +96,13 @@ public partial class AgendamentoAddView : ContentPage
         // Configura a notificação
         await VerifyPermissionsAsync();
         ScheduleNotificationDay(selectedDate);
+>>>>>>> Primeira_Branch
+=======
+        //Inicia o serviço 
+        StartService();  
+
+        // Configura a notificação
+        await VerifyPermissionsAsync();
 >>>>>>> Primeira_Branch
     }
 
@@ -172,9 +190,13 @@ public partial class AgendamentoAddView : ContentPage
     {
         var entry = (Entry)sender;
 <<<<<<< HEAD
+<<<<<<< HEAD
         string pattern = @"^[\p{L}0-9\s\-]*$"; // Permite letras, números, espaços , traços e acentos
 =======
         string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+>>>>>>> Primeira_Branch
+=======
+        string pattern = @"^[\p{L}0-9\s\-]*$"; // Permite letras, números, espaços , traços e acentos
 >>>>>>> Primeira_Branch
         if (!Regex.IsMatch(e.NewTextValue, pattern))
         {
@@ -183,6 +205,9 @@ public partial class AgendamentoAddView : ContentPage
         }
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
 
     public void StartService()
     {
@@ -198,6 +223,9 @@ public partial class AgendamentoAddView : ContentPage
     }
 
     //FIM
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
 =======
 >>>>>>> Primeira_Branch
 }

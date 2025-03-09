@@ -63,8 +63,8 @@
                     <VerticalStackLayout Margin="5">
                         <Button                          
                             x:Name="btnNoticacao" 
-                           Clicked="btnNoticacao_Clicked"
-                             ImageSource="sino_64px.png"/>
+                            Clicked="btnNotificacao_Clicked"
+                            ImageSource="sino_64px.png"/>
 
                         <Label Text="Notificação"/>
 
@@ -91,9 +91,9 @@
                     <VerticalStackLayout Margin="5">
                         <Button 
                             x:Name="btnMaps"      
-                            Clicked="btnMaps_Clicked"
-                            ImageSource="pino_de_localizacao_64px.png"/>
-                        <Label Text="Mapa"/>
+                            Clicked="btnMaps_Clicked"                            
+                            ImageSource="bicho_preguica_64px.png"/>
+                        <!-- <Label Text="Mapa"/> --> 
                     </VerticalStackLayout>
 
                      </HorizontalStackLayout>
@@ -139,7 +139,8 @@
                                                 Grid.Row="0"
                                                 Spacing="0" HorizontalOptions="Center">                                                 
                                                     <Image Source="despertador_64px" WidthRequest="30" HeightRequest="30" />
-                                                    <Label                                              
+                                                    <Label               
+                                                        x:Name="lblNameAlarme"
                                                          CharacterSpacing="6"
                                                          TextColor="White"
                                                          Text="Alarme" FontSize="20" FontAttributes="Bold" Margin="0,5,0,10" Padding="10,0,0,0"

@@ -231,9 +231,13 @@ namespace AppSaude.MVVM.ViewModels
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         public AgendamentoViewModel(IServicesTeste agendamentoRepository)
 =======
         public AgendamentoViewModel(IService agendamentoRepository)
+>>>>>>> Primeira_Branch
+=======
+        public AgendamentoViewModel(IServicesTeste agendamentoRepository)
 >>>>>>> Primeira_Branch
         {
 
@@ -319,9 +323,13 @@ namespace AppSaude.MVVM.ViewModels
 
         //Instância a lista e a atualiza
 <<<<<<< HEAD
+<<<<<<< HEAD
         public async Task Refresh(IServicesTeste _servicos)
 =======
         public async Task Refresh(IService _servicos)
+>>>>>>> Primeira_Branch
+=======
+        public async Task Refresh(IServicesTeste _servicos)
 >>>>>>> Primeira_Branch
         {
             try

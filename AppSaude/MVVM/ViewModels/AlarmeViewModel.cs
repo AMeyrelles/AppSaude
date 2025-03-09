@@ -2,6 +2,7 @@
 using AppSaude.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 
 
@@ -95,7 +96,6 @@ namespace AppSaude.MVVM.ViewModels
 
 
         private TimeSpan _reminderTime;
-
         public TimeSpan ReminderTime
         {
             get => _reminderTime;
@@ -116,6 +116,18 @@ namespace AppSaude.MVVM.ViewModels
             set => SetProperty(ref _isEnabled, value);
         }
 
+        private bool _isNotified;
+        public bool IsNotified
+        {
+            get => _isNotified;
+            set => SetProperty(ref _isNotified, value);
+        }
+        public new event PropertyChangedEventHandler PropertyChanged;
+        protected new virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private DateTime _lastNotifiedDate;
         public DateTime LastNotifiedDate
         {
@@ -133,7 +145,7 @@ namespace AppSaude.MVVM.ViewModels
         {
             ReminderTime = new TimeSpan(8, 0, 0); // 08:00
         }
-        public AlarmeViewModel(IService alarmeRepository)
+        public AlarmeViewModel(IServicesTeste alarmeRepository)
         {
 
             // Inicializa o serviço de alarme
@@ -215,7 +227,7 @@ namespace AppSaude.MVVM.ViewModels
             });
         }
 
-        public async Task Refresh(IService alarmeService)
+        public async Task Refresh(IServicesTeste alarmeService)
         {
             try
             {

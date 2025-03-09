@@ -9,24 +9,22 @@ namespace AppSaude.MVVM.Views
 {
     public partial class AlarmeAddView : ContentPage
     {
-        private readonly IService _service;    
+        private readonly IServicesTeste _services;
 
-        IServiceAndroid _servicesAndroid;       
+        private readonly IServiceAndroid _serviceAndroid;
 
         private readonly List<DateTime> _alarmList = new();
 
-
-        public AlarmeAddView(IService servicos, IServiceAndroid serviceAndroid)
+        public AlarmeAddView(IServicesTeste services, IServiceAndroid servicesAndroid)
         {
             InitializeComponent();
-           
-            _service = servicos ?? throw new ArgumentNullException(nameof(servicos), "O serviço de alarme não foi fornecido.");
 
-            _servicesAndroid = serviceAndroid ?? throw new ArgumentNullException(nameof(servicos), "O serviço não foi fornecido.");
+            // Atribuir dependências injetadas
+            _services = services ?? throw new ArgumentNullException(nameof(services));
+            _serviceAndroid = servicesAndroid ?? throw new ArgumentNullException(nameof(servicesAndroid));
 
-            _servicesAndroid = serviceAndroid;
 
-            var viewModel = new AlarmeViewModel(_service);
+            var viewModel = new AlarmeViewModel(_services);
 
             BindingContext = viewModel;            
         }
@@ -40,7 +38,7 @@ namespace AppSaude.MVVM.Views
 
                 if (status != PermissionStatus.Granted)
                 {
-                    await DisplayAlert("Alerta", "Aceite para receber notificações!", "OK");
+                    await DisplayAlert("Alerta", "Aceite para receber as notificações!", "OK");
                     status = await Permissions.RequestAsync<Permissions.PostNotifications>();
                 }
 
@@ -64,10 +62,9 @@ namespace AppSaude.MVVM.Views
         private async void btnAddAlarme_Clicked(object sender, EventArgs e)
         {
             TimeSpan selectedTime = TimePickerControl.Time;
-
             DateTime now = DateTime.Now;
 
-            DateTime alarmDateTime = new DateTime(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
+            DateTime alarmDateTime = new(now.Year, now.Month, now.Day, selectedTime.Hours, selectedTime.Minutes, 0);
 
             if (alarmDateTime <= now)
             {
@@ -76,9 +73,9 @@ namespace AppSaude.MVVM.Views
 
             _alarmList.Add(alarmDateTime);
 
-            _servicesAndroid.Start();
+            StartService();
 
-            await VerifyPermissionsAsync();            
+            await VerifyPermissionsAsync();
         }
 
         //Botão de voltar
@@ -87,18 +84,16 @@ namespace AppSaude.MVVM.Views
             await Navigation.PopAsync();
         }
 
-
         //Adiciona o valor do Switch ao banco de dados
         private async void AlarmSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-
             var switchControl = sender as Switch;
 
             if (switchControl?.BindingContext is Alarme alarme)
             {
                 alarme.IsEnabled = e.Value;
                
-                await _service.AddAlarme(alarme);
+                await _services.AddAlarme(alarme);
             }
             else
             {
@@ -118,13 +113,28 @@ namespace AppSaude.MVVM.Views
         private void OnCustomEntryTextChanged(object sender, TextChangedEventArgs e)
         {
             var entry = (Entry)sender;
-            string pattern = @"^[a-zA-Z0-9\s\-]*$"; // Permite letras, números, espaços e traços
+            string pattern = @"^[\p{L}0-9\s\-]*$"; // Permite letras, números, espaços , traços e acentos
             if (!Regex.IsMatch(e.NewTextValue, pattern))
             {
                 // Reverte para o último valor válido
                 entry.Text = e.OldTextValue;
             }
         }
+
+        public void StartService()
+        {
+            if (!_serviceAndroid.IsRunning)
+            {
+                _serviceAndroid.Start(); // Inicia o serviço
+            }
+            else
+            {
+                Console.WriteLine("HOMEPAGE: O serviço já está em execução.");
+            }
+
+        }
+
+        //FIM
     }
 }
 

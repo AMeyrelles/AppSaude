@@ -20,19 +20,18 @@
     </ContentPage.Resources>
 
     <Grid         
-        BackgroundColor="White"
-        Margin="5,10,5,0">
-        
+        BackgroundColor="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="85*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
 
-        <CollectionView ItemsSource="{Binding Alarmes}"
-                        SelectedItem="{Binding AlarmeAtual}"
-                        SelectionMode="Single"
-                        >
-
+        <CollectionView
+            Margin="2"
+            ItemsSource="{Binding Alarmes}"
+            SelectedItem="{Binding AlarmeAtual}"
+            SelectionMode="Single"
+            >
             <CollectionView.ItemTemplate>                    
                 <DataTemplate>
                     <Border 

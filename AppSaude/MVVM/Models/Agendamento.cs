@@ -10,6 +10,7 @@ namespace AppSaude.MVVM.Models
 
         // Nome do especialista
 <<<<<<< HEAD
+<<<<<<< HEAD
         [MaxLength(100)]
         public string SpecialistName { get; set; }
 
@@ -34,26 +35,29 @@ namespace AppSaude.MVVM.Models
         public string City { get; set; } = "Cidade";
 =======
         [NotNull, MaxLength(100)]
+=======
+        [MaxLength(100)]
+>>>>>>> Primeira_Branch
         public string SpecialistName { get; set; }
 
         // Nome da especialidade
-        [NotNull, MaxLength(50)]
+        [NotNull, MaxLength(100)]
         public string Specialty { get; set; }
 
         // Codigo postal
-        [MaxLength(30)]
+        [MaxLength(8)]
         public string PostalCode { get; set; }
 
         // Rua
-        [NotNull, MaxLength(100)]
+        [MaxLength(100)]
         public string Street { get; set; }
 
         //Bairro
-        [NotNull, MaxLength(100)]
+        [MaxLength(100)]
         public string Neighborhood { get; set; }
 
         // Cidade
-        [NotNull, MaxLength(50)]
+        [MaxLength(100)]
         public string City { get; set; }
 >>>>>>> Primeira_Branch
 
@@ -69,10 +73,14 @@ namespace AppSaude.MVVM.Models
         [MaxLength(100)]
         public string DescriptionAppointments { get; set; }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Primeira_Branch
         public bool IsEnabled { get; set; } // Verifica se o agendamento esta habilitado
         public bool IsNotified { get; set; } // Verifica se o agendamento ja foi notificado
         public int NotificationCount { get; set; } = 0;
         public int NotificationDailyCount { get; set; } = 0;
+<<<<<<< HEAD
         public DateTime? LastNotifiedDate { get; set; } // DateTime nullable
     }
 }
@@ -83,4 +91,9 @@ namespace AppSaude.MVVM.Models
         public bool IsNotified { get; set; } // Verifica se o agendamento ja foi chamado
     }
 }
+>>>>>>> Primeira_Branch
+=======
+    }
+}
+
 >>>>>>> Primeira_Branch
