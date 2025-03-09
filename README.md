@@ -22,7 +22,7 @@ EXECUTANDO O PROJETO
 
 # AppSaude (Lembre+)
 
-[![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-6.0+-512BD4?logo=.net)](https://dotnet.microsoft.com/apps/maui)
+[![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-8.0+-512BD4?logo=.net)](https://dotnet.microsoft.com/apps/maui)
 [![Visual Studio 2022](https://img.shields.io/badge/Visual%20Studio-2022-5C2D91?logo=visual-studio)](https://visualstudio.microsoft.com/)
 
 Breve descrição do seu projeto
